@@ -16,7 +16,7 @@ import org.graphstream.graph.implementations.MultiGraph;
 
 public class GkaReader {
 	public static void main(String[] args) throws MalformedURLException, IOException {
-		String filename = "graph00.gka";
+		String filename = "graph06.gka";
 		Path path = Paths.get(System.getProperty("user.dir"), "/gka-Dateien/" + filename);
 		Scanner input = new Scanner(new URL("file:///" + path.toAbsolutePath()).openStream(), "UTF-8");
 		String regex = "^\\s*([\\wÄäÖöÜüß]+)\\s*((->|--)\\s*([\\wÄäÖöÜüß]+)\\s*(\\(\\s*([\\wÄäÖöÜüß]+)\\s*\\)\\s*)?(:\\s*(\\d+)\\s*)?)?;$";
@@ -24,15 +24,8 @@ public class GkaReader {
 
 		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 		Graph graph = new MultiGraph("Tutorial 1");
-		String styleSheet = 
-				"node {" 
-				+ "	text-size: 15;" 
-				+ "	shape: circle;" 
-				+ "	fill-color: yellow;" 
-				+ "	size: 30px;"
-				+ "	text-alignment: center;" 
-				+ "}";
-		graph.addAttribute("ui.stylesheet", styleSheet);
+
+		graph.addAttribute("ui.stylesheet", "url('file:///D:/GitHub/GKA/GKA1/src/stylesheet')");
 		graph.display();
 
 		HashMap<String, String> nodeNameNodeIdMap = new HashMap<String, String>();
@@ -111,4 +104,6 @@ public class GkaReader {
 		input.close();
 
 	}
+	
+	
 }
