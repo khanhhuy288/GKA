@@ -5,34 +5,35 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.Node;
-import org.graphstream.graph.implementations.MultiGraph;
-
-import sun.font.CreatedFontTracker;
 
 public class GkaReader {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		String filename = "graph01.gka";
-		Path path = Paths.get(System.getProperty("user.dir"), "/gka-Dateien/" + filename);
-		File file = new File(path.toString());
+		Path filePath = Paths.get(System.getProperty("user.dir") + "/gka-Dateien/" + filename);
+		Path stylesheetPath = Paths.get(System.getProperty("user.dir") + "/src/stylesheet");
+	
+		GkaGraph myGraph = GkaReader.read(filePath, stylesheetPath);
+		myGraph.display();
+	}
+	
+	public static GkaGraph read(Path filePath) throws FileNotFoundException, IOException {
+		return read(filePath, null);
+	}
+	
+	public static GkaGraph read(Path filePath, Path stylesheetPath) throws FileNotFoundException, IOException {
+		GkaGraph graph = new GkaGraph(GkaGraph.createStringId());
+
+		if (stylesheetPath != null) {
+			graph.addAttribute("ui.stylesheet", "url('file:///" + stylesheetPath.toString() + "')");
+			System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+		}
+
 		String regex = "^\\s*([\\wÄäÖöÜüß]+)\\s*((->|--)\\s*([\\wÄäÖöÜüß]+)\\s*(\\(\\s*([\\wÄäÖöÜüß]+)\\s*\\)\\s*)?(:\\s*(\\d+)\\s*)?)?;$";
 		Pattern pattern = Pattern.compile(regex);
-
-		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
-		GkaGraph graph = new GkaGraph("My Graph");
-
-		graph.addAttribute("ui.stylesheet", "url('file:///D:/GitHub/GKA/GKA1/src/stylesheet')");
-		graph.display();
-
-		HashMap<String, String> nodeNameNodeIdMap = graph.getNodeNameToIdMap();
-
+		
+		File file = new File(filePath.toString());
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			String line;
 			while ((line = br.readLine()) != null) {
@@ -49,24 +50,16 @@ public class GkaReader {
 
 					if (nameNode2 != null) {
 						String node2_ID = graph.getNodeId(nameNode2);
+						
 						String edgeId = GkaGraph.createStringId();
 
 						if (direction.equals("--")) {
 							graph.addEdge(edgeId, node1_ID, node2_ID);
-
-						} else if (direction.equals("->")) {
+						} else if (direction.equals("->")){
 							graph.addEdge(edgeId, node1_ID, node2_ID, true);
 						}
 
-						Edge edge = graph.getEdge(edgeId);
-
-						if (edgeName != null) {
-							edge.addAttribute("name", edgeName);
-						}
-
-						if (edgeWeight != null) {
-							edge.addAttribute("weight", Integer.valueOf(edgeWeight));
-						}
+						graph.addEdgeAttr(edgeId, edgeName, edgeWeight);
 					}
 
 				}
@@ -74,20 +67,11 @@ public class GkaReader {
 		}
 
 		// add labels for nodes and edges
-		for (Node node : graph) {
-			node.addAttribute("label", (String) node.getAttribute("name"));
-		}
-
-		for (Edge edge : graph.getEachEdge()) {
-			if (edge.hasAttribute("name")) {
-				edge.addAttribute("label", edge.getAttribute("name").toString());
-			}
-
-			if (edge.hasAttribute("weight")) {
-				edge.addAttribute("label", (int) edge.getAttribute("weight"));
-			}
-		}
-
+		graph.addLabels();
+		
+		return graph;
 	}
+	
+	
 
 }
