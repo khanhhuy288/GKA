@@ -6,7 +6,7 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
 
 public class GkaGraph extends MultiGraph {
-	private HashMap<String, String> nodeNameToIdMap;
+	private HashMap<String, String> nodeNameToIdMap;	
 	
 	public GkaGraph(String id) {
 		super(id);
@@ -29,6 +29,44 @@ public class GkaGraph extends MultiGraph {
 			nodeId = nodeNameToIdMap.get(nodeName);
 		}
 		return nodeId;
+	}
+	
+	public String getEdgesString() {
+		String str = ""; 
+		
+		for (Edge edge : this.getEachEdge()) {
+			str += edge.getNode0().getAttribute("name");
+			
+			if (edge.isDirected()) {
+				str += " -> " + edge.getNode1().getAttribute("name");
+			} else {
+				str += " -- " + edge.getNode1().getAttribute("name");
+			}
+			
+			if (edge.hasAttribute("name")) {
+				str += " (" + edge.getAttribute("name") + ")";
+			}
+			
+			if (edge.hasAttribute("weight")) {
+				str += " : " + edge.getAttribute("weight");
+			}
+			
+			str += ";\n";
+		}
+		
+		return str;
+	}
+	
+	public String getSingleNodesString() {
+		String str = "";
+	
+		for (Node node : this.getEachNode()) {
+			if(node.getDegree() == 0){
+	            str += node.getAttribute("name") + ";\n";
+	        }
+		}
+		
+		return str;
 	}
 	
 	public void addEdgeAttr(String edgeId, String edgeName, String edgeWeight) {

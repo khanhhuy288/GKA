@@ -1,0 +1,7 @@
+node {
+	text-size: 12px; 
+	shape: circle; 
+	fill-color: yellow; 
+	size: 20px;
+	text-alignment: center;
+}
