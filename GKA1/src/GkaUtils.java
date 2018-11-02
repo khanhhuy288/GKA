@@ -1,3 +1,4 @@
+import java.awt.datatransfer.StringSelection;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -25,7 +26,7 @@ import java.util.regex.Pattern;
  */
 public class GkaUtils {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		String filename = "graph04.gka";
+		String filename = "holy.gka";
 		GkaGraph myGraph = GkaUtils.read(filename, "defaultStylesheet");
 		myGraph.display();
 		GkaUtils.save(myGraph, "holy.gka");

@@ -1,9 +1,12 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
+
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 /**
  * GkaGraph has useful functions for working with graph's properties.
@@ -151,18 +154,21 @@ public class GkaGraph extends MultiGraph {
 	 */
 	public void addLabels() {
 		for (Node node : this) {
-			node.addAttribute("label", (String) node.getAttribute("name"));
+			node.addAttribute("label", node.getAttribute("name").toString());
 		}
 
 		for (Edge edge : this.getEachEdge()) {
-			// ??? labels for name is overwritten by labels for weight
-			if (edge.hasAttribute("name")) {
-				edge.addAttribute("label", edge.getAttribute("name").toString());
+			ArrayList<String> edgeProps = new ArrayList<>();
+			
+			if (edge.hasAttribute("name")){
+				edgeProps.add(edge.getAttribute("name"));
 			}
 
 			if (edge.hasAttribute("weight")) {
-				edge.addAttribute("label", (int) edge.getAttribute("weight"));
+				edgeProps.add(edge.getAttribute("weight").toString());
 			}
+			
+			edge.addAttribute("label", String.join(" : ", edgeProps));
 		}
 	}
 
