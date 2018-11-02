@@ -5,3 +5,10 @@ node {
 	size: 20px;
 	text-alignment: center;
 }
+
+edge {
+	text-size: 12;
+	text-alignment: along;
+	text-background-mode: rounded-box;
+
+}
