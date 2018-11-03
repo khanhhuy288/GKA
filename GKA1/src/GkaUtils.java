@@ -42,6 +42,7 @@ public class GkaUtils {
 		
 		AlgoBFS.traverse(myGraph, "s");
 		System.out.println(AlgoBFS.distance(myGraph, "s", "t"));
+		AlgoBFS.shortestPath(myGraph, "s", "t");
 	}
 
 	/**
@@ -91,6 +92,11 @@ public class GkaUtils {
 		// set stylesheet
 		String stylesheetPath = System.getProperty("user.dir") + "/stylesheet/" + stylesheetName;
 		graph.addAttribute("ui.stylesheet", "url('file:///" + stylesheetPath + "')");
+		
+		// improve viewing quality
+		graph.addAttribute("ui.quality");
+        graph.addAttribute("ui.antialias");
+
 
 		// regex for GKA format of each line
 		String regex = "^\\s*([\\wÄäÖöÜüß]+)\\s*((->|--)\\s*([\\wÄäÖöÜüß]+)\\s*(\\(\\s*([\\wÄäÖöÜüß]+)\\s*\\)\\s*)?(:\\s*(\\d+)\\s*)?)?;$";

@@ -4,6 +4,11 @@ import java.util.Stack;
 
 import org.graphstream.graph.Node;
 
+/**
+ * Contain methods to traverse and find shortest path using BFS.
+ * @author Tri Pham
+ *
+ */
 public class AlgoBFS {
 
 	/**
@@ -96,7 +101,7 @@ public class AlgoBFS {
 				// the algorithm ends if t is reached
 				if (next == t) {
 					result = (int) next.getAttribute("dist");
-					// break;
+//					break;
 				}
 			}
 		}
@@ -148,7 +153,6 @@ public class AlgoBFS {
 
 				// the algorithm ends if s is reached
 				if (node == s) {
-					System.out.print(startName + " ");
 					break;
 				}
 
@@ -162,7 +166,7 @@ public class AlgoBFS {
 					int wantedDist = (int) node.getAttribute("dist") - 1;
 
 					// found a suitable node
-					if ((int) next.getAttribute("dist") == wantedDist && !result.contains(next)) {
+					if ((int) next.getAttribute("dist") == wantedDist) {
 						// add to queue for the next examination
 						queue.add(next);
 						
@@ -175,10 +179,12 @@ public class AlgoBFS {
 				}
 			}
 
-			for (Node n : result) {
-				System.out.print(result.pop().getAttribute("name") + " ");
+			// print out result
+			System.out.print("A shortest path between " + startName + " und " + endName + ": ");
+			while(!result.isEmpty()) {
+				Node n = result.pop();
+				System.out.print(n.getAttribute("name") + " ");
 			}
-
 			System.out.println();
 		}
 	}
