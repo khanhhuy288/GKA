@@ -144,7 +144,8 @@ public class AlgoBFS {
 			// Create a queue for BFS and enqueue t
 			LinkedList<Node> queue = new LinkedList<Node>();
 			queue.add(t);
-
+			t.addAttribute("ui.class", "marked");
+			
 			t.setAttribute("dist", distance);
 
 			while (!queue.isEmpty()) {
@@ -167,6 +168,7 @@ public class AlgoBFS {
 
 					// found a suitable node
 					if ((int) next.getAttribute("dist") == wantedDist) {
+						next.addAttribute("ui.class", "marked");
 						// add to queue for the next examination
 						queue.add(next);
 						

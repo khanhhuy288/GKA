@@ -4,7 +4,7 @@ graph {
 
 node {
 	text-color: white;
-	text-size: 12px; 
+	text-size: 15px; 
 	shape: circle; 
 	fill-color: blue; 
 	size: 20px;
@@ -13,11 +13,16 @@ node {
 	stroke-color: yellow;
 }
 
+node.marked {
+	text-color: blue;
+	fill-color: red;
+}
+
 edge {
 	shape: line;
 	stroke-mode: plain;
 	text-color: white;
-	text-size: 12;
+	text-size: 15;
 	fill-color: yellow;
 	text-background-mode: rounded-box;
 	text-background-color: black;

@@ -30,8 +30,7 @@ public class GkaUtils {
 //		GkaGraph myGraph = GkaUtils.read(filename, "defaultStylesheet");
 //		Viewer viewer = myGraph.display();
 //		viewer.enableAutoLayout();
-//		myGraph.addAttribute("ui.quality");
-//		myGraph.addAttribute("ui.antialias");
+
 	    
 		String filename = "BFStest.gka";
 		GkaGraph myGraph = GkaUtils.read(filename, "defaultStylesheet");
