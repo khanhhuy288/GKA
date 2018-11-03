@@ -8,7 +8,5 @@ node {
 
 edge {
 	text-size: 12;
-	text-alignment: along;
 	text-background-mode: rounded-box;
-
 }

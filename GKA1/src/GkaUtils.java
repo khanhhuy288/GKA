@@ -1,4 +1,3 @@
-import java.awt.datatransfer.StringSelection;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -26,7 +25,7 @@ import java.util.regex.Pattern;
  */
 public class GkaUtils {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		String filename = "holy.gka";
+		String filename = "graph01.gka";
 		GkaGraph myGraph = GkaUtils.read(filename, "defaultStylesheet");
 		myGraph.display();
 		GkaUtils.save(myGraph, "holy.gka");
@@ -97,23 +96,13 @@ public class GkaUtils {
 				// find the properties of a line
 				if (matcher.matches()) {
 					String nameNode1 = matcher.group(1);
-					String direction = matcher.group(3);
+					String isDirected = matcher.group(3);
 					String nameNode2 = matcher.group(4);
 					String edgeName = matcher.group(6);
 					String edgeWeight = matcher.group(8);
 
-					// create or get node 1
-					String nodeId1 = graph.getNodeId(nameNode1);
-
-					if (nameNode2 != null) {
-						// create or get node 2
-						String nodeId2 = graph.getNodeId(nameNode2);
-
-						// create edge with its properties
-						String edgeId = GkaGraph.createStringId();
-						graph.addEdge(edgeId, nodeId1, nodeId2, direction);
-						graph.addEdgeAttr(edgeId, edgeName, edgeWeight);
-					}
+					// create an edge or a single node
+					graph.createEdge(nameNode1, nameNode2, isDirected, edgeName, edgeWeight);
 
 				}
 			}
