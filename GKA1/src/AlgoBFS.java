@@ -2,17 +2,26 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Stack;
 
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
 /**
  * Contain methods to traverse and find shortest path using BFS.
+ * 
  * @author Tri Pham
  *
  */
 public class AlgoBFS {
 
 	/**
-	 * prints BFS traversal starting from a given node
+	 * Print out and visualize BFS traversal starting from a given node <br>
+	 * Algorithm: <br>
+	 * 1. Mark the starting node and add it to queue <br>
+	 * 2. Dequeue the visiting node <br>
+	 * 3. Iterate through its adjacent nodes, if it isn't marked, mark it and add it
+	 * to queue <br>
+	 * 4. If the queue is empty, the algorithm ends, else dequeue the first node in
+	 * the queue and go to step 3 <br>
 	 * 
 	 * @param g
 	 * @param nodeName
@@ -20,12 +29,24 @@ public class AlgoBFS {
 	public static void traverse(GkaGraph g, String nodeName) {
 		Node n = g.getNode(g.createNode(nodeName));
 
+		// Reset all marks
+		for (Node node : g) {
+			node.setAttribute("ui.class", "unmarked");
+		}
+		for (Edge edge : g.getEachEdge()) {
+			edge.setAttribute("ui.class", "unmarked");
+		}
+
 		// Create a queue for BFS
 		LinkedList<Node> queue = new LinkedList<Node>();
+
+		// Create a list to store the order of nodes for visualizing
+		LinkedList<Node> res = new LinkedList<Node>();
 
 		// Mark the current node as visited and enqueue it
 		n.setAttribute("class", "marked");
 		queue.add(n);
+		res.add(n);
 
 		while (queue.size() != 0) {
 			// Dequeue visited node and print it
@@ -38,15 +59,21 @@ public class AlgoBFS {
 			while (neighbors.hasNext()) {
 				Node next = neighbors.next();
 				if (next.getAttribute("class") != "marked") {
-//					sleep();
 					next.setAttribute("class", "marked");
-//					sleep();
 					queue.add(next);
+					res.add(next);
 				}
 			}
 		}
 
 		System.out.println();
+
+		// visualize traversal
+		for (Node node : res) {
+			sleepTr();
+			node.setAttribute("ui.class", "marked");
+			sleepTr();
+		}
 	}
 
 	/**
@@ -103,7 +130,7 @@ public class AlgoBFS {
 				// the algorithm ends if t is reached
 				if (next == t) {
 					result = (int) next.getAttribute("dist");
-//					break;
+					// break;
 				}
 			}
 		}
@@ -113,7 +140,7 @@ public class AlgoBFS {
 	}
 
 	/**
-	 * Print out a path with the least edges between 2 nodes <br>
+	 * Print out and visualize a path with the least edges between 2 nodes <br>
 	 * Algorithm: <br>
 	 * 1. Mark t with distance(s,t) = i <br>
 	 * 2. Find and mark a adjacent node of the current visiting node that has
@@ -132,6 +159,14 @@ public class AlgoBFS {
 		Node s = g.getNode(g.createNode(startName));
 		Node t = g.getNode(g.createNode(endName));
 
+		// Reset all marks
+		for (Node node : g) {
+			node.setAttribute("ui.class", "unmarked");
+		}
+		for (Edge edge : g.getEachEdge()) {
+			edge.setAttribute("ui.class", "unmarked");
+		}
+
 		// distance between s and t
 		int distance = distance(g, startName, endName);
 
@@ -146,8 +181,7 @@ public class AlgoBFS {
 			// Create a queue for BFS and enqueue t
 			LinkedList<Node> queue = new LinkedList<Node>();
 			queue.add(t);
-//			t.addAttribute("ui.class", "marked");
-			
+
 			t.setAttribute("dist", distance);
 
 			while (!queue.isEmpty()) {
@@ -172,7 +206,7 @@ public class AlgoBFS {
 					if ((int) next.getAttribute("dist") == wantedDist) {
 						// add to queue for the next examination
 						queue.add(next);
-						
+
 						// add wanted 'parent' node to the stack
 						result.add(next);
 
@@ -184,40 +218,37 @@ public class AlgoBFS {
 
 			// print out result
 			System.out.print("A shortest path between " + startName + " und " + endName + ": ");
-			
+
 			Node[] resArr = new Node[result.size()];
-			for(int i = 0; i < resArr.length; i++) {
+			for (int i = 0; i < resArr.length; i++) {
 				resArr[i] = result.pop();
 				System.out.print(resArr[i].getAttribute("name") + " ");
 			}
-			
-//			for(int i = 0; i < resArr.length; i++) {
-//				System.out.print(resArr[i].getAttribute("name") + " ");
-//			}
 			System.out.println();
-			
+
 			// visualize shortest path
 			resArr[0].addAttribute("ui.class", "marked");
+			resArr[resArr.length - 1].addAttribute("ui.class", "marked");
 			sleep();
-			for(int i = 1; i < resArr.length; i++) {
+			for (int i = 1; i < resArr.length; i++) {
 				sleep();
 				resArr[i].addAttribute("ui.class", "marked");
-				resArr[i-1].getEdgeBetween(resArr[i]).addAttribute("ui.class", "marked");
+				resArr[i - 1].getEdgeBetween(resArr[i]).addAttribute("ui.class", "marked");
 			}
-			
-//			System.out.print("A shortest path between " + startName + " und " + endName + ": ");
-//			while(!result.isEmpty()) {
-//				Node n = result.pop();
-//				sleep();
-//				n.addAttribute("ui.class", "marked");
-//				System.out.print(n.getAttribute("name") + " ");
-//				sleep();
-//			}
-			
+		}
+	}
+
+	protected static void sleepTr() {
+		try {
+			Thread.sleep(600);
+		} catch (Exception e) {
 		}
 	}
 	
 	protected static void sleep() {
-        try { Thread.sleep(1000); } catch (Exception e) {}
-    }
+		try {
+			Thread.sleep(1000);
+		} catch (Exception e) {
+		}
+	}
 }

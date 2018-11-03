@@ -35,8 +35,7 @@ public class GkaUtils {
 		String filename = "BFStest.gka";
 		GkaGraph myGraph = GkaUtils.read(filename, "defaultStylesheet");
 		myGraph.display();
-		GkaUtils.save(myGraph, "BFSsave.gka");
-		
+		GkaUtils.save(myGraph, "BFSsave.gka");		
 		myGraph.addLabels();
 		
 		AlgoBFS.traverse(myGraph, "s");
@@ -45,7 +44,7 @@ public class GkaUtils {
 	}
 
 	/**
-	 * Read a GKA file from the <em>gka-Dateien</em> folder. Default stylesheet
+	 * Read a GKA file from the <em>gkaFiles</em> folder. Default stylesheet
 	 * in the <em>stylesheet</em> folder is used.
 	 * 
 	 * @param filename
@@ -65,7 +64,7 @@ public class GkaUtils {
 	}
 
 	/**
-	 * Read a GKA file from the <em>gka-Dateien</em> folder. Custom stylesheet
+	 * Read a GKA file from the <em>gkaFiles</em> folder. Custom stylesheet
 	 * in the <em>stylesheet</em> folder is used.
 	 * 
 	 * @param filename
