@@ -1,12 +1,26 @@
+graph {
+	fill-color: black;
+}
+
 node {
+	text-color: white;
 	text-size: 12px; 
 	shape: circle; 
-	fill-color: yellow; 
+	fill-color: blue; 
 	size: 20px;
 	text-alignment: center;
+	stroke-mode: plain;
+	stroke-color: yellow;
 }
 
 edge {
+	shape: line;
+	stroke-mode: plain;
+	text-color: white;
 	text-size: 12;
+	fill-color: yellow;
 	text-background-mode: rounded-box;
+	text-background-color: black;
 }
+
+

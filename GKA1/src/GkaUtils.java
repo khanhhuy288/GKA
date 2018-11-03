@@ -10,6 +10,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.graphstream.ui.view.Viewer;
 
 /**
  * Utility Class for reading a GKA file or saving a GkaGraph object as GKA
@@ -25,10 +26,13 @@ import java.util.regex.Pattern;
  */
 public class GkaUtils {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		String filename = "graph01.gka";
+		String filename = "graph07.gka";
 		GkaGraph myGraph = GkaUtils.read(filename, "defaultStylesheet");
-		myGraph.display();
-		GkaUtils.save(myGraph, "holy.gka");
+		Viewer viewer = myGraph.display();
+		viewer.enableAutoLayout();
+		myGraph.addAttribute("ui.quality");
+		myGraph.addAttribute("ui.antialias");
+	    
 	}
 
 	/**
@@ -84,7 +88,7 @@ public class GkaUtils {
 		Pattern pattern = Pattern.compile(regex);
 
 		// set file path
-		String filePath = System.getProperty("user.dir") + "/gka-Dateien/" + filename;
+		String filePath = System.getProperty("user.dir") + "/gkaFiles/" + filename;
 		File file = new File(filePath);
 
 		// read file line by line
@@ -115,7 +119,7 @@ public class GkaUtils {
 	}
 
 	/**
-	 * Save a GkaGraph object as a GKA file to the <em>gka-Dateien</em> folder.
+	 * Save a GkaGraph object as a GKA file to the <em>gkaFiles</em> folder.
 	 * 
 	 * @param graph
 	 * @throws IOException
@@ -125,7 +129,7 @@ public class GkaUtils {
 	public static void save(GkaGraph graph, String filename)
 			throws UnsupportedEncodingException, FileNotFoundException, IOException {
 		// set save path
-		String filePath = System.getProperty("user.dir") + "/gka-Dateien/" + filename;
+		String filePath = System.getProperty("user.dir") + "/gkaFiles/" + filename;
 		File file = new File(filePath.toString());
 
 		// write GKA object to file
