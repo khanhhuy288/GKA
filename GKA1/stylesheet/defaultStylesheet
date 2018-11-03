@@ -28,4 +28,8 @@ edge {
 	text-background-color: black;
 }
 
+edge.marked {
+	fill-color: red;
+}
+
 

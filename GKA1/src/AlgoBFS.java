@@ -38,7 +38,9 @@ public class AlgoBFS {
 			while (neighbors.hasNext()) {
 				Node next = neighbors.next();
 				if (next.getAttribute("class") != "marked") {
+//					sleep();
 					next.setAttribute("class", "marked");
+//					sleep();
 					queue.add(next);
 				}
 			}
@@ -144,7 +146,7 @@ public class AlgoBFS {
 			// Create a queue for BFS and enqueue t
 			LinkedList<Node> queue = new LinkedList<Node>();
 			queue.add(t);
-			t.addAttribute("ui.class", "marked");
+//			t.addAttribute("ui.class", "marked");
 			
 			t.setAttribute("dist", distance);
 
@@ -168,7 +170,6 @@ public class AlgoBFS {
 
 					// found a suitable node
 					if ((int) next.getAttribute("dist") == wantedDist) {
-						next.addAttribute("ui.class", "marked");
 						// add to queue for the next examination
 						queue.add(next);
 						
@@ -183,11 +184,40 @@ public class AlgoBFS {
 
 			// print out result
 			System.out.print("A shortest path between " + startName + " und " + endName + ": ");
-			while(!result.isEmpty()) {
-				Node n = result.pop();
-				System.out.print(n.getAttribute("name") + " ");
+			
+			Node[] resArr = new Node[result.size()];
+			for(int i = 0; i < resArr.length; i++) {
+				resArr[i] = result.pop();
+				System.out.print(resArr[i].getAttribute("name") + " ");
 			}
+			
+//			for(int i = 0; i < resArr.length; i++) {
+//				System.out.print(resArr[i].getAttribute("name") + " ");
+//			}
 			System.out.println();
+			
+			// visualize shortest path
+			resArr[0].addAttribute("ui.class", "marked");
+			sleep();
+			for(int i = 1; i < resArr.length; i++) {
+				sleep();
+				resArr[i].addAttribute("ui.class", "marked");
+				resArr[i-1].getEdgeBetween(resArr[i]).addAttribute("ui.class", "marked");
+			}
+			
+//			System.out.print("A shortest path between " + startName + " und " + endName + ": ");
+//			while(!result.isEmpty()) {
+//				Node n = result.pop();
+//				sleep();
+//				n.addAttribute("ui.class", "marked");
+//				System.out.print(n.getAttribute("name") + " ");
+//				sleep();
+//			}
+			
 		}
 	}
+	
+	protected static void sleep() {
+        try { Thread.sleep(1000); } catch (Exception e) {}
+    }
 }
