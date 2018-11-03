@@ -26,13 +26,22 @@ import org.graphstream.ui.view.Viewer;
  */
 public class GkaUtils {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		String filename = "graph07.gka";
-		GkaGraph myGraph = GkaUtils.read(filename, "defaultStylesheet");
-		Viewer viewer = myGraph.display();
-		viewer.enableAutoLayout();
-		myGraph.addAttribute("ui.quality");
-		myGraph.addAttribute("ui.antialias");
+//		String filename = "graph07.gka";
+//		GkaGraph myGraph = GkaUtils.read(filename, "defaultStylesheet");
+//		Viewer viewer = myGraph.display();
+//		viewer.enableAutoLayout();
+//		myGraph.addAttribute("ui.quality");
+//		myGraph.addAttribute("ui.antialias");
 	    
+		String filename = "BFStest.gka";
+		GkaGraph myGraph = GkaUtils.read(filename, "defaultStylesheet");
+		myGraph.display();
+		GkaUtils.save(myGraph, "BFSsave.gka");
+		
+		myGraph.addLabels();
+		
+		AlgoBFS.traverse(myGraph, "s");
+		System.out.println(AlgoBFS.distance(myGraph, "s", "t"));
 	}
 
 	/**
