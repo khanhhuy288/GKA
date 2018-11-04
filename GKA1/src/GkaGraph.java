@@ -8,7 +8,7 @@ import org.graphstream.graph.implementations.MultiGraph;
 
 
 /**
- * GkaGraph has useful functions for working with graph's properties.
+ * GkaGraph has useful functions for working with graph's attributes.
  * 
  * @author Huy Tran PC
  *
@@ -43,7 +43,7 @@ public class GkaGraph extends MultiGraph {
 	 * 
 	 * @param nodeName
 	 *            Name of a node
-	 * @return Id of that node.
+	 * @return Id of that node
 	 */
 	public String createNode(String nodeName) {
 		String nodeId;
@@ -63,19 +63,19 @@ public class GkaGraph extends MultiGraph {
 	
 	/**
 	 * Create an edge. If there's no node 2, a single node is created.
-	 * @param nameNode1 Name of the node 1
-	 * @param nameNode2 Name of the node 2 
+	 * @param nodeName1 Name of node 1
+	 * @param nodeName2 Name of node 2 
 	 * @param isDirected "--" for undirected, "->" for directed
 	 * @param edgeName Name of the edge
 	 * @param edgeWeight Weight of the edge 
 	 */
-	public void createEdge(String nameNode1, String nameNode2, String isDirected, String edgeName, String edgeWeight) {
+	public void createEdge(String nodeName1, String nodeName2, String isDirected, String edgeName, String edgeWeight) {
 		// create or get node 1
-		String nodeId1 = this.createNode(nameNode1);
+		String nodeId1 = this.createNode(nodeName1);
 		
-		if (nameNode2 != null) {
+		if (nodeName2 != null) {
 			// create or get node 2
-			String nodeId2 = this.createNode(nameNode2);
+			String nodeId2 = this.createNode(nodeName2);
 
 			// create edge 
 			String edgeId = GkaGraph.createStringId();

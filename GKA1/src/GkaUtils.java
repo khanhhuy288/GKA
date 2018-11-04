@@ -10,7 +10,6 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.graphstream.ui.view.Viewer;
 
 /**
  * Utility Class for reading a GKA file or saving a GkaGraph object as GKA
@@ -26,21 +25,18 @@ import org.graphstream.ui.view.Viewer;
  */
 public class GkaUtils {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-//		String filename = "graph07.gka";
+//		String filename = "graph06.gka";
 //		GkaGraph myGraph = GkaUtils.read(filename, "defaultStylesheet");
-//		Viewer viewer = myGraph.display();
-//		viewer.enableAutoLayout();
-
-	    
+//		myGraph.display();
+//		GkaUtils.save(myGraph, "holy.gka");
+		
 		String filename = "BFStest.gka";
 		GkaGraph myGraph = GkaUtils.read(filename, "defaultStylesheet");
 		myGraph.display();
-		GkaUtils.save(myGraph, "BFSsave.gka");		
-		myGraph.addLabels();
-		
+		GkaUtils.save(myGraph, "BFSsave.gka");				
 		AlgoBFS.traverse(myGraph, "s");
 		System.out.println(AlgoBFS.distance(myGraph, "s", "t"));
-		AlgoBFS.shortestPath(myGraph, "s", "t");
+//		AlgoBFS.shortestPath(myGraph, "s", "t");
 	}
 
 	/**
@@ -95,10 +91,9 @@ public class GkaUtils {
 		graph.addAttribute("ui.quality");
         graph.addAttribute("ui.antialias");
 
-
 		// regex for GKA format of each line
 		String regex = "^\\s*([\\wÄäÖöÜüß]+)\\s*((->|--)\\s*([\\wÄäÖöÜüß]+)\\s*(\\(\\s*([\\wÄäÖöÜüß]+)\\s*\\)\\s*)?(:\\s*(\\d+)\\s*)?)?;$";
-		Pattern pattern = Pattern.compile(regex);
+        Pattern pattern = Pattern.compile(regex);
 
 		// set file path
 		String filePath = System.getProperty("user.dir") + "/gkaFiles/" + filename;
@@ -112,15 +107,14 @@ public class GkaUtils {
 
 				// find the properties of a line
 				if (matcher.matches()) {
-					String nameNode1 = matcher.group(1);
+					String nodeName1 = matcher.group(1);
 					String isDirected = matcher.group(3);
-					String nameNode2 = matcher.group(4);
+					String nodeName2 = matcher.group(4);
 					String edgeName = matcher.group(6);
 					String edgeWeight = matcher.group(8);
 
 					// create an edge or a single node
-					graph.createEdge(nameNode1, nameNode2, isDirected, edgeName, edgeWeight);
-
+					graph.createEdge(nodeName1, nodeName2, isDirected, edgeName, edgeWeight);
 				}
 			}
 		}
@@ -143,7 +137,7 @@ public class GkaUtils {
 			throws UnsupportedEncodingException, FileNotFoundException, IOException {
 		// set save path
 		String filePath = System.getProperty("user.dir") + "/gkaFiles/" + filename;
-		File file = new File(filePath.toString());
+		File file = new File(filePath);
 
 		// write GKA object to file
 		try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {

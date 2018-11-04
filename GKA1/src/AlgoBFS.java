@@ -23,39 +23,39 @@ public class AlgoBFS {
 	 * 4. If the queue is empty, the algorithm ends, else dequeue the first node in
 	 * the queue and go to step 3 <br>
 	 * 
-	 * @param g
-	 * @param nodeName
+	 * @param graph A graph to work with 
+	 * @param nodeName Name of the start node
 	 */
-	public static void traverse(GkaGraph g, String nodeName) {
-		Node n = g.getNode(g.createNode(nodeName));
-
-		// Reset all marks
-		for (Node node : g) {
+	public static void traverse(GkaGraph graph, String nodeName) {
+		Node node = graph.getNode(graph.createNode(nodeName));
+		
+		for (Node node : graph) {
 			node.setAttribute("ui.class", "unmarked");
 		}
-		for (Edge edge : g.getEachEdge()) {
+		for (Edge edge : graph.getEachEdge()) {
 			edge.setAttribute("ui.class", "unmarked");
 		}
+		
 
-		// Create a queue for BFS
+		// create a queue for visited nodes
 		LinkedList<Node> queue = new LinkedList<Node>();
 
-		// Create a list to store the order of nodes for visualizing
+		// create a list for traverse 
 		LinkedList<Node> res = new LinkedList<Node>();
 
-		// Mark the current node as visited and enqueue it
-		n.setAttribute("class", "marked");
-		queue.add(n);
-		res.add(n);
+		// mark the current node as visited and enqueue it
+		node.setAttribute("class", "marked");
+		queue.add(node);
+		res.add(node);
 
 		while (queue.size() != 0) {
 			// Dequeue visited node and print it
-			n = queue.poll();
-			System.out.print(n.getAttribute("name") + " ");
+			node = queue.poll();
+			System.out.print(node.getAttribute("name") + " ");
 
 			// Iterate through all adjacent nodes
 			// If a adjacent has not been visited, then mark it visited and enqueue it
-			Iterator<Node> neighbors = n.getNeighborNodeIterator();
+			Iterator<Node> neighbors = node.getNeighborNodeIterator();
 			while (neighbors.hasNext()) {
 				Node next = neighbors.next();
 				if (next.getAttribute("class") != "marked") {
