@@ -16,10 +16,9 @@ public class AlgoBFS {
 	/**
 	 * Print out and visualize BFS traversal starting from a given node <br>
 	 * Algorithm: <br>
-	 * 1. Mark the starting node and add it to queue <br>
+	 * 1. Mark the start node and add it to queue <br>
 	 * 2. Dequeue the visiting node <br>
-	 * 3. Iterate through its adjacent nodes, if it isn't marked, mark it and add it
-	 * to queue <br>
+	 * 3. Iterate through its adjacent nodes, if it isn't marked, mark and enqueue it <br>
 	 * 4. If the queue is empty, the algorithm ends, else dequeue the first node in
 	 * the queue and go to step 3 <br>
 	 * 
@@ -27,8 +26,7 @@ public class AlgoBFS {
 	 * @param nodeName Name of the start node
 	 */
 	public static void traverse(GkaGraph graph, String nodeName) {
-		Node node = graph.getNode(graph.createNode(nodeName));
-		
+		// clear marks 
 		for (Node node : graph) {
 			node.setAttribute("ui.class", "unmarked");
 		}
@@ -36,30 +34,32 @@ public class AlgoBFS {
 			edge.setAttribute("ui.class", "unmarked");
 		}
 		
-
 		// create a queue for visited nodes
 		LinkedList<Node> queue = new LinkedList<Node>();
 
-		// create a list for traverse 
+		// create a list for result
 		LinkedList<Node> res = new LinkedList<Node>();
 
-		// mark the current node as visited and enqueue it
-		node.setAttribute("class", "marked");
-		queue.add(node);
-		res.add(node);
+		// get start node
+		Node start = graph.getNode(graph.createNode(nodeName));
+		
+		// mark the start node as visited and enqueue it
+		start.setAttribute("visited", "yes");
+		queue.add(start);
+		res.add(start);
 
 		while (queue.size() != 0) {
-			// Dequeue visited node and print it
-			node = queue.poll();
-			System.out.print(node.getAttribute("name") + " ");
+			// dequeue a visited node and print it
+			Node currentNode = queue.poll();
+			System.out.print(currentNode.getAttribute("name") + " ");
 
-			// Iterate through all adjacent nodes
-			// If a adjacent has not been visited, then mark it visited and enqueue it
-			Iterator<Node> neighbors = node.getNeighborNodeIterator();
+			// iterate through all adjacent nodes
+			// mark unvisited nodes as visited and enqueue them 
+			Iterator<Node> neighbors = currentNode.getNeighborNodeIterator();
 			while (neighbors.hasNext()) {
 				Node next = neighbors.next();
-				if (next.getAttribute("class") != "marked") {
-					next.setAttribute("class", "marked");
+				if (next.getAttribute("visited") != "yes") {
+					next.setAttribute("visited", "yes");
 					queue.add(next);
 					res.add(next);
 				}
@@ -68,7 +68,7 @@ public class AlgoBFS {
 
 		System.out.println();
 
-		// visualize traversal
+		// visualize the traversal
 		for (Node node : res) {
 			sleepTr();
 			node.setAttribute("ui.class", "marked");
@@ -77,7 +77,7 @@ public class AlgoBFS {
 	}
 
 	/**
-	 * Calculate the shortest distance between 2 nodes in graph using BFS <br>
+	 * Calculate the shortest distance between 2 nodes in graph using BFS. <br>
 	 * Algorithm: <br>
 	 * 1. Set dist(s) = i = 0 <br>
 	 * 2. Iterate through all adjacent nodes of visiting node (dist = i). If the
@@ -86,51 +86,52 @@ public class AlgoBFS {
 	 * by 1 and go to step 2. <br>
 	 * If the loop ends before t is reached, return -1
 	 * 
-	 * @param g
-	 *            the graph
-	 * @param startName
-	 *            name of start node
-	 * @param endName
-	 *            name of end node
-	 * @return the least number of edges between s and t (default = -1, 2 nodes
-	 *         aren't connected)
+	 * @param graph
+	 *            The graph to work with 
+	 * @param startNodeName
+	 *            Name of start node 
+	 * @param endNodeName
+	 *            Name of end node
+	 * @return The smallest number of edges between s and t. Return -1 if 2 nodes
+	 *         aren't connected
 	 */
-	public static int distance(GkaGraph g, String startName, String endName) {
-		Node s = g.getNode(g.createNode(startName));
-		Node t = g.getNode(g.createNode(endName));
+	public static int distance(GkaGraph graph, String startNodeName, String endNodeName) {
+		// get start and end nodes 
+		Node start = graph.getNode(graph.createNode(startNodeName));
+		Node end = graph.getNode(graph.createNode(endNodeName));
+		
+		// set default 
 		int result = -1;
 
-		// Create a queue for BFS and enqueue s
+		// create a queue for BFS and enqueue start node
 		LinkedList<Node> queue = new LinkedList<Node>();
-		queue.add(s);
+		queue.add(start);
 
-		// set distance for s is 0, others are -1 (unvisited)
-		for (Node n : g) {
-			n.setAttribute("dist", -1);
+		// set distance for start node to 0, others to -1 (unvisited)
+		for (Node node : graph) {
+			node.setAttribute("dist", -1);
 		}
-		s.setAttribute("dist", 0);
-
+		start.setAttribute("dist", 0);
+		
 		while (!queue.isEmpty()) {
-			// pop visited node
-			Node node = queue.poll();
+			// dequeue a visited node 
+			Node currentNode = queue.poll();
 
 			// iterate through all adjacent nodes
-			Iterator<Node> neighbors = node.getNeighborNodeIterator();
+			Iterator<Node> neighbors = currentNode.getNeighborNodeIterator();
 			while (neighbors.hasNext()) {
-				Node next = neighbors.next();
-
-				if ((int) next.getAttribute("dist") == -1) {
-					// set new distance to s
-					next.setAttribute("dist", (int) node.getAttribute("dist") + 1);
-
-					// add to queue for the next examination
-					queue.add(next);
+				Node node = neighbors.next();
+				
+				// set new distance to unvisited node and enqueue it
+				if ((int) node.getAttribute("dist") == -1) {
+					node.setAttribute("dist", (int) currentNode.getAttribute("dist") + 1);
+					queue.add(node);
 				}
 
-				// the algorithm ends if t is reached
-				if (next == t) {
-					result = (int) next.getAttribute("dist");
-					// break;
+				// stop if end node is found 
+				if (node == end) {
+					result = (int) node.getAttribute("dist");
+					break;
 				}
 			}
 		}
@@ -149,67 +150,63 @@ public class AlgoBFS {
 	 * 2
 	 * 
 	 * @param g
-	 *            the graph
-	 * @param startName
-	 *            name of start node
-	 * @param endName
-	 *            name of end node
+	 *            The graph to work with
+	 * @param startNodeName
+	 *            Name of the start node
+	 * @param endNodeName
+	 *            Name of the end node
 	 */
-	public static void shortestPath(GkaGraph g, String startName, String endName) {
-		Node s = g.getNode(g.createNode(startName));
-		Node t = g.getNode(g.createNode(endName));
-
-		// Reset all marks
+	public static void shortestPath(GkaGraph g, String startNodeName, String endNodeName) {
+		// clear marks 
 		for (Node node : g) {
 			node.setAttribute("ui.class", "unmarked");
 		}
 		for (Edge edge : g.getEachEdge()) {
 			edge.setAttribute("ui.class", "unmarked");
 		}
+		
+		// get start and end nodes 
+		Node start = g.getNode(g.createNode(startNodeName));
+		Node end = g.getNode(g.createNode(endNodeName));
 
-		// distance between s and t
-		int distance = distance(g, startName, endName);
+		// get distance between start and end nodes 
+		int distance = distance(g, startNodeName, endNodeName);
 
-		// check if s and t are connected
+		// find shortest path only if distance >= 0
 		if (distance < 0) {
-			System.out.printf("%s and %s aren't connected", startName, endName);
+			System.out.printf("%s and %s aren't connected", startNodeName, endNodeName);
 		} else {
-			// result stack
+			// create a stack for result and enqueue end node 
 			Stack<Node> result = new Stack<Node>();
-			result.add(t);
+			result.add(end);
 
-			// Create a queue for BFS and enqueue t
+			// create a queue for BFS and enqueue end node
 			LinkedList<Node> queue = new LinkedList<Node>();
-			queue.add(t);
+			queue.add(end);
 
-			t.setAttribute("dist", distance);
+			end.setAttribute("dist", distance);
 
 			while (!queue.isEmpty()) {
-				// pop visited node
-				Node node = queue.poll();
+				// dequeue a visited node
+				Node currentNode = queue.poll();
 
-				// the algorithm ends if s is reached
-				if (node == s) {
+				// stop if start is found
+				if (currentNode == start) {
 					break;
 				}
 
-				// iterate through adjacent nodes to find a 'parent' node that lies on a
+				// iterate through adjacent nodes to find a parent node that lies on the
 				// shortest path
-				Iterator<Node> neighbors = node.getNeighborNodeIterator();
+				Iterator<Node> neighbors = currentNode.getNeighborNodeIterator();
 				while (neighbors.hasNext()) {
-					Node next = neighbors.next();
+					Node node = neighbors.next();
 
-					// wanted distance to start node
-					int wantedDist = (int) node.getAttribute("dist") - 1;
-
-					// found a suitable node
-					if ((int) next.getAttribute("dist") == wantedDist) {
-						// add to queue for the next examination
-						queue.add(next);
-
-						// add wanted 'parent' node to the stack
-						result.add(next);
-
+					// find one parent node that has the wanted distance to start node and
+					// enqueue it 
+					int wantedDist = (int) currentNode.getAttribute("dist") - 1;
+					if ((int) node.getAttribute("dist") == wantedDist) {
+						queue.add(node);
+						result.add(node);
 						break;
 					}
 
@@ -217,7 +214,7 @@ public class AlgoBFS {
 			}
 
 			// print out result
-			System.out.print("A shortest path between " + startName + " und " + endName + ": ");
+			System.out.print("A shortest path between " + startNodeName + " und " + endNodeName + ": ");
 
 			Node[] resArr = new Node[result.size()];
 			for (int i = 0; i < resArr.length; i++) {
@@ -238,13 +235,19 @@ public class AlgoBFS {
 		}
 	}
 
+	/**
+	 * Pause during traversal between each node.
+	 */
 	protected static void sleepTr() {
 		try {
-			Thread.sleep(600);
+			Thread.sleep(800);
 		} catch (Exception e) {
 		}
 	}
 	
+	/**
+	 * Pause during finding shortest path.
+	 */
 	protected static void sleep() {
 		try {
 			Thread.sleep(1000);

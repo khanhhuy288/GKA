@@ -33,10 +33,13 @@ public class GkaUtils {
 		String filename = "BFStest.gka";
 		GkaGraph myGraph = GkaUtils.read(filename, "defaultStylesheet");
 		myGraph.display();
-		GkaUtils.save(myGraph, "BFSsave.gka");				
+		GkaUtils.save(myGraph, "BFSsave.gka");			
+	
 		AlgoBFS.traverse(myGraph, "s");
+		
+		AlgoBFS.shortestPath(myGraph, "s", "t");
 		System.out.println(AlgoBFS.distance(myGraph, "s", "t"));
-//		AlgoBFS.shortestPath(myGraph, "s", "t");
+		
 	}
 
 	/**

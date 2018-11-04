@@ -14,7 +14,6 @@ node {
 }
 
 node.marked {
-	text-color: blue;
 	fill-color: red;
 }
 
