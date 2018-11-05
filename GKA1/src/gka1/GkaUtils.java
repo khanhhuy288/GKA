@@ -1,3 +1,4 @@
+package gka1;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -27,14 +28,15 @@ import java.util.regex.Pattern;
  */
 public class GkaUtils {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		// String filename = "graph10.gka";
-		// GkaGraph myGraph = GkaUtils.read(filename);
-		// myGraph.display();
-		// myGraph.beautify();
+		 String filename = "graph10.gka";
+		 GkaGraph myGraph = GkaUtils.read(filename);
+		 myGraph.display();
+		 myGraph.beautify();
 
-		GkaGraph graph = GkaUtils.generateRandom(10, 20, false, false);
-		GkaUtils.save(graph, "holy.gka");
-		graph.display();
+		 GkaGraph graph = GkaUtils.generateRandom(10, 5, false, false);
+		 GkaUtils.save(graph, "holy.gka");
+		 graph.display();
+		 graph.beautify();
 
 		// String filename = "BFStest.gka";
 		// GkaGraph myGraph = GkaUtils.read(filename, "defaultStylesheet");
@@ -45,6 +47,13 @@ public class GkaUtils {
 		//
 		// AlgoBFS.shortestPath(myGraph, "s", "t");
 		// System.out.println(AlgoBFS.distance(myGraph, "s", "t"));
+		
+//		String filename = "graphTest1.gka";
+//		GkaGraph graph = GkaUtils.read(filename);
+//		GkaUtils.save(graph, "savedGraphTest1.gka");
+//		GkaGraph savedGraph = GkaUtils.read("savedGraphTest1.gka");
+//		savedGraph.display();
+//		savedGraph.beautify();
 
 	}
 
@@ -72,7 +81,7 @@ public class GkaUtils {
 		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
 		// regex for GKA format of each line
-		String regex = "^\\s*([\\wÄäÖöÜüß]+)\\s*((->|--)\\s*([\\wÄäÖöÜüß]+)\\s*(\\(\\s*([\\wÄäÖöÜüß]+)\\s*\\)\\s*)?(:\\s*(\\d+)\\s*)?)?;$";
+		String regex = "^\\s*([\\wÄäÖöÜüß]+)\\s*((->|--)\\s*([\\wÄäÖöÜüß]+)\\s*(\\(\\s*([\\wÄäÖöÜüß\\d\\s]+)\\s*\\)\\s*)?(:\\s*(\\d+)\\s*)?)?;$";
 		Pattern pattern = Pattern.compile(regex);
 
 		// set file path
@@ -91,6 +100,10 @@ public class GkaUtils {
 					String isDirected = matcher.group(3);
 					String nodeName2 = matcher.group(4);
 					String edgeName = matcher.group(6);
+					// remove extra whitespaces
+					if (edgeName != null) {
+						edgeName = edgeName.trim().replaceAll("\\s+", " ");
+					}
 					String edgeWeight = matcher.group(8);
 
 					// create an edge or a single node
