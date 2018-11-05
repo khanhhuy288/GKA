@@ -32,20 +32,22 @@ public class GkaUtils {
 		// myGraph.display();
 		// myGraph.beautify();
 
-		GkaGraph graph = GkaUtils.generateRandom(10, 20, false, false);
-		GkaUtils.save(graph, "holy.gka");
-		graph.display();
+//		GkaGraph graph = GkaUtils.generateRandom(10, 20, false, false);
+//		GkaUtils.save(graph, "holy.gka");
+//		graph.display();
 
-		// String filename = "BFStest.gka";
-		// GkaGraph myGraph = GkaUtils.read(filename, "defaultStylesheet");
-		// myGraph.display();
-		// GkaUtils.save(myGraph, "BFSsave.gka");
+		String filename = "BFStest.gka";
+		GkaGraph myGraph = GkaUtils.read(filename);		
+		GkaUtils.save(myGraph, "BFSsave.gka");
+		
+//		AlgoBFS.traverse(myGraph, "s");		
+//		System.out.println(AlgoBFS.distance(myGraph, "s", "t"));
+//		AlgoBFS.shortestPath(myGraph, "s", "t");
 
-		// AlgoBFS.traverse(myGraph, "s");
-		//
-		// AlgoBFS.shortestPath(myGraph, "s", "t");
-		// System.out.println(AlgoBFS.distance(myGraph, "s", "t"));
-
+		myGraph.display();
+		myGraph.beautify();
+		AlgoBFS.visualizeTraversal(myGraph, "s");
+		AlgoBFS.visualizeShortestPath(myGraph, "s", "t");
 	}
 
 	/**
