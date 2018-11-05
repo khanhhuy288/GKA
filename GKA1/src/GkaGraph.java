@@ -6,7 +6,6 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
 
-
 /**
  * GkaGraph has useful functions for working with graph's attributes.
  * 
@@ -21,7 +20,7 @@ public class GkaGraph extends MultiGraph {
 	 * Constructor for a GkaGraph.
 	 * 
 	 * @param id
-	 *            Id of the graph
+	 *            Id of the graph.
 	 */
 	public GkaGraph(String id) {
 		super(id);
@@ -31,7 +30,7 @@ public class GkaGraph extends MultiGraph {
 	/**
 	 * Get the hash map with node names as keys and node ids as values.
 	 * 
-	 * @return The hash map
+	 * @return The hash map.
 	 */
 	public HashMap<String, String> getNodeNameToIdMap() {
 		return nodeNameToIdMap;
@@ -42,8 +41,8 @@ public class GkaGraph extends MultiGraph {
      * the method just retrieves the id of the created node.  
 	 * 
 	 * @param nodeName
-	 *            Name of a node
-	 * @return Id of that node
+	 *            Name of a node.
+	 * @return Id of that node.
 	 */
 	public String createNode(String nodeName) {
 		String nodeId;
@@ -63,11 +62,11 @@ public class GkaGraph extends MultiGraph {
 	
 	/**
 	 * Create an edge. If there's no node 2, a single node is created.
-	 * @param nodeName1 Name of node 1
-	 * @param nodeName2 Name of node 2 
-	 * @param isDirected "--" for undirected, "->" for directed
-	 * @param edgeName Name of the edge
-	 * @param edgeWeight Weight of the edge 
+	 * @param nodeName1 Name of node 1.
+	 * @param nodeName2 Name of node 2. 
+	 * @param isDirected Whether graph is directed.
+	 * @param edgeName Name of the edge.
+	 * @param edgeWeight Weight of the edge.
 	 */
 	public void createEdge(String nodeName1, String nodeName2, String isDirected, String edgeName, String edgeWeight) {
 		// create or get node 1
@@ -183,5 +182,28 @@ public class GkaGraph extends MultiGraph {
 	public static String createStringId() {
 		return UUID.randomUUID().toString();
 	}
-
+	
+	/**
+	 * Beautify the graph with default stylesheet. 
+	 */
+	public void beautify() {
+		beautify("defaultStylesheet");
+	}
+	
+	/**
+	 * Beautify the graph with custom stylesheet.
+	 * @param stylesheetName Name of the stylesheet. 
+	 */
+	public void beautify(String stylesheetName) {
+		// set stylesheet
+		String stylesheetPath = System.getProperty("user.dir") + "/stylesheet/" + stylesheetName;
+		this.addAttribute("ui.stylesheet", "url('file:///" + stylesheetPath + "')");
+		
+		// improve viewing quality
+		this.addAttribute("ui.quality");
+        this.addAttribute("ui.antialias");
+		
+        // add labels to nodes and edges
+		this.addLabels();
+	}
 }
