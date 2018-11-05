@@ -68,11 +68,11 @@ public class AlgoBFS {
 	/**
 	 * Calculate the shortest distance between 2 nodes in graph using BFS. <br>
 	 * Algorithm: <br>
-	 * 1. Set dist(s) = i = 0. <br>
-	 * 2. Iterate through all adjacent nodes of visiting node (dist = i). If the
-	 * node is unvisited, set dist = i+1. <br>
-	 * 3. If t is reached, the result is i+1, the algorithm ends. If not, increase i
-	 * by 1 and go to step 2. <br>
+	 * 1. Set dist(s) = 0 and enqueue s. <br>
+	 * 2. Dequeue the first node in the queue. Iterate through its adjacent nodes.
+	 * If the node is unvisited, set dist = dist(currentNode) + 1. <br>
+	 * 3. If t is reached, the result is dist(currentNode) + 1, the algorithm ends.
+	 * If not, go to step 2. <br>
 	 * If the loop ends before t is reached, return -1.
 	 * 
 	 * @param graph
@@ -132,11 +132,12 @@ public class AlgoBFS {
 	/**
 	 * Print out a path with the least edges connecting 2 nodes. <br>
 	 * Algorithm: <br>
-	 * 1. Mark t with distance(s,t) = i <br>
-	 * 2. Find and mark a adjacent node of the current visiting node that has
-	 * distance = i-1 <br>
-	 * 3. If s is reached, end the algorithm. If not, decrease i by 1 and go to step
-	 * 2
+	 * 1. Mark t with distance(s,t) = i and enqueue t. <br>
+	 * 2. Find a adjacent node of the last enqueued node (n) that has distance =
+	 * dist(n)-1 and enqueue it. <br>
+	 * 3. If a neighbor of s is reached, go to step 4. If not, go to step 2. <br>
+	 * 4. Enqueue s and end the algorithm, print out the queue in reversed order to
+	 * see the path.
 	 * 
 	 * @param graph
 	 *            The graph to work with
@@ -172,8 +173,10 @@ public class AlgoBFS {
 				// dequeue visiting node
 				Node currentNode = queue.poll();
 
-				// stop if start is found
-				if (currentNode == start) {
+				int currentDist = (int) currentNode.getAttribute("dist");
+
+				// stop if a neighbor of start is found
+				if (currentDist == 1) {
 					break;
 				}
 
@@ -185,8 +188,7 @@ public class AlgoBFS {
 
 					// find one parent node that has the wanted distance to start node and
 					// enqueue it
-					int wantedDist = (int) currentNode.getAttribute("dist") - 1;
-					if ((int) node.getAttribute("dist") == wantedDist) {
+					if ((int) node.getAttribute("dist") == currentDist - 1) {
 						queue.add(node);
 						result.add(node);
 						break;
@@ -194,6 +196,7 @@ public class AlgoBFS {
 
 				}
 			}
+			result.add(start);
 
 			// print out result
 			System.out.print("A shortest path between " + startNodeName + " und " + endNodeName + ": ");
