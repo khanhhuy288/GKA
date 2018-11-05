@@ -1,4 +1,5 @@
 package gka1;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -28,15 +29,15 @@ import java.util.regex.Pattern;
  */
 public class GkaUtils {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		 String filename = "graph10.gka";
-		 GkaGraph myGraph = GkaUtils.read(filename);
-		 myGraph.display();
-		 myGraph.beautify();
+		// String filename = "graph10.gka";
+		// GkaGraph myGraph = GkaUtils.read(filename);
+		// myGraph.display();
+		// myGraph.beautify();
 
-		 GkaGraph graph = GkaUtils.generateRandom(10, 5, false, false);
-		 GkaUtils.save(graph, "holy.gka");
-		 graph.display();
-		 graph.beautify();
+		GkaGraph graph = GkaUtils.generateRandom(2, 100, false, true);
+		GkaUtils.save(graph, "holy.gka");
+		graph.display();
+		graph.beautify();
 
 		// String filename = "BFStest.gka";
 		// GkaGraph myGraph = GkaUtils.read(filename, "defaultStylesheet");
@@ -47,13 +48,13 @@ public class GkaUtils {
 		//
 		// AlgoBFS.shortestPath(myGraph, "s", "t");
 		// System.out.println(AlgoBFS.distance(myGraph, "s", "t"));
-		
-//		String filename = "graphTest1.gka";
-//		GkaGraph graph = GkaUtils.read(filename);
-//		GkaUtils.save(graph, "savedGraphTest1.gka");
-//		GkaGraph savedGraph = GkaUtils.read("savedGraphTest1.gka");
-//		savedGraph.display();
-//		savedGraph.beautify();
+
+		// String filename = "graphTest1.gka";
+		// GkaGraph graph = GkaUtils.read(filename);
+		// GkaUtils.save(graph, "savedGraphTest1.gka");
+		// GkaGraph savedGraph = GkaUtils.read("savedGraphTest1.gka");
+		// savedGraph.display();
+		// savedGraph.beautify();
 
 	}
 
@@ -76,9 +77,6 @@ public class GkaUtils {
 			throws UnsupportedEncodingException, FileNotFoundException, IOException {
 		// create empty graph
 		GkaGraph graph = new GkaGraph(GkaGraph.createStringId());
-
-		// set viewer
-		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
 		// regex for GKA format of each line
 		String regex = "^\\s*([\\wÄäÖöÜüß]+)\\s*((->|--)\\s*([\\wÄäÖöÜüß]+)\\s*(\\(\\s*([\\wÄäÖöÜüß\\d\\s]+)\\s*\\)\\s*)?(:\\s*(\\d+)\\s*)?)?;$";
@@ -111,6 +109,9 @@ public class GkaUtils {
 				}
 			}
 		}
+
+		// set viewer
+		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
 		return graph;
 	}
@@ -167,7 +168,9 @@ public class GkaUtils {
 	}
 
 	/**
-	 * Generate a random graph.
+	 * Generate a random graph with a fixed number of nodes and edges. Edge
+	 * names are optional. Edge weight is also optional and can be set within a
+	 * range.
 	 * 
 	 * @param nodeNum
 	 *            Number of nodes.
@@ -176,7 +179,7 @@ public class GkaUtils {
 	 * @param isDirected
 	 *            Whether graph is directed.
 	 * @param hasEdgeName
-	 *            Whether name edges should be added.
+	 *            Whether edge names should be added.
 	 * @param edgeWeightMin
 	 *            The minimum weight of an edge.
 	 * @param edgeWeightMax
@@ -193,11 +196,8 @@ public class GkaUtils {
 			graph.createNode(String.valueOf(i));
 		}
 
-		// get list of node names for node name 1
+		// get list of node names
 		ArrayList<String> nodesNameList = new ArrayList<>(graph.getNodeNameToIdMap().keySet());
-		// get list of node names for node name 2
-		ArrayList<String> nodesNameListWithNull = new ArrayList<>(nodesNameList);
-		nodesNameListWithNull.add(null);
 
 		// set directivity
 		String isDirectedStr = isDirected ? "->" : "--";
@@ -210,7 +210,8 @@ public class GkaUtils {
 		int edgeWeight;
 		for (int i = 0; i < edgeNum; i++) {
 			nodeName1 = nodesNameList.get(rand.nextInt(nodesNameList.size()));
-			nodeName2 = nodesNameListWithNull.get(rand.nextInt(nodesNameListWithNull.size()));
+			nodeName2 = nodesNameList.get(rand.nextInt(nodesNameList.size()));
+			System.out.println(nodeName1 + " --- " + nodeName2);
 			if (hasEdgeWeight) {
 				edgeWeight = rand.nextInt(edgeWeightMax - edgeWeightMin + 1) + edgeWeightMin;
 				if (hasEdgeName) {
@@ -226,6 +227,9 @@ public class GkaUtils {
 				}
 			}
 		}
+
+		// set viewer
+		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
 		return graph;
 	}
