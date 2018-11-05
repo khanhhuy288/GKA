@@ -14,7 +14,7 @@ import org.graphstream.graph.Node;
 public class AlgoBFS {
 
 	/**
-	 * Print out BFS traversal starting from a given node <br>
+	 * Print out BFS traversal starting from a given node. <br>
 	 * Algorithm: <br>
 	 * 1. Mark the start node and add it to queue. <br>
 	 * 2. Dequeue the first node in the queue and print it out. <br>
@@ -80,8 +80,8 @@ public class AlgoBFS {
 	 *            Name of start node
 	 * @param endNodeName
 	 *            Name of end node
-	 * @return The smallest number of edges needed to connect s and t. Return -1 if
-	 *         2 nodes aren't connected
+	 * @return The smallest number of edges needed to connect s and t. <br>
+	 *         Return -1 if 2 nodes aren't connected.
 	 */
 	public static int distance(GkaGraph graph, String startNodeName, String endNodeName) {
 		// get start and end nodes
@@ -129,7 +129,7 @@ public class AlgoBFS {
 	}
 
 	/**
-	 * Print out a path with the least edges between 2 nodes <br>
+	 * Print out a path with the least edges connecting 2 nodes. <br>
 	 * Algorithm: <br>
 	 * 1. Mark t with distance(s,t) = i <br>
 	 * 2. Find and mark a adjacent node of the current visiting node that has
@@ -209,7 +209,7 @@ public class AlgoBFS {
 	}
 
 	/**
-	 * Clear all previous marks on the graph made by other visualized methods
+	 * Clear all previous marks on the graph made by visualized methods.
 	 * 
 	 * @param graph
 	 *            A graph to work with
@@ -224,7 +224,7 @@ public class AlgoBFS {
 	}
 
 	/**
-	 * Print out and visualize BFS traversal starting from a given node
+	 * Print out and visualize BFS traversal starting from a given node.
 	 * 
 	 * @param graph
 	 *            The graph to work with
@@ -242,7 +242,7 @@ public class AlgoBFS {
 	}
 
 	/**
-	 * Print out and visualize a path with the least edges between 2 nodes
+	 * Print out and visualize a path with the least edges connecting 2 nodes.
 	 * 
 	 * @param graph
 	 *            The graph to work with
