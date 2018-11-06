@@ -53,7 +53,7 @@ public class AlgoBFS {
 			Iterator<Node> neighbors = currentNode.getNeighborNodeIterator();
 			while (neighbors.hasNext()) {
 				Node node = neighbors.next();
-				if (node.getAttribute("visited") != "yes") {
+				if (node.getAttribute("visited") != "yes" && currentNode.getEdgeToward(node) != null) {
 					node.setAttribute("visited", "yes");
 					queue.add(node);
 				}
@@ -112,7 +112,7 @@ public class AlgoBFS {
 				Node node = neighbors.next();
 
 				// set new distance to unvisited node and enqueue it
-				if ((int) node.getAttribute("dist") == -1) {
+				if ((int) node.getAttribute("dist") == -1 && currentNode.getEdgeToward(node) != null) {
 					node.setAttribute("dist", (int) currentNode.getAttribute("dist") + 1);
 					queue.add(node);
 				}
@@ -188,7 +188,7 @@ public class AlgoBFS {
 
 					// find one parent node that has the wanted distance to start node and
 					// enqueue it
-					if ((int) node.getAttribute("dist") == currentDist - 1) {
+					if ((int) node.getAttribute("dist") == currentDist - 1 && node.getEdgeToward(currentNode) != null) {
 						queue.add(node);
 						result.add(node);
 						break;
