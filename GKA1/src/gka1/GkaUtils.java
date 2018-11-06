@@ -44,13 +44,13 @@ public class GkaUtils {
 		 GkaUtils.save(myGraph, "BFSsave.gka");
 
 //		 AlgoBFS.traverse(myGraph, "s");		
-//		 System.out.println(AlgoBFS.distance(myGraph, "s", "t"));
+		 System.out.println(AlgoBFS.distance(myGraph, "s", "b"));
 //		 AlgoBFS.shortestPath(myGraph, "s", "t");
 		 
-		 myGraph.display();
-		 myGraph.beautify();
-		 AlgoBFS.visualizeTraversal(myGraph, "s");
-		 AlgoBFS.visualizeShortestPath(myGraph, "s", "t");
+//		 myGraph.display();
+//		 myGraph.beautify();
+//		 AlgoBFS.visualizeTraversal(myGraph, "s");
+//		 AlgoBFS.visualizeShortestPath(myGraph, "s", "t");
 
 //		 String filename = "graphTest1.gka";
 //		 GkaGraph graph = GkaUtils.read(filename);

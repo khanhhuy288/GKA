@@ -105,6 +105,10 @@ public class AlgoBFS {
 		while (!queue.isEmpty()) {
 			// dequeue visiting node
 			Node currentNode = queue.poll();
+			
+			if (result >= 0) {
+				break;
+			}
 
 			// iterate through all adjacent nodes
 			Iterator<Node> neighbors = currentNode.getNeighborNodeIterator();
