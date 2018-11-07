@@ -18,14 +18,17 @@ import gka1.AlgoBFS;
 import gka1.GkaGraph;
 import gka1.GkaUtils;
 
+/**
+ * Test for AlgoBFS.
+ * @author Tri Pham
+ *
+ */
 public class AlgoBFSTest {
 	private GkaGraph graph;
 	private ArrayList<String> traverseTest1;
 	private ArrayList<String> traverseTest2;	
 	private String[] pathArrTest;
 	
-	private GkaGraph randomGraph;
-
 
 	@Before
 	public void init() throws UnsupportedEncodingException, IOException {
@@ -33,10 +36,7 @@ public class AlgoBFSTest {
 		
 		traverseTest1 = new ArrayList<>(Arrays.asList("s", "f", "a", "d", "e", "c", "b", "t"));
 		traverseTest2 = new ArrayList<>(Arrays.asList("s", "f", "a", "d", "e", "c", "t", "b"));
-		pathArrTest = new String[] {"s", "a", "e", "t"};
-
-		
-		
+		pathArrTest = new String[] {"s", "a", "e", "t"};		
 	}
 	
 	@Test
@@ -46,8 +46,6 @@ public class AlgoBFSTest {
 			traverseList.add(node.getAttribute("name") + "");
 		}
 		List<String> traverseAL = new ArrayList<String>(traverseList);
-		System.out.println(traverseAL);
-		System.out.println(traverseTest2);
 		boolean test1 = traverseAL.containsAll(traverseTest1) && traverseTest1.containsAll(traverseAL);
 		boolean test2 = traverseAL.containsAll(traverseTest2) && traverseTest2.containsAll(traverseAL);
 		assertTrue(test1 || test2);
