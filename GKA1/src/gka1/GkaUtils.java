@@ -29,10 +29,10 @@ import java.util.regex.Pattern;
  */
 public class GkaUtils {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		// String filename = "graph10.gka";
-		// GkaGraph myGraph = GkaUtils.read(filename);
-		// myGraph.display();
-		// myGraph.beautify();
+//		 String filename = "graph03.gka";
+//		 GkaGraph myGraph = GkaUtils.read(filename);
+//		 myGraph.display();
+//		 myGraph.beautify();
 
 //		GkaGraph graph = GkaUtils.generateRandom(2, 100, false, true);
 //		GkaUtils.save(graph, "holy.gka");
@@ -82,7 +82,7 @@ public class GkaUtils {
 		GkaGraph graph = new GkaGraph(GkaGraph.createStringId());
 
 		// regex for GKA format of each line
-		String regex = "^\\s*([\\wÄäÖöÜüß]+)\\s*((->|--)\\s*([\\wÄäÖöÜüß]+)\\s*(\\(\\s*([\\wÄäÖöÜüß\\d\\s]+)\\s*\\)\\s*)?(:\\s*(\\d+)\\s*)?)?;$";
+		String regex = "^\\s*([\\wÄäÖöÜüß]+)\\s*((->|--)\\s*([\\wÄäÖöÜüß]+)\\s*(\\(\\s*([\\wÄäÖöÜüß\\s]+)\\s*\\)\\s*)?(:\\s*(\\d+)\\s*)?)?;$";
 		Pattern pattern = Pattern.compile(regex);
 
 		// set file path
@@ -214,7 +214,7 @@ public class GkaUtils {
 		for (int i = 0; i < edgeNum; i++) {
 			nodeName1 = nodesNameList.get(rand.nextInt(nodesNameList.size()));
 			nodeName2 = nodesNameList.get(rand.nextInt(nodesNameList.size()));
-			System.out.println(nodeName1 + " --- " + nodeName2);
+
 			if (hasEdgeWeight) {
 				edgeWeight = rand.nextInt(edgeWeightMax - edgeWeightMin + 1) + edgeWeightMin;
 				if (hasEdgeName) {

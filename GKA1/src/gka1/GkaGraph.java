@@ -42,7 +42,7 @@ public class GkaGraph extends MultiGraph {
      * the method just retrieves the id of the created node.  
 	 * 
 	 * @param nodeName
-	 *            Name of a node.
+	 *            Name of a node.	
 	 * @return Id of that node.
 	 */
 	public String createNode(String nodeName) {
