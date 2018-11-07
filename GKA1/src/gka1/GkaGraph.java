@@ -8,7 +8,7 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
 
 /**
- * GkaGraph has useful functions for working with graph's attributes.
+ * GkaGraph has useful methods for working with graph's attributes.
  * 
  * @author Huy Tran PC
  *
@@ -103,10 +103,12 @@ public class GkaGraph extends MultiGraph {
 	 * Add labels to nodes and edges.
 	 */
 	public void addLabels() {
+		// add labels to nodes 
 		for (Node node : this) {
 			node.addAttribute("label", node.getAttribute("name").toString());
 		}
 
+		// add labels to edges 
 		for (Edge edge : this.getEachEdge()) {
 			ArrayList<String> edgeProps = new ArrayList<>();
 			
@@ -126,7 +128,7 @@ public class GkaGraph extends MultiGraph {
 	 * Find all edges with properties and get their string presentation in GKA
 	 * format.
 	 * 
-	 * @return String presentation in GKA format of all edges and their
+	 * @return String representation in GKA format of all edges and their
 	 *         properties.
 	 */
 	public String getEdgesString() {

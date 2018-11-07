@@ -29,35 +29,35 @@ import java.util.regex.Pattern;
  */
 public class GkaUtils {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-//		 String filename = "graph03.gka";
-//		 GkaGraph myGraph = GkaUtils.read(filename);
-//		 myGraph.display();
-//		 myGraph.beautify();
+//		String[] filenames = {"graph01.gka", "graph02.gka", "graph03.gka", "graph04.gka", "graph05.gka",
+//				"graph06.gka", "graph07.gka", "graph08.gka", "graph09.gka", "graph10.gka", "graph10.gka"};
+//		
+//		GkaGraph myGraph;
+//		
+//		for (String filename : filenames) {
+//			myGraph = GkaUtils.read(filename);
+//			myGraph.display();
+//			myGraph.beautify();
+//		} 
 
-//		GkaGraph graph = GkaUtils.generateRandom(2, 100, false, true);
-//		GkaUtils.save(graph, "holy.gka");
-//		graph.display();
-//		graph.beautify();
+		
+//		 GkaGraph graph = GkaUtils.generateRandom(5, 50, false, true);
+//		 GkaUtils.save(graph, "holy.gka");
+//		 graph.display();
+//		 graph.beautify();
 
-		 String filename = "BFStest.gka";
-		 GkaGraph myGraph = GkaUtils.read(filename);
-		 GkaUtils.save(myGraph, "BFSsave.gka");
+		// String filename = "BFStest.gka";
+		// GkaGraph myGraph = GkaUtils.read(filename);
+		// GkaUtils.save(myGraph, "BFSsave.gka");
 
-//		 AlgoBFS.traverse(myGraph, "s");		
-//		 System.out.println(AlgoBFS.distance(myGraph, "s", "t"));
-//		 AlgoBFS.shortestPath(myGraph, "s", "t");
-		 
-		 myGraph.display();
-		 myGraph.beautify();
-		 AlgoBFS.visualizeTraversal(myGraph, "s");
-		 AlgoBFS.visualizeShortestPath(myGraph, "s", "t");
+		// AlgoBFS.traverse(myGraph, "s");
+		// System.out.println(AlgoBFS.distance(myGraph, "s", "t"));
+		// AlgoBFS.shortestPath(myGraph, "s", "t");
 
-//		 String filename = "graphTest1.gka";
-//		 GkaGraph graph = GkaUtils.read(filename);
-//		 GkaUtils.save(graph, "savedGraphTest1.gka");
-//		 GkaGraph savedGraph = GkaUtils.read("savedGraphTest1.gka");
-//		 savedGraph.display();
-//		 savedGraph.beautify();
+		// myGraph.display();
+		// myGraph.beautify();
+		// AlgoBFS.visualizeTraversal(myGraph, "s");
+		// AlgoBFS.visualizeShortestPath(myGraph, "s", "t");
 
 	}
 
