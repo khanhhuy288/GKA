@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
@@ -25,14 +26,14 @@ import gka1.GkaUtils;
 public class GkaUtilsTest {
 	private GkaGraph graph;
 	private GkaGraph savedGraph;
-	private ArrayList<String> nodeNames;
-	private ArrayList<String> edgeNames;
+	private List<String> nodeNames;
+	private List<String> edgeNames;
 	private int nodesNum;
 	private int edgesNum;
-	private ArrayList<String> nodeNamesTest;
-	private ArrayList<String> edgeNamesTest;
-	private ArrayList<String> nodeNamesSaveTest;
-	private ArrayList<String> edgeNamesSaveTest;
+	private List<String> nodeNamesTest;
+	private List<String> edgeNamesTest;
+	private List<String> nodeNamesSaveTest;
+	private List<String> edgeNamesSaveTest;
 	private GkaGraph randomGraph;
 
 	/**

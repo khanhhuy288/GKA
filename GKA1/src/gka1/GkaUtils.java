@@ -11,9 +11,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.graphstream.graph.Node;
 
 /**
  * Utility Class for reading a GKA file or saving a GkaGraph object as GKA
@@ -29,69 +33,52 @@ import java.util.regex.Pattern;
  */
 public class GkaUtils {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
+		// String filename = "graphTest1.gka";
+		// GkaGraph graph = GkaUtils.read(filename);
+		// GkaUtils.save(graph, "savedGraphTest1.gka");
+		// GkaGraph savedGraph = GkaUtils.read("savedGraphTest1.gka");
+		// savedGraph.display();
+		// savedGraph.beautify();
 
-//		 String filename = "graph03.gka";
-//		 GkaGraph myGraph = GkaUtils.read(filename);
-//		 myGraph.display();
-//		 myGraph.beautify();
+		// String[] filenames = {"graph01.gka", "graph02.gka", "graph03.gka",
+		// "graph04.gka", "graph05.gka",
+		// "graph06.gka", "graph07.gka", "graph08.gka", "graph09.gka",
+		// "graph10.gka", "graph10.gka"};
+		//
+		// GkaGraph myGraph;
+		//
+		// for (String filename : filenames) {
+		// myGraph = GkaUtils.read(filename);
+		// myGraph.display();
+		// myGraph.beautify();
+		// }
 
-//		GkaGraph graph = GkaUtils.generateRandom(2, 100, false, true);
-//		GkaUtils.save(graph, "holy.gka");
-//		graph.display();
-//		graph.beautify();
+		// GkaGraph graph = GkaUtils.generateRandom(5, 50, false, true);
+		// GkaUtils.save(graph, "holy.gka");
+		// graph.display();
+		// graph.beautify();
 
-		 String filename = "BFStest.gka";
-		 GkaGraph myGraph = GkaUtils.read(filename);
-		 GkaUtils.save(myGraph, "BFSsave.gka");
-
-//		 AlgoBFS.traverse(myGraph, "s");		
-		 System.out.println(AlgoBFS.distance(myGraph, "s", "b"));
-//		 AlgoBFS.shortestPath(myGraph, "s", "t");
-		 
-//		 myGraph.display();
-//		 myGraph.beautify();
-//		 AlgoBFS.visualizeTraversal(myGraph, "s");
-//		 AlgoBFS.visualizeShortestPath(myGraph, "s", "t");
-
-//		 String filename = "graphTest1.gka";
-//		 GkaGraph graph = GkaUtils.read(filename);
-//		 GkaUtils.save(graph, "savedGraphTest1.gka");
-//		 GkaGraph savedGraph = GkaUtils.read("savedGraphTest1.gka");
-//		 savedGraph.display();
-//		 savedGraph.beautify();
-
-//		String[] filenames = {"graph01.gka", "graph02.gka", "graph03.gka", "graph04.gka", "graph05.gka",
-//				"graph06.gka", "graph07.gka", "graph08.gka", "graph09.gka", "graph10.gka", "graph10.gka"};
-//		
-//		GkaGraph myGraph;
-//		
-//		for (String filename : filenames) {
-//			myGraph = GkaUtils.read(filename);
-//			myGraph.display();
-//			myGraph.beautify();
-//		} 
-
+		String filename = "BFStest.gka";
+		GkaGraph myGraph = GkaUtils.read(filename);
+//		myGraph.display(); 
+//		myGraph.beautify();
+		List<Node> nodes = AlgoBFS.traverse(myGraph, "s", false);
+		for (Node node: nodes) {
+			System.out.print(node.getAttribute("name") + " ");
+		}	
 		
-//		 GkaGraph graph = GkaUtils.generateRandom(5, 50, false, true);
-//		 GkaUtils.save(graph, "holy.gka");
-//		 graph.display();
-//		 graph.beautify();
-
-		// String filename = "BFStest.gka";
-		// GkaGraph myGraph = GkaUtils.read(filename);
-		// GkaUtils.save(myGraph, "BFSsave.gka");
-
-		// AlgoBFS.traverse(myGraph, "s");
-		// System.out.println(AlgoBFS.distance(myGraph, "s", "t"));
-		// AlgoBFS.shortestPath(myGraph, "s", "t");
+//		List<Node> path = AlgoBFS.shortestPath(myGraph, "s", "t", true);
 
 		// myGraph.display();
 		// myGraph.beautify();
 		// AlgoBFS.visualizeTraversal(myGraph, "s");
 		// AlgoBFS.visualizeShortestPath(myGraph, "s", "t");
 
-
 	}
+	
+	
+
+	
 
 	/**
 	 * Read a GKA file from the <em>gkaFiles</em> folder.
@@ -232,7 +219,7 @@ public class GkaUtils {
 		}
 
 		// get list of node names
-		ArrayList<String> nodesNameList = new ArrayList<>(graph.getNodeNameToIdMap().keySet());
+		ArrayList<String> nodesNameList = new ArrayList<>(graph.getNodeNames());
 
 		// set directivity
 		String isDirectedStr = isDirected ? "->" : "--";

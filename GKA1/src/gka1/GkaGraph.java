@@ -1,6 +1,9 @@
 package gka1;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.graphstream.graph.Edge;
@@ -26,15 +29,6 @@ public class GkaGraph extends MultiGraph {
 	public GkaGraph(String id) {
 		super(id);
 		this.nodeNameToIdMap = new HashMap<String, String>();
-	}
-
-	/**
-	 * Get the hash map with node names as keys and node ids as values.
-	 * 
-	 * @return The hash map.
-	 */
-	public HashMap<String, String> getNodeNameToIdMap() {
-		return nodeNameToIdMap;
 	}
 	
 	/**
@@ -186,6 +180,10 @@ public class GkaGraph extends MultiGraph {
 		return UUID.randomUUID().toString();
 	}
 	
+	public Set<String> getNodeNames() {
+		return nodeNameToIdMap.keySet();
+	}
+
 	/**
 	 * Beautify the graph with default stylesheet. 
 	 */
