@@ -183,7 +183,7 @@ public class GkaGraph extends MultiGraph {
 	public Set<String> getNodeNames() {
 		return nodeNameToIdMap.keySet();
 	}
-
+	
 	/**
 	 * Beautify the graph with default stylesheet. 
 	 */

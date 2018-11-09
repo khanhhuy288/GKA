@@ -60,12 +60,10 @@ public class GkaUtils {
 
 		String filename = "BFStest.gka";
 		GkaGraph myGraph = GkaUtils.read(filename);
-//		myGraph.display(); 
-//		myGraph.beautify();
+		myGraph.display(); 
+		myGraph.beautify();
 		List<Node> nodes = AlgoBFS.traverse(myGraph, "s", false);
-		for (Node node: nodes) {
-			System.out.print(node.getAttribute("name") + " ");
-		}	
+		System.out.println(GkaUtils.toNodesString(nodes));
 		
 //		List<Node> path = AlgoBFS.shortestPath(myGraph, "s", "t", true);
 
@@ -77,7 +75,13 @@ public class GkaUtils {
 	}
 	
 	
-
+	public static List<String> toNodesString(List<Node> nodes) {
+		List<String> res = new ArrayList<>();
+		for (Node node : nodes) {
+			res.add(node.getAttribute("name"));
+		}
+		return res;
+	}
 	
 
 	/**
