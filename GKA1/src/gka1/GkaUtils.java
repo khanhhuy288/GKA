@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -53,28 +52,29 @@ public class GkaUtils {
 		// myGraph.beautify();
 		// }
 
-		// GkaGraph graph = GkaUtils.generateRandom(5, 50, false, true);
-		// GkaUtils.save(graph, "holy.gka");
+//		 GkaGraph graph = GkaUtils.generateRandom(5, 50, false, true);
+//		 GkaUtils.save(graph, "holy.gka");
 		// graph.display();
 		// graph.beautify();
 
 		String filename = "BFStest.gka";
 		GkaGraph myGraph = GkaUtils.read(filename);
-		myGraph.display(); 
-		myGraph.beautify();
-		List<Node> nodes = AlgoBFS.traverse(myGraph, "s", false);
-		System.out.println(GkaUtils.toNodesString(nodes));
-		
-//		List<Node> path = AlgoBFS.shortestPath(myGraph, "s", "t", true);
+//		myGraph.display();
+//		myGraph.beautify();
+		 List<Node> nodes = AlgoBFS.traverse(myGraph, "s", false);
+		 System.out.println(GkaUtils.toNodesString(nodes));
 
-		// myGraph.display();
-		// myGraph.beautify();
-		// AlgoBFS.visualizeTraversal(myGraph, "s");
-		// AlgoBFS.visualizeShortestPath(myGraph, "s", "t");
+		List<Node> path = AlgoBFS.shortestPath(myGraph, "s", "t", true);
 
 	}
-	
-	
+
+	/**
+	 * Get the string presentation of a list of nodes. 
+	 * 
+	 * @param nodes
+	 *            List of nodes.
+	 * @return List of node names.
+	 */
 	public static List<String> toNodesString(List<Node> nodes) {
 		List<String> res = new ArrayList<>();
 		for (Node node : nodes) {
@@ -82,7 +82,6 @@ public class GkaUtils {
 		}
 		return res;
 	}
-	
 
 	/**
 	 * Read a GKA file from the <em>gkaFiles</em> folder.
@@ -189,7 +188,7 @@ public class GkaUtils {
 	 *            Whether name edges should be added.
 	 * @return A GkaGraph object.
 	 */
-	public static GkaGraph generateRandom(int nodeNum, int edgeNum, Boolean isDirected, Boolean hasEdgeName) {
+	public static GkaGraph generateRandom(int nodeNum, int edgeNum, boolean isDirected, boolean hasEdgeName) {
 		return generateRandom(nodeNum, edgeNum, isDirected, hasEdgeName, 2, 1);
 	}
 
@@ -212,7 +211,7 @@ public class GkaUtils {
 	 *            The maximum wieght of an edge.
 	 * @return A GkaGraph object.
 	 */
-	public static GkaGraph generateRandom(int nodeNum, int edgeNum, Boolean isDirected, Boolean hasEdgeName,
+	public static GkaGraph generateRandom(int nodeNum, int edgeNum, boolean isDirected, boolean hasEdgeName,
 			int edgeWeightMin, int edgeWeightMax) {
 		// create empty graph
 		GkaGraph graph = new GkaGraph(GkaGraph.createStringId());

@@ -62,18 +62,8 @@ public class GkaUtilsTest {
 		graph = GkaUtils.read("graphTest1.gka");
 
 		// get nodes and edge of graph
-		nodeNamesTest = new ArrayList<>();
-		edgeNamesTest = new ArrayList<>();
-
-		for (Node node : graph) {
-			nodeNamesTest.add(node.getAttribute("name").toString());
-		}
-
-		for (Edge edge : graph.getEachEdge()) {
-			if (edge.hasAttribute("name")) {
-				edgeNamesTest.add(edge.getAttribute("name").toString());
-			}
-		}
+		nodeNamesTest = graph.getNodeNames();
+		edgeNamesTest = graph.getEdgeNames();
 
 		assertTrue(nodeNamesTest.containsAll(nodeNames) && nodeNames.containsAll(nodeNamesTest));
 		assertTrue(edgeNamesTest.containsAll(edgeNames) && edgeNames.containsAll(edgeNamesTest));
@@ -97,18 +87,8 @@ public class GkaUtilsTest {
 		savedGraph = GkaUtils.read("savedGraphTest1.gka");
 
 		// get nodes and edges of savedGraph 
-		nodeNamesSaveTest = new ArrayList<>();
-		edgeNamesSaveTest = new ArrayList<>();
-
-		for (Node node : savedGraph) {
-			nodeNamesSaveTest.add(node.getAttribute("name").toString());
-		}
-
-		for (Edge edge : savedGraph.getEachEdge()) {
-			if (edge.hasAttribute("name")) {
-				edgeNamesSaveTest.add(edge.getAttribute("name").toString());
-			}
-		}
+		nodeNamesSaveTest = savedGraph.getNodeNames();
+		edgeNamesSaveTest = savedGraph.getEdgeNames();
 
 		assertTrue(nodeNamesSaveTest.containsAll(nodeNames) && nodeNames.containsAll(nodeNamesSaveTest));
 		assertTrue(edgeNamesSaveTest.containsAll(edgeNames) && edgeNames.containsAll(edgeNamesSaveTest));

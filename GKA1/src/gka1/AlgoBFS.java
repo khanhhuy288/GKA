@@ -19,44 +19,46 @@ import org.graphstream.graph.Node;
 public class AlgoBFS {
 
 	/**
-	 * Print out BFS traversal starting from a given node. <br>
+	 * Get the sequence of node in BFS-traversal. <br>
 	 * Algorithm: <br>
-	 * 1. Mark the start node and add it to queue. <br>
-	 * 2. Dequeue the first node in the queue and print it out. <br>
-	 * 3. Iterate through its adjacent nodes, if the node isn't marked, mark and
-	 * enqueue it. <br>
-	 * 4. If the queue is empty, the algorithm ends, else go to step 2. <br>
+	 * 1. Enqueue start node and mark it as visited.<br>
+	 * 2. Dequeue a node in the queue. <br>
+	 * 3. Stop if queue is empty.
+	 * 4. Enqueue its unvisited adjacent nodes and mark them as visited. <br>
+	 * 5. Go to step 2. <br>
 	 * 
 	 * @param graph
-	 *            A graph to work with
+	 *            A graph to work with.
 	 * @param startNodeName
-	 *            Name of the start node
-	 * @return The sequence of nodes during BFS
+	 *            Name of the start node.
+	 * @param isVisualized
+	 *            Whether graph should be visualized.
+	 * @return The sequence of nodes during BFS.
 	 */
 	public static List<Node> traverse(GkaGraph graph, String startNodeName, boolean isVisualized) {
 		// check if node exists
 		if (!graph.getNodeNames().contains(startNodeName)) {
-			return null;
+			throw new IllegalArgumentException("Node not found in graph.");
 		}
-		
+
 		// get start node
 		Node start = graph.getNode(graph.createNode(startNodeName));
-		
+
 		// create a list for visited nodes
 		List<Node> visited = new ArrayList<>();
-		
-		// create a queue for nodes to visit 
+
+		// create a queue for nodes to visit
 		Queue<Node> toVisit = new LinkedList<Node>();
 
 		// enqueue start node
-		toVisit.add(start);	
+		toVisit.add(start);
 		visited.add(start);
 
 		while (!toVisit.isEmpty()) {
 			// dequeue visiting node
 			Node curr = toVisit.remove();
 
-			// enqueue adjacent nodes 
+			// enqueue unvisited adjacent nodes
 			Iterator<Node> neighbors = curr.getNeighborNodeIterator();
 			while (neighbors.hasNext()) {
 				Node n = neighbors.next();
@@ -64,13 +66,15 @@ public class AlgoBFS {
 					toVisit.add(n);
 					visited.add(n);
 				}
-			}			
+			}
 		}
-		
+
 		// visualize the result
 		if (isVisualized) {
+			graph.display();
+			graph.beautify();
 			clearMarks(graph);
-			
+
 			for (Node node : visited) {
 				sleep();
 				node.setAttribute("ui.class", "marked");
@@ -82,15 +86,16 @@ public class AlgoBFS {
 	}
 
 	/**
-	 * Print out a path with the least edges connecting 2 nodes. <br>
+	 * Find the shortest path between 2 given nodes in graph. <br>
 	 * Algorithm: <br>
-	 * 1. Mark t with distance(s,t) = i and enqueue t. <br>
-	 * 2. Find a adjacent node of the last enqueued node (n) that has distance =
-	 * dist(n)-1 and enqueue it. <br>
-	 * 3. If a neighbor of s is reached, go to step 4. If not, go to step 2.
-	 * <br>
-	 * 4. Enqueue s and end the algorithm, print out the queue in reversed order
-	 * to see the path.
+	 * 1. Enqueue start node and add it to a HashMap between each node.
+	 * and its parent. <br>
+	 * 2. Dequeue a node in the queue. <br>
+	 * 3. Go to step 7 if queue is empty 
+	 * 4. Stop if end node is found. <br>
+	 * 5. Enqueue its adjacent nodes that is not in the HashMap and add them to HashMap. <br>
+	 * 6. Go to step 2. <br>
+	 * 7. Stop as end node can't be found. 
 	 * 
 	 * @param graph
 	 *            The graph to work with.
@@ -98,74 +103,80 @@ public class AlgoBFS {
 	 *            Name of the start node.
 	 * @param endNodeName
 	 *            Name of the end node.
+	 * @param isVisualized
+	 *            Whether the graph should be visualized.
 	 * @return Sequence of nodes on the shortest path between start and end
+	 *         nodes.
 	 */
-	public static List<Node> shortestPath(GkaGraph graph, String startNodeName, String endNodeName, boolean isVisualized) {
+	public static List<Node> shortestPath(GkaGraph graph, String startNodeName, String endNodeName,
+			boolean isVisualized) {
 		// check if nodes exist
 		if (!graph.getNodeNames().contains(startNodeName) || !graph.getNodeNames().contains(endNodeName)) {
-			return null;
+			throw new IllegalArgumentException("Node not found in graph.");
 		}
-		
+
 		// get start and end nodes
 		Node start = graph.getNode(graph.createNode(startNodeName));
 		Node end = graph.getNode(graph.createNode(endNodeName));
 
-		// create a queue for nodes to visit 
+		// create a queue for nodes to visit
 		Queue<Node> toVisit = new LinkedList<>();
-		
-		// create a HashMap between each node and its parent 
+
+		// create a HashMap between each node and its parent
 		HashMap<Node, Node> parents = new HashMap<>();
 
-		// enqueue start node 
+		// enqueue start node
 		toVisit.add(start);
 		parents.put(start, null);
 
 		while (!toVisit.isEmpty()) {
-			// dequeue visiting node 
+			// dequeue visiting node
 			Node curr = toVisit.remove();
 
-			// stop if end is found 
+			// stop if end is found
 			if (curr == end) {
 				break;
 			}
 
-			// enqueue adjacent nodes 
+			// enqueue unvisited adjacent nodes
 			Iterator<Node> neighbors = curr.getNeighborNodeIterator();
 			while (neighbors.hasNext()) {
 				Node n = neighbors.next();
 				if (!parents.containsKey(n) && curr.hasEdgeToward(n)) {
 					toVisit.add(n);
 					parents.put(n, curr);
-				}			
+				}
 			}
 		}
 
-		// return null if end is not found 
+		// return null if end is not found
 		if (parents.get(end) == null) {
 			return null;
 		}
-		
-		// trace back the path with HashMap 
+
+		// trace back the path with HashMap
 		List<Node> out = new LinkedList<>();
 		Node curr = end;
 		while (curr != null) {
 			out.add(0, curr);
 			curr = parents.get(curr);
 		}
-		
+
 		// visualize the result
 		if (isVisualized) {
+			graph.display();
+			graph.beautify();
 			clearMarks(graph);
 			out.get(0).addAttribute("ui.class", "special");
-			
+
 			for (int i = 1; i < out.size(); i++) {
 				out.get(i).addAttribute("ui.class", "marked");
 				out.get(i - 1).getEdgeBetween(out.get(i)).addAttribute("ui.class", "marked");
 			}
-			
+
 			out.get(out.size() - 1).addAttribute("ui.class", "special");
 		}
-	
+
 		return out;
 
 	}
@@ -174,7 +185,7 @@ public class AlgoBFS {
 	 * Clear all previous marks on the graph made by visualized methods.
 	 * 
 	 * @param graph
-	 *            A graph to work with
+	 *            A graph to work with.
 	 */
 	protected static void clearMarks(GkaGraph graph) {
 		for (Node node : graph) {

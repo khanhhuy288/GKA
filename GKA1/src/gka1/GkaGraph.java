@@ -180,8 +180,30 @@ public class GkaGraph extends MultiGraph {
 		return UUID.randomUUID().toString();
 	}
 	
-	public Set<String> getNodeNames() {
-		return nodeNameToIdMap.keySet();
+	/**
+	 * Get names of all the nodes in graph. 
+	 * @return A list of node names.
+	 */
+	public List<String> getNodeNames() {
+		List<String> nodeNames = new ArrayList<>();
+		for (Node node : this) {
+			nodeNames.add(node.getAttribute("name").toString());
+		}
+		return nodeNames;
+	}
+	
+	/**
+	 * Get names of all the edges in graph. 
+	 * @return A list of edge names.
+	 */
+	public List<String> getEdgeNames() {
+		List<String> edgeNames = new ArrayList<>();
+		for (Edge edge : this.getEachEdge()) {
+			if (edge.hasAttribute("name")) {
+				edgeNames.add(edge.getAttribute("name").toString());
+			}
+		}
+		return edgeNames;
 	}
 	
 	/**
