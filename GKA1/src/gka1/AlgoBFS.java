@@ -11,7 +11,7 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
 /**
- * Contain methods to traverse and find shortest path using BFS.
+ * Contain methods to traverse and to find shortest path using BFS.
  * 
  * @author Tri Pham
  *
@@ -21,8 +21,7 @@ public class AlgoBFS {
 	 * Get the sequence of node in BFS-traversal. <br>
 	 * Algorithm: <br>
 	 * 1. Enqueue start node and mark it as visited.<br>
-	 * 2. Dequeue a node in the queue. <br>
-	 * 3. Stop if queue is empty.
+	 * 2. Dequeue a node in the queue until queue is empty. <br>
 	 * 4. Enqueue its unvisited adjacent nodes and mark them as visited. <br>
 	 * 5. Go to step 2. <br>
 	 * 
@@ -89,12 +88,13 @@ public class AlgoBFS {
 	 * Algorithm: <br>
 	 * 1. Enqueue start node and add it to a HashMap between each node.
 	 * and its parent. <br>
-	 * 2. Dequeue a node in the queue. <br>
-	 * 3. Go to step 7 if queue is empty 
+	 * 2. Dequeue a node in the queue until queue is empty. <br>
+	 * 3. Go to step 7 if queue is empty. <br>
 	 * 4. Stop if end node is found. <br>
 	 * 5. Enqueue its adjacent nodes that is not in the HashMap and add them to HashMap. <br>
 	 * 6. Go to step 2. <br>
 	 * 7. Stop as end node can't be found. 
+	 * 8. Trace back the path. 
 	 * 
 	 * @param graph
 	 *            The graph to work with.
@@ -132,8 +132,8 @@ public class AlgoBFS {
 			// dequeue visiting node
 			Node curr = toVisit.remove();
 
-			// stop if end is found
-			if (curr == end) {
+			// stop if end node is found
+			if (curr.equals(end)) {
 				break;
 			}
 

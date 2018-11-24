@@ -221,7 +221,7 @@ public class GkaGraph extends MultiGraph {
 		while (leavingEdges.hasNext()) {
 			Edge edge = leavingEdges.next();
 			if (edge.getTargetNode().equals(targetNode)) {
-				if (Integer.valueOf(edge.getAttribute("weight").toString()) <= min) {
+				if (Integer.valueOf(edge.getAttribute("weight").toString()) < min) {
 					min = Integer.valueOf(edge.getAttribute("weight").toString());
 				}
 			}
