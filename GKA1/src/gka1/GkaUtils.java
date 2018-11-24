@@ -64,7 +64,7 @@ public class GkaUtils {
 		List<Node> nodes = AlgoBFS.traverse(myGraph, "s", false);
 		System.out.println(GkaUtils.toNodesString(nodes));
 
-		List<Node> path = AlgoBFS.shortestPath(myGraph, "s", "g", true);
+		List<Node> path = AlgoBFS.shortestPath(myGraph, "s", "t", true);
 		System.out.println(GkaUtils.toNodesString(path));
 	}
 
@@ -107,7 +107,7 @@ public class GkaUtils {
 		GkaGraph graph = new GkaGraph(GkaGraph.createStringId());
 
 		// regex for GKA format of each line
-		String regex = "^\\s*([\\wÄäÖöÜüß]+)\\s*((->|--)\\s*([\\wÄäÖöÜüß]+)\\s*(\\(\\s*([\\wÄäÖöÜüß\\s]+)\\s*\\)\\s*)?(:\\s*(\\d+)\\s*)?)?;$";
+		String regex = "^\\s*([\\wÄäÖöÜüß]+)\\s*((->|--)\\s*([\\wÄäÖöÜüß]+)\\s*(\\(\\s*([\\wÄäÖöÜüß\\s]+)\\s*\\)\\s*)?(:\\s*(\\d+)\\s*)?)?;\\s*$";
 		Pattern pattern = Pattern.compile(regex);
 
 		// set file path

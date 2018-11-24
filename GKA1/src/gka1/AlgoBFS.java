@@ -17,7 +17,6 @@ import org.graphstream.graph.Node;
  *
  */
 public class AlgoBFS {
-
 	/**
 	 * Get the sequence of node in BFS-traversal. <br>
 	 * Algorithm: <br>

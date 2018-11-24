@@ -30,7 +30,6 @@ public class AlgoBFSTest {
 	private String endNodeName;
 	private String singleNodeName;
 	private GkaGraph graph;
-	private List<String> shortestPath;
 	private List<String> traversePathTest;
 	private List<String> shortestPathTest;
 	private List<String> noShortestPathTest;
