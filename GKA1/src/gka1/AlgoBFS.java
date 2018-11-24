@@ -47,7 +47,7 @@ public class AlgoBFS {
 		List<Node> visited = new ArrayList<>();
 
 		// create a queue for nodes to visit
-		Queue<Node> toVisit = new LinkedList<Node>();
+		Queue<Node> toVisit = new LinkedList<>();
 
 		// enqueue start node
 		toVisit.add(start);
@@ -121,12 +121,12 @@ public class AlgoBFS {
 		// create a queue for nodes to visit
 		Queue<Node> toVisit = new LinkedList<>();
 
-		// create a HashMap between each node and its parent
-		HashMap<Node, Node> parents = new HashMap<>();
+		// create a HashMap between each node and its previous node
+		HashMap<Node, Node> prevNodes = new HashMap<>();
 
 		// enqueue start node
 		toVisit.add(start);
-		parents.put(start, null);
+		prevNodes.put(start, null);
 
 		while (!toVisit.isEmpty()) {
 			// dequeue visiting node
@@ -141,15 +141,15 @@ public class AlgoBFS {
 			Iterator<Node> neighbors = curr.getNeighborNodeIterator();
 			while (neighbors.hasNext()) {
 				Node n = neighbors.next();
-				if (!parents.containsKey(n) && curr.hasEdgeToward(n)) {
+				if (!prevNodes.containsKey(n) && curr.hasEdgeToward(n)) {
 					toVisit.add(n);
-					parents.put(n, curr);
+					prevNodes.put(n, curr);
 				}
 			}
 		}
 
 		// return null if end is not found
-		if (parents.get(end) == null) {
+		if (prevNodes.get(end) == null) {
 			return null;
 		}
 
@@ -158,7 +158,7 @@ public class AlgoBFS {
 		Node curr = end;
 		while (curr != null) {
 			out.add(0, curr);
-			curr = parents.get(curr);
+			curr = prevNodes.get(curr);
 		}
 
 		// visualize the result

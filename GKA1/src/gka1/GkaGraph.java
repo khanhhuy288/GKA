@@ -2,9 +2,12 @@ package gka1;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
+import javax.xml.transform.Source;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
@@ -204,6 +207,26 @@ public class GkaGraph extends MultiGraph {
 			}
 		}
 		return edgeNames;
+	}
+	
+	/**
+	 * Get the lowest weight on edges between 2 adjacents node in graph.
+	 * @param sourceNode Source node.
+	 * @param targetNode Target node.
+	 * @return The lowest weight between 2 adjacent nodes. 
+	 */
+	public double getShortestDist(Node sourceNode, Node targetNode) {
+		Iterator<Edge> leavingEdges = sourceNode.getLeavingEdgeIterator();
+		double min = Double.POSITIVE_INFINITY;
+		while (leavingEdges.hasNext()) {
+			Edge edge = leavingEdges.next();
+			if (edge.getTargetNode().equals(targetNode)) {
+				if (Integer.valueOf(edge.getAttribute("weight").toString()) <= min) {
+					min = Integer.valueOf(edge.getAttribute("weight").toString());
+				}
+			}
+		}
+		return min;
 	}
 	
 	/**
