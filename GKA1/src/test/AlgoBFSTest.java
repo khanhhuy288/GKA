@@ -20,40 +20,72 @@ import gka1.GkaUtils;
 
 /**
  * Test for AlgoBFS.
+ * 
  * @author Tri Pham
  *
  */
 public class AlgoBFSTest {
+	private String filename;
+	private String startNodeName;
+	private String endNodeName;
+	private String singleNodeName;
 	private GkaGraph graph;
-	private List<String> traversePath;
 	private List<String> shortestPath;
 	private List<String> traversePathTest;
 	private List<String> shortestPathTest;
+	private List<String> noShortestPathTest;
 
 	@Before
 	public void init() throws UnsupportedEncodingException, IOException {
-		graph = GkaUtils.read("BFStest.gka");
+		filename = "BFStest.gka";
+		graph = GkaUtils.read(filename);
+		startNodeName = "s";
+		endNodeName = "t";
+		singleNodeName = "g";
 	}
-	
+
 	/**
-	 * Test for traversal.
+	 * Test traversal from a node.
 	 */
 	@Test
 	public void testTraverse() {
-		traversePath = new ArrayList<>(Arrays.asList("s", "a", "f", "e", "d", "b", "t", "c"));
 		traversePathTest = GkaUtils.toNodesString(AlgoBFS.traverse(graph, "s", false));
-		assertTrue(traversePathTest.equals(traversePath));
+		
+		assertEquals(8, traversePathTest.size());
+
+		// print to console
+		System.out.println(String.format("Traversal path on %s starting from %s:", filename, startNodeName));
+		System.out.println(String.join(" -> ", traversePathTest));
+		System.out.println();
 	}
-	
+
 	/**
-	 * Test for shorest path.
+	 * Test shortest path between 2 valid nodes.
 	 */
 	@Test
 	public void testShortestPath() {
-		shortestPath = new ArrayList<>(Arrays.asList("s", "a", "e", "t"));
-		shortestPathTest = GkaUtils.toNodesString(AlgoBFS.shortestPath(graph, "s", "t", false));
-		assertEquals(shortestPathTest.size(), shortestPathTest.size());
-		assertTrue(shortestPathTest.equals(shortestPath));
-	}
+		shortestPathTest = GkaUtils.toNodesString(AlgoBFS.shortestPath(graph, startNodeName, endNodeName, false));
+		
+		assertEquals(4, shortestPathTest.size());
 
+		// print to console
+		System.out.println(String.format("Shortest path on %s from %s to %s:", filename, startNodeName, endNodeName));
+		System.out.println(String.join(" -> ", shortestPathTest));
+		System.out.println();
+	}
+	
+	/**
+	 * Test shortest path between 2 unlinked nodes.
+	 */
+	@Test
+	public void testNoShortestPath() {
+		noShortestPathTest = GkaUtils.toNodesString(AlgoBFS.shortestPath(graph, startNodeName, singleNodeName, false));
+		
+		assertEquals(0, noShortestPathTest.size());
+		
+		// print to console
+		System.out.println(String.format("No shortest path on %s from %s to %s:", filename, startNodeName, singleNodeName));
+		System.out.println(String.join(" -> ", noShortestPathTest));
+		System.out.println();
+	}
 }

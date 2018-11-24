@@ -52,24 +52,24 @@ public class GkaUtils {
 		// myGraph.beautify();
 		// }
 
-//		 GkaGraph graph = GkaUtils.generateRandom(5, 50, false, true);
-//		 GkaUtils.save(graph, "holy.gka");
+		// GkaGraph graph = GkaUtils.generateRandom(5, 50, false, true);
+		// GkaUtils.save(graph, "holy.gka");
 		// graph.display();
 		// graph.beautify();
 
 		String filename = "BFStest.gka";
 		GkaGraph myGraph = GkaUtils.read(filename);
-//		myGraph.display();
-//		myGraph.beautify();
-		 List<Node> nodes = AlgoBFS.traverse(myGraph, "s", false);
-		 System.out.println(GkaUtils.toNodesString(nodes));
+		// myGraph.display();
+		// myGraph.beautify();
+		List<Node> nodes = AlgoBFS.traverse(myGraph, "s", false);
+		System.out.println(GkaUtils.toNodesString(nodes));
 
-		List<Node> path = AlgoBFS.shortestPath(myGraph, "s", "t", true);
-
+		List<Node> path = AlgoBFS.shortestPath(myGraph, "s", "g", true);
+		System.out.println(GkaUtils.toNodesString(path));
 	}
 
 	/**
-	 * Get the string presentation of a list of nodes. 
+	 * Get the string presentation of a list of nodes.
 	 * 
 	 * @param nodes
 	 *            List of nodes.
@@ -77,6 +77,9 @@ public class GkaUtils {
 	 */
 	public static List<String> toNodesString(List<Node> nodes) {
 		List<String> res = new ArrayList<>();
+		if (nodes == null) {
+			return res; 
+		}
 		for (Node node : nodes) {
 			res.add(node.getAttribute("name"));
 		}
