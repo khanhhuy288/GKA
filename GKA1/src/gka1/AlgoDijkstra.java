@@ -18,12 +18,12 @@ import org.graphstream.algorithm.AStar.DistanceCosts;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
-import com.sun.javafx.scene.traversal.WeightedClosestCorner;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.CompareGenerator;
+//import com.sun.javafx.scene.traversal.WeightedClosestCorner;
+//import com.sun.org.apache.xalan.internal.xsltc.compiler.util.CompareGenerator;
 
 import scala.annotation.meta.getter;
 import scala.collection.mutable.UnrolledBuffer;
-import sun.java2d.pipe.AlphaColorPipe;
+//import sun.java2d.pipe.AlphaColorPipe;
 
 /**
  * Contain methods to find the shortest path using Dijkstra.
