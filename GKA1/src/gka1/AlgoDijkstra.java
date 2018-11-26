@@ -36,8 +36,6 @@ public class AlgoDijkstra {
 		GkaGraph graph = GkaUtils.read("VLtest.gka");
 		List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "1", "6", true);
 		System.out.println(GkaUtils.toNodesString(shortestPath));
-		graph.display();
-		graph.beautify();
 	}
 
 	/**
@@ -50,7 +48,7 @@ public class AlgoDijkstra {
 	 * @param endNodeName
 	 *            Name of the end node.
 	 * @param isVisualized
-	 *            Whether the graph should be visualised.
+	 *            Whether the graph should be visualized.
 	 * @return Sequence of nodes on the shortest path between start and end
 	 *         nodes.
 	 */
