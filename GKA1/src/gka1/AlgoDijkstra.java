@@ -3,27 +3,18 @@ package gka1;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Currency;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.Set;
 
-import org.graphstream.algorithm.AStar.DistanceCosts;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
-
-//import com.sun.javafx.scene.traversal.WeightedClosestCorner;
-//import com.sun.org.apache.xalan.internal.xsltc.compiler.util.CompareGenerator;
-
-import scala.annotation.meta.getter;
-import scala.collection.mutable.UnrolledBuffer;
-//import sun.java2d.pipe.AlphaColorPipe;
 
 /**
  * Contain methods to find the shortest path using Dijkstra.
@@ -33,8 +24,13 @@ import scala.collection.mutable.UnrolledBuffer;
  */
 public class AlgoDijkstra {
 	public static void main(String[] args) throws UnsupportedEncodingException, FileNotFoundException, IOException {
-		GkaGraph graph = GkaUtils.read("VLtest.gka");
-		List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "1", "6", true);
+//		 GkaGraph graph = GkaUtils.read("VLtest.gka");
+//		 List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "1", "6",
+//		 true);
+//		 System.out.println(GkaUtils.toNodesString(shortestPath));
+
+		GkaGraph graph = GkaUtils.read("graph03.gka");
+		List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "Kiel", "Paderborn", true);
 		System.out.println(GkaUtils.toNodesString(shortestPath));
 	}
 
@@ -75,23 +71,23 @@ public class AlgoDijkstra {
 					- Double.valueOf(n2.getAttribute("cost").toString()));
 		};
 
-		// create a min priority queue ordered by the cost to start node 
+		// create a min priority queue ordered by the cost to start node
 		PriorityQueue<Node> minPQ = new PriorityQueue<>(costToStartComparator);
 
 		// create a list for visited nodes
-		List<Node> visited = new ArrayList<>();
+		Set<Node> visited = new HashSet<>();
 
-		// set start node's initial values 
-		totalCosts.put(start, 0.0);
+		// set start node's initial values
 		start.addAttribute("cost", 0.0);
-		minPQ.add(start);
 		prevNodes.put(start, null);
+		totalCosts.put(start, 0.0);
+		minPQ.add(start);
 
 		// set the other nodes' initial values
 		for (Node node : graph) {
 			if (node != start) {
-				totalCosts.put(node, Double.POSITIVE_INFINITY);
 				node.addAttribute("cost", Double.POSITIVE_INFINITY);
+				totalCosts.put(node, Double.POSITIVE_INFINITY);
 			}
 		}
 
@@ -99,37 +95,53 @@ public class AlgoDijkstra {
 			// dequeue the node with smallest cost to start
 			Node curr = minPQ.remove();
 
-			// stop if end node is found
-			if (curr.equals(end)) {
-				break;
-			}
+			// stop if end is found
+//			if (curr.equals(end)) {
+//				break;
+//			}
 
-			// mark it as visited 
+			// mark it as visited
 			visited.add(curr);
 
-			// iterate through unvisited adjacent nodes 
+			// iterate through unvisited adjacent nodes
 			Iterator<Node> neighbors = curr.getNeighborNodeIterator();
 			while (neighbors.hasNext()) {
 				Node n = neighbors.next();
 				if (!visited.contains(n) && curr.hasEdgeToward(n)) {
 					// get cost between current node and its neighbor
 					double distance = graph.getShortestDist(curr, n);
+
 					// get cost between start and its neighbor
 					double totalCost = totalCosts.get(curr) + distance;
 
-					// update total cost and previous node if path is better 
+					// update total cost and previous node if path is better
 					if (totalCost < totalCosts.get(n)) {
-						totalCosts.put(n, totalCost);
-						prevNodes.put(n, curr);
-
 						// update cost in min priority queue
-						if (!minPQ.contains(n)) {
+						if (minPQ.contains(n)) {
 							minPQ.remove(n);
 						}
 						n.addAttribute("cost", totalCost);
 						minPQ.add(n);
+
+						totalCosts.put(n, totalCost);
+						prevNodes.put(n, curr);
 					}
 				}
+			}
+		}
+
+		for (Map.Entry<Node, Double> entry : totalCosts.entrySet()) {
+			Node key = entry.getKey();
+			double value = entry.getValue();
+			System.out.println("Key: " + key.getAttribute("name") + "; " + "Value: " + value);
+		}
+
+		System.out.println();
+		for (Map.Entry<Node, Node> entry : prevNodes.entrySet()) {
+			Node key = entry.getKey();
+			Node value = entry.getValue();
+			if (value != null) {
+				System.out.println("Key: " + key.getAttribute("name") + "; " + "Value: " + value.getAttribute("name"));
 			}
 		}
 

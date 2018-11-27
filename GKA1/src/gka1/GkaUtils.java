@@ -52,20 +52,22 @@ public class GkaUtils {
 		// myGraph.beautify();
 		// }
 
-		// GkaGraph graph = GkaUtils.generateRandom(5, 50, false, true);
-		// GkaUtils.save(graph, "holy.gka");
+		GkaGraph graph = GkaUtils.generateRandom(100, 3500, true, false, 1, 10);
+		GkaUtils.save(graph, "holy.gka");
+		List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "0", "99", false);
+		System.out.println(GkaUtils.toNodesString(shortestPath));
 		// graph.display();
 		// graph.beautify();
 
-		String filename = "BFStest.gka";
-		GkaGraph myGraph = GkaUtils.read(filename);
-		// myGraph.display();
-		// myGraph.beautify();
-		List<Node> nodes = AlgoBFS.traverse(myGraph, "s", false);
-		System.out.println(GkaUtils.toNodesString(nodes));
-
-		List<Node> path = AlgoBFS.shortestPath(myGraph, "s", "t", true);
-		System.out.println(GkaUtils.toNodesString(path));
+		// String filename = "BFStest.gka";
+		// GkaGraph myGraph = GkaUtils.read(filename);
+		// // myGraph.display();
+		// // myGraph.beautify();
+		// List<Node> nodes = AlgoBFS.traverse(myGraph, "s", false);
+		// System.out.println(GkaUtils.toNodesString(nodes));
+		//
+		// List<Node> path = AlgoBFS.shortestPath(myGraph, "s", "t", true);
+		// System.out.println(GkaUtils.toNodesString(path));
 	}
 
 	/**
@@ -78,7 +80,7 @@ public class GkaUtils {
 	public static List<String> toNodesString(List<Node> nodes) {
 		List<String> res = new ArrayList<>();
 		if (nodes == null) {
-			return res; 
+			return res;
 		}
 		for (Node node : nodes) {
 			res.add(node.getAttribute("name"));
@@ -191,8 +193,26 @@ public class GkaUtils {
 	 *            Whether name edges should be added.
 	 * @return A GkaGraph object.
 	 */
+	public static GkaGraph generateRandom(int nodeNum, int edgeNum, boolean isDirected, boolean hasEdgeName,
+			int edgeWeightMin, int edgeWeightMax) {
+		return generateRandom(nodeNum, edgeNum, isDirected, hasEdgeName, 2, 1, 0);
+	}
+
+	/**
+	 * Generate a random graph.
+	 * 
+	 * @param nodeNum
+	 *            Number of nodes.
+	 * @param edgeNum
+	 *            Number of edges.
+	 * @param isDirected
+	 *            Whether graph is directed.
+	 * @param hasEdgeName
+	 *            Whether name edges should be added.
+	 * @return A GkaGraph object.
+	 */
 	public static GkaGraph generateRandom(int nodeNum, int edgeNum, boolean isDirected, boolean hasEdgeName) {
-		return generateRandom(nodeNum, edgeNum, isDirected, hasEdgeName, 2, 1);
+		return generateRandom(nodeNum, edgeNum, isDirected, hasEdgeName, 2, 1, 0);
 	}
 
 	/**
@@ -212,10 +232,12 @@ public class GkaUtils {
 	 *            The minimum weight of an edge.
 	 * @param edgeWeightMax
 	 *            The maximum wieght of an edge.
+	 * @param seed
+	 *            Seed for random generator.
 	 * @return A GkaGraph object.
 	 */
 	public static GkaGraph generateRandom(int nodeNum, int edgeNum, boolean isDirected, boolean hasEdgeName,
-			int edgeWeightMin, int edgeWeightMax) {
+			int edgeWeightMin, int edgeWeightMax, int seed) {
 		// create empty graph
 		GkaGraph graph = new GkaGraph(GkaGraph.createStringId());
 
@@ -231,7 +253,7 @@ public class GkaUtils {
 		String isDirectedStr = isDirected ? "->" : "--";
 
 		// add edges with random nodes, names or weight
-		Random rand = new Random();
+		Random rand = new Random(seed);
 		String nodeName1;
 		String nodeName2;
 		Boolean hasEdgeWeight = edgeWeightMin <= edgeWeightMax;
