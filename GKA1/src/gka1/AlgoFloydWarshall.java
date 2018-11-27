@@ -24,6 +24,11 @@ public class AlgoFloydWarshall {
 		List<Node> shortestPath = AlgoFloydWarshall.shortestPath(graph, "1", "6", true);
 		System.out.println(GkaUtils.toNodesString(shortestPath));
 		System.out.println(AlgoFloydWarshall.distance(graph, "1", "6"));
+		
+//		GkaGraph graph = GkaUtils.read("graph03.gka");
+//		List<Node> shortestPath = AlgoFloydWarshall.shortestPath(graph, "Hamburg", "Norderstedt", true);
+//		System.out.println(GkaUtils.toNodesString(shortestPath));
+//		System.out.println(AlgoFloydWarshall.distance(graph, "Hamburg", "Norderstedt"));
 
 	}
 
@@ -169,10 +174,8 @@ public class AlgoFloydWarshall {
 			for (int j = 0; j < nodeNr; j++) {
 				if (i == j) {
 					distance[i][j] = 0;
-				} else if (graph.getNode(i).hasEdgeToward(j)) {
-					distance[i][j] = graph.getShortestDist(graph.getNode(i), graph.getNode(j));
 				} else {
-					distance[i][j] = Double.POSITIVE_INFINITY;
+					distance[i][j] = graph.getShortestDist(graph.getNode(i), graph.getNode(j));
 				}
 
 				transit[i][j] = -1;

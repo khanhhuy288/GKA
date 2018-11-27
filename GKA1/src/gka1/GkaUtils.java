@@ -57,15 +57,20 @@ public class GkaUtils {
 		// graph.display();
 		// graph.beautify();
 
-		String filename = "BFStest.gka";
-		GkaGraph myGraph = GkaUtils.read(filename);
-		// myGraph.display();
-		// myGraph.beautify();
-		List<Node> nodes = AlgoBFS.traverse(myGraph, "s", false);
-		System.out.println(GkaUtils.toNodesString(nodes));
+		// String filename = "BFStest.gka";
+		// GkaGraph myGraph = GkaUtils.read(filename);
+		// // myGraph.display();
+		// // myGraph.beautify();
+		// List<Node> nodes = AlgoBFS.traverse(myGraph, "s", false);
+		// System.out.println(GkaUtils.toNodesString(nodes));
+		//
+		// List<Node> path = AlgoBFS.shortestPath(myGraph, "s", "t", true);
+		// System.out.println(GkaUtils.toNodesString(path));
 
-		List<Node> path = AlgoBFS.shortestPath(myGraph, "s", "t", true);
-		System.out.println(GkaUtils.toNodesString(path));
+		String filename = "graph03.gka";
+		GkaGraph myGraph = GkaUtils.read(filename);
+		myGraph.display();
+		myGraph.beautify();
 	}
 
 	/**
@@ -78,7 +83,7 @@ public class GkaUtils {
 	public static List<String> toNodesString(List<Node> nodes) {
 		List<String> res = new ArrayList<>();
 		if (nodes == null) {
-			return res; 
+			return res;
 		}
 		for (Node node : nodes) {
 			res.add(node.getAttribute("name"));
@@ -196,9 +201,8 @@ public class GkaUtils {
 	}
 
 	/**
-	 * Generate a random graph with a fixed number of nodes and edges. Edge
-	 * names are optional. Edge weight is also optional and can be set within a
-	 * range.
+	 * Generate a random graph with a fixed number of nodes and edges. Edge names
+	 * are optional. Edge weight is also optional and can be set within a range.
 	 * 
 	 * @param nodeNum
 	 *            Number of nodes.

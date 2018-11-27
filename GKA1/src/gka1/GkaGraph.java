@@ -85,7 +85,7 @@ public class GkaGraph extends MultiGraph {
 			String edgeId = GkaGraph.createStringId();
 
 			if (isDirected.equals("--")) {
-				this.addEdge(edgeId, nodeId1, nodeId2);
+				this.addEdge(edgeId, nodeId1, nodeId2, false);
 			} else if (isDirected.equals("->")) {
 				this.addEdge(edgeId, nodeId1, nodeId2, true);
 			}
@@ -230,16 +230,15 @@ public class GkaGraph extends MultiGraph {
 	 * @return The lowest weight between 2 adjacent nodes.
 	 */
 	public double getShortestDist(Node sourceNode, Node targetNode) {
-		Iterator<Edge> leavingEdges = sourceNode.getLeavingEdgeIterator();
 		double min = Double.POSITIVE_INFINITY;
-		while (leavingEdges.hasNext()) {
-			Edge edge = leavingEdges.next();
-			if (edge.getTargetNode().equals(targetNode)) {
+		for (Edge edge : sourceNode.getEachEdge()) {
+			if (sourceNode.hasEdgeToward(targetNode) && sourceNode.getEdgeToward(targetNode).equals(edge)) {
 				if (Integer.valueOf(edge.getAttribute("weight").toString()) < min) {
 					min = Integer.valueOf(edge.getAttribute("weight").toString());
 				}
 			}
 		}
+		
 		return min;
 	}
 
