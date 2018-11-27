@@ -20,7 +20,7 @@ node.marked {
 
 node.special {
 	fill-color: green;
-	text-color: black;
+	text-color: red;
 	stroke-color: green;
 }
 

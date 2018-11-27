@@ -24,16 +24,14 @@ import org.graphstream.graph.Node;
  */
 public class AlgoDijkstra {
 	public static void main(String[] args) throws UnsupportedEncodingException, FileNotFoundException, IOException {
-//		GkaGraph graph = GkaUtils.read("VLtest.gka");
-//		List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "1", "6", true);
-//		System.out.println(GkaUtils.toNodesString(shortestPath));
+//		 GkaGraph graph = GkaUtils.read("VLtest.gka");
+//		 List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "1", "6",
+//		 true);
+//		 System.out.println(GkaUtils.toNodesString(shortestPath));
 
-		 GkaGraph graph = GkaUtils.read("graph03.gka");
-		 graph.display();
-		 graph.beautify();
-		 List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "K",
-		 "B", true);
-		 System.out.println(GkaUtils.toNodesString(shortestPath));
+		GkaGraph graph = GkaUtils.read("graph03.gka");
+		List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "Kiel", "Paderborn", true);
+		System.out.println(GkaUtils.toNodesString(shortestPath));
 	}
 
 	/**
@@ -119,7 +117,7 @@ public class AlgoDijkstra {
 					// update total cost and previous node if path is better
 					if (totalCost < totalCosts.get(n)) {
 						// update cost in min priority queue
-						if (!minPQ.contains(n)) {
+						if (minPQ.contains(n)) {
 							minPQ.remove(n);
 						}
 						n.addAttribute("cost", totalCost);
