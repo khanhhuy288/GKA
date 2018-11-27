@@ -227,12 +227,12 @@ public class GkaGraph extends MultiGraph {
 	public double getShortestDist(Node sourceNode, Node targetNode) {
 		double min = Double.POSITIVE_INFINITY;
 		for (Edge edge : sourceNode.getEachEdge()) {
-			if (sourceNode.hasEdgeToward(targetNode) && sourceNode.getEdgeToward(targetNode).equals(edge)) {
-				if (Integer.valueOf(edge.getAttribute("weight").toString()) < min) {
-					min = Integer.valueOf(edge.getAttribute("weight").toString());
-				}
-			}
-		}
+ 			if (sourceNode.hasEdgeToward(targetNode) && sourceNode.getEdgeToward(targetNode).equals(edge)) {
+ 				if (Integer.valueOf(edge.getAttribute("weight").toString()) < min) {
+ 					min = Integer.valueOf(edge.getAttribute("weight").toString());
+ 				}
+ 			}
+ 		}
 		
 		return min;
 	}

@@ -53,11 +53,11 @@ public class GkaUtils {
 		// }
 
 		GkaGraph graph = GkaUtils.generateRandom(100, 3500, true, false, 1, 10);
-		GkaUtils.save(graph, "holy.gka");
+//		GkaUtils.save(graph, "holy.gka");
 		List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "0", "99", false);
 		System.out.println(GkaUtils.toNodesString(shortestPath));
-		// graph.display();
-		// graph.beautify();
+//		 graph.display();
+//		 graph.beautify();
 
 		// String filename = "BFStest.gka";
 		// GkaGraph myGraph = GkaUtils.read(filename);
