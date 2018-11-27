@@ -28,30 +28,38 @@ public class AlgoFloydWarshall {
 	}
 
 	/**
-	 * Array of distances
+	 * Array of shortest distances between each pair of nodes.
 	 * 
 	 * @param graph
 	 *            The graph to work with.
 	 * @return a table that contains the shortest distance between two nodes.
 	 */
-	public static int[][] distanceArray(GkaGraph graph) {
-		return algo(graph)[0];
+	public static double[][] distanceArray(GkaGraph graph) {
+		return algorithm(graph)[0];
 	}
 
 	/**
-	 * Array of transit
+	 * Array of transit node for each pair of nodes.
 	 * 
 	 * @param graph
 	 *            The graph to work with.
-	 * @return a table that indicates for each pair of nodes s and t the node that
-	 *         on the shortest path from s to t and has the shortest distance to t.
+	 * @return a table that indicates for each pair of nodes s and t the node with
+	 *         the highest index on the shortest path from s to t.
 	 */
 	public static int[][] transitArray(GkaGraph graph) {
-		return algo(graph)[1];
+		int nodeNr = graph.getNodeCount();
+		double[][] transitDouble = algorithm(graph)[1];
+		int[][] transitInt = new int[nodeNr][nodeNr];
+		for (int i = 0; i < nodeNr; i++) {
+			for (int j = 0; j < nodeNr; j++) {
+				transitInt[i][j] = (int) transitDouble[i][j];
+			}
+		}
+		return transitInt;
 	}
 
 	/**
-	 * Calculate the shortest distance between two nodes
+	 * Calculate the shortest distance between two nodes.
 	 * 
 	 * @param graph
 	 *            The graph to work with.
@@ -61,7 +69,7 @@ public class AlgoFloydWarshall {
 	 *            Name of the end node.
 	 * @return The length of the shortest path between two nodes.
 	 */
-	public static int distance(GkaGraph graph, String startNodeName, String endNodeName) {
+	public static double distance(GkaGraph graph, String startNodeName, String endNodeName) {
 		int startIndex = graph.getNode(graph.createNode(startNodeName)).getIndex();
 		int endIndex = graph.getNode(graph.createNode(endNodeName)).getIndex();
 		return distanceArray(graph)[startIndex][endIndex];
@@ -99,8 +107,8 @@ public class AlgoFloydWarshall {
 
 		Node curr = end;
 		while (transitArray(graph)[startIndex][curr.getIndex()] > 0) {
-			// (index of) the nearest node to current node (isn't necessarily adjacent to
-			// current node)
+			// the node with the highest index on the shortest path from start node to
+			// current node (isn't necessarily adjacent to current node)
 			int trIndex = transitArray(graph)[startIndex][curr.getIndex()];
 
 			// in case the nearest node isn't adjacent to current node
@@ -141,7 +149,7 @@ public class AlgoFloydWarshall {
 	}
 
 	/**
-	 * Mechanism of Floyd-Warshall
+	 * Implementation of Floyd-Warshall algorithm.
 	 * 
 	 * @param graph
 	 *            The graph to work with.
@@ -150,21 +158,21 @@ public class AlgoFloydWarshall {
 	 *         2. a transit matrix to help reconstruct the shortest path between any
 	 *         two nodes of the graph
 	 */
-	public static int[][][] algo(GkaGraph graph) {
+	public static double[][][] algorithm(GkaGraph graph) {
 		int nodeNr = graph.getNodeCount();
-		int[][][] result = new int[2][nodeNr][nodeNr];
-		int[][] distance = result[0];
-		int[][] transit = result[1];
+		double[][][] result = new double[2][nodeNr][nodeNr];
+		double[][] distance = result[0];
+		double[][] transit = result[1];
 
+		// initiate distance and transit
 		for (int i = 0; i < nodeNr; i++) {
 			for (int j = 0; j < nodeNr; j++) {
 				if (i == j) {
 					distance[i][j] = 0;
 				} else if (graph.getNode(i).hasEdgeToward(j)) {
-					Edge edge = graph.getNode(i).getEdgeToward(j);
-					distance[i][j] = (int) edge.getAttribute("weight");
+					distance[i][j] = graph.getShortestDist(graph.getNode(i), graph.getNode(j));
 				} else {
-					distance[i][j] = 99999;
+					distance[i][j] = Double.POSITIVE_INFINITY;
 				}
 
 				transit[i][j] = -1;
@@ -174,9 +182,18 @@ public class AlgoFloydWarshall {
 		for (int j = 0; j < nodeNr; j++) {
 			for (int i = 0; i < nodeNr; i++) {
 				for (int k = 0; k < nodeNr; k++) {
-					if (distance[i][j] + distance[j][k] < distance[i][k]) {
-						distance[i][k] = distance[i][j] + distance[j][k];
+					// If node j is on the shortest path from i to k,
+					// then update the value of distance[i][k] and set j the transit node
+					double sum = distance[i][j] + distance[j][k];
+					if (sum < distance[i][k]) {
+						distance[i][k] = sum;
 						transit[i][k] = j;
+					}
+
+					// If distance of any node from itself becomes negative,
+					// there is a negative weight cycle. Stop the algorithm.
+					if (distance[i][i] < 0) {
+						return result;
 					}
 				}
 			}
