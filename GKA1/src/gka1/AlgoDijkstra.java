@@ -24,14 +24,14 @@ import org.graphstream.graph.Node;
  */
 public class AlgoDijkstra {
 	public static void main(String[] args) throws UnsupportedEncodingException, FileNotFoundException, IOException {
-//		GkaGraph graph = GkaUtils.read("VLtest.gka");
-//		List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "1", "6", true);
-//		System.out.println(GkaUtils.toNodesString(shortestPath));
-
-		// GkaGraph graph = GkaUtils.read("graph03.gka");
-		// List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "Lübeck",
-		// "Hamburg", true);
+		// GkaGraph graph = GkaUtils.read("VLtest.gka");
+		// List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "1", "6",
+		// true);
 		// System.out.println(GkaUtils.toNodesString(shortestPath));
+
+		GkaGraph graph = GkaUtils.read("graph03.gka");
+		List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "Lübeck", "Husum", true);
+		System.out.println(GkaUtils.toNodesString(shortestPath));
 	}
 
 	/**
@@ -130,20 +130,23 @@ public class AlgoDijkstra {
 			}
 		}
 
-		for (Map.Entry<Node, Double> entry : totalCosts.entrySet()) {
-			Node key = entry.getKey();
-			double value = entry.getValue();
-			System.out.println("Key: " + key.getAttribute("name") + "; " + "Value: " + value);
-		}
-
-		System.out.println();
-		for (Map.Entry<Node, Node> entry : prevNodes.entrySet()) {
-			Node key = entry.getKey();
-			Node value = entry.getValue();
-			if (value != null) {
-				System.out.println("Key: " + key.getAttribute("name") + "; " + "Value: " + value.getAttribute("name"));
-			}
-		}
+		// print totalCosts und prevNodes in console
+		// for (Map.Entry<Node, Double> entry : totalCosts.entrySet()) {
+		// Node key = entry.getKey();
+		// double value = entry.getValue();
+		// System.out.println("Key: " + key.getAttribute("name") + "; " +
+		// "Value: " + value);
+		// }
+		//
+		// System.out.println();
+		// for (Map.Entry<Node, Node> entry : prevNodes.entrySet()) {
+		// Node key = entry.getKey();
+		// Node value = entry.getValue();
+		// if (value != null) {
+		// System.out.println("Key: " + key.getAttribute("name") + "; " +
+		// "Value: " + value.getAttribute("name"));
+		// }
+		// }
 
 		// return null if end is not found
 		if (prevNodes.get(end) == null) {

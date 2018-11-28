@@ -55,8 +55,6 @@ public class GkaUtils {
 		GkaGraph graph = GkaUtils.generateRandom(100, 3500, true, false, 1, 10, 0);
 		List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "0", "99", false);
 		System.out.println(GkaUtils.toNodesString(shortestPath));
-//		graph.display();
-//		graph.beautify();
 
 		// String filename = "BFStest.gka";
 		// GkaGraph myGraph = GkaUtils.read(filename);
