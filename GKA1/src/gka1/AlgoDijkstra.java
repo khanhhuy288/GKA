@@ -24,14 +24,14 @@ import org.graphstream.graph.Node;
  */
 public class AlgoDijkstra {
 	public static void main(String[] args) throws UnsupportedEncodingException, FileNotFoundException, IOException {
-//		 GkaGraph graph = GkaUtils.read("VLtest.gka");
-//		 List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "1", "6",
-//		 true);
-//		 System.out.println(GkaUtils.toNodesString(shortestPath));
+//		GkaGraph graph = GkaUtils.read("VLtest.gka");
+//		List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "1", "6", true);
+//		System.out.println(GkaUtils.toNodesString(shortestPath));
 
-		GkaGraph graph = GkaUtils.read("graph03.gka");
-		List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "Kiel", "Paderborn", true);
-		System.out.println(GkaUtils.toNodesString(shortestPath));
+		// GkaGraph graph = GkaUtils.read("graph03.gka");
+		// List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "Lübeck",
+		// "Hamburg", true);
+		// System.out.println(GkaUtils.toNodesString(shortestPath));
 	}
 
 	/**
@@ -96,9 +96,9 @@ public class AlgoDijkstra {
 			Node curr = minPQ.remove();
 
 			// stop if end is found
-//			if (curr.equals(end)) {
-//				break;
-//			}
+			if (curr.equals(end)) {
+				break;
+			}
 
 			// mark it as visited
 			visited.add(curr);
