@@ -198,9 +198,14 @@ public class AlgoFloydWarshall {
 			for (int j = 0; j < nodeNr; j++) {
 				if (i == j) {
 					distance[i][j] = 0;
-				} else {
-					distance[i][j] = graph.getShortestDist(graph.getNode(i), graph.getNode(j));
-				}
+//				} else {
+//					distance[i][j] = graph.getShortestDist(graph.getNode(i), graph.getNode(j));
+//				}
+				} else if (graph.getNode(i).hasEdgeToward(j)) {
+ 					distance[i][j] = (int)graph.getNode(i).getEdgeToward(j).getAttribute("weight");
+ 				} else {
+ 					distance[i][j] = Double.POSITIVE_INFINITY;
+ 				}
 
 				transit[i][j] = -1;
 			}
