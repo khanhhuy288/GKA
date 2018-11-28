@@ -44,12 +44,12 @@ public class AlgoFloydWarshall {
 // 		System.out.println(info.getLengthTo(graph.createNode("Norderstedt")));
  		
  		
- 		GkaGraph graph = GkaUtils.generateRandom(100, 3500, true, false, 1, 10);
+ 		GkaGraph graph = GkaUtils.generateRandom(100, 3500, true, false, 1, 10, 0);
  		List<Node> shortestPath = AlgoFloydWarshall.shortestPath(graph, "0", "99", true);
 		System.out.println(GkaUtils.toNodesString(shortestPath));
 		System.out.println(AlgoFloydWarshall.distance(graph, "0", "99"));
  		
- 		APSP apsp = new APSP(graph, "weight", false);
+ 		APSP apsp = new APSP(graph, "weight", true);
  		apsp.compute();		
  		APSPInfo info = graph.getNode(graph.createNode("0")).getAttribute(APSPInfo.ATTRIBUTE_NAME);		
  		System.out.println(info.getLengthTo(graph.createNode("99")));
