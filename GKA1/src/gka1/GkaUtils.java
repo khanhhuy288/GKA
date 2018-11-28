@@ -52,12 +52,11 @@ public class GkaUtils {
 		// myGraph.beautify();
 		// }
 
-		GkaGraph graph = GkaUtils.generateRandom(100, 3500, true, false, 1, 10);
-//		GkaUtils.save(graph, "holy.gka");
+		GkaGraph graph = GkaUtils.generateRandom(100, 3500, true, false, 1, 10, 0);
 		List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "0", "99", false);
 		System.out.println(GkaUtils.toNodesString(shortestPath));
-//		 graph.display();
-//		 graph.beautify();
+//		graph.display();
+//		graph.beautify();
 
 		// String filename = "BFStest.gka";
 		// GkaGraph myGraph = GkaUtils.read(filename);
@@ -195,7 +194,7 @@ public class GkaUtils {
 	 */
 	public static GkaGraph generateRandom(int nodeNum, int edgeNum, boolean isDirected, boolean hasEdgeName,
 			int edgeWeightMin, int edgeWeightMax) {
-		return generateRandom(nodeNum, edgeNum, isDirected, hasEdgeName, 2, 1, 0);
+		return generateRandom(nodeNum, edgeNum, isDirected, hasEdgeName, edgeWeightMin, edgeWeightMax, null);
 	}
 
 	/**
@@ -236,7 +235,7 @@ public class GkaUtils {
 	 * @return A GkaGraph object.
 	 */
 	public static GkaGraph generateRandom(int nodeNum, int edgeNum, boolean isDirected, boolean hasEdgeName,
-			int edgeWeightMin, int edgeWeightMax, int seed) {
+			int edgeWeightMin, int edgeWeightMax, Integer seed) {
 		// create empty graph
 		GkaGraph graph = new GkaGraph(GkaGraph.createStringId());
 
@@ -252,7 +251,7 @@ public class GkaUtils {
 		String isDirectedStr = isDirected ? "->" : "--";
 
 		// add edges with random nodes, names or weight
-		Random rand = new Random(seed);
+		Random rand = seed != null ? new Random(seed) : new Random();
 		String nodeName1;
 		String nodeName2;
 		Boolean hasEdgeWeight = edgeWeightMin <= edgeWeightMax;
