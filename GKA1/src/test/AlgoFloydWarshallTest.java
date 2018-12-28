@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.graphstream.algorithm.APSP;
 import org.graphstream.algorithm.APSP.APSPInfo;
@@ -53,6 +54,12 @@ public class AlgoFloydWarshallTest {
 	private double shortestDistanceResultBig;
 	private APSP apspBig;
 	private APSPInfo infoBig;
+	
+	private GkaGraph[] bigGraphs;
+	private double[] shortestDistanceTestBigs;
+	private double[] shortestDistanceResultBigs;
+	private APSP[] apspBigs;
+	private APSPInfo[] infoBigs;
 
 	@Before
 	public void init() throws UnsupportedEncodingException, IOException {
@@ -71,11 +78,15 @@ public class AlgoFloydWarshallTest {
 		endNodeName03_3 = "Husum";
 		apsp03 = new APSP(graph03, "weight", false);
 
-		big = GkaUtils.generateRandom(100, 3500, true, false, 1, 10, 0);
+		big = GkaUtils.generateRandom(100, 3500, true, false, 1, 10);
 		startNodeNameBig = "0";
 		endNodeNameBig = "99";
 		apspBig = new APSP(big, "weight", true);
 
+//		for (int i = 0; i < 100; i++) {
+//			bigGraphs[i] = GkaUtils.generateRandom(100, 3500, true, false, 1, 10);
+//			apspBigs[i] = new APSP(bigGraphs[i], "weight", true);
+//		}
 	}
 
 	/**
@@ -154,11 +165,29 @@ public class AlgoFloydWarshallTest {
 		apspBig.compute();
 		infoBig = big.getNode(big.createNode(startNodeNameBig)).getAttribute(APSPInfo.ATTRIBUTE_NAME);
 		shortestDistanceResultBig = infoBig.getLengthTo(big.createNode(endNodeNameBig));
-		assertEquals(shortestDistanceResultBig, shortestDistanceTestBig, 1);
 
 		// print to console
 		System.out.println(String.format("Shortest path on BIG from %s to %s:", startNodeNameBig, endNodeNameBig));
 		System.out.println(String.join(" -> ", GkaUtils.toNodesString(shortestPathTestBig)));
+		System.out.println("Path length according to my Floyd-Warshall: " + shortestDistanceTestBig);
+		System.out.println("Path length according to GraphStream: " + shortestDistanceResultBig);
 		System.out.println();
+		
+		assertEquals(shortestDistanceResultBig, shortestDistanceTestBig, 0.000000001);
 	}
+	
+//	/**
+//	 * Test shortest path between 2 valid nodes in 100 big graphs with 100 nodes.
+//	 */
+//	@Test
+//	public void testShortestPathBig100() {
+//		for (int i = 0; i < 99; i++) {
+//			shortestDistanceTestBigs[i] = AlgoFloydWarshall.distance(bigGraphs[i], startNodeNameBig, endNodeNameBig);
+//
+//			apspBigs[i].compute();
+//			infoBigs[i] = big.getNode(big.createNode(startNodeNameBig)).getAttribute(APSPInfo.ATTRIBUTE_NAME);
+//			shortestDistanceResultBigs[i] = infoBigs[i].getLengthTo(big.createNode(endNodeNameBig));
+//			assertEquals(shortestDistanceResultBigs[i], shortestDistanceTestBigs[i], 0.000000001);
+//		}
+//	}
 }
