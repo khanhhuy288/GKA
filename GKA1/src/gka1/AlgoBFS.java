@@ -1,5 +1,8 @@
 package gka1;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,6 +20,16 @@ import org.graphstream.graph.Node;
  *
  */
 public class AlgoBFS {
+	public static void main(String[] args) throws UnsupportedEncodingException, FileNotFoundException, IOException {
+		 String filename = "BFStest.gka";
+		 GkaGraph myGraph = GkaUtils.read(filename);
+//		 List<Node> nodes = AlgoBFS.traverse(myGraph, "s", true);
+//		 System.out.println(GkaUtils.toNodesString(nodes));
+		
+		 List<Node> path = AlgoBFS.shortestPath(myGraph, "s", "t", true);
+		 System.out.println(GkaUtils.toNodesString(path));
+	}
+
 	/**
 	 * Get the sequence of node in BFS-traversal. <br>
 	 * Algorithm: <br>
@@ -86,15 +99,15 @@ public class AlgoBFS {
 	/**
 	 * Find the shortest path between 2 given nodes in graph. <br>
 	 * Algorithm: <br>
-	 * 1. Enqueue start node and add it to a HashMap between each node.
-	 * and its parent. <br>
+	 * 1. Enqueue start node and add it to a HashMap between each node. and its
+	 * parent. <br>
 	 * 2. Dequeue a node in the queue until queue is empty. <br>
 	 * 3. Go to step 7 if queue is empty. <br>
 	 * 4. Stop if end node is found. <br>
-	 * 5. Enqueue its adjacent nodes that is not in the HashMap and add them to HashMap. <br>
+	 * 5. Enqueue its adjacent nodes that is not in the HashMap and add them to
+	 * HashMap. <br>
 	 * 6. Go to step 2. <br>
-	 * 7. Stop as end node can't be found. 
-	 * 8. Trace back the path. 
+	 * 7. Stop as end node can't be found. 8. Trace back the path.
 	 * 
 	 * @param graph
 	 *            The graph to work with.

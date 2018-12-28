@@ -51,20 +51,6 @@ public class GkaUtils {
 		// myGraph.display();
 		// myGraph.beautify();
 		// }
-
-		GkaGraph graph = GkaUtils.generateRandom(100, 3500, true, false, 1, 10, 0);
-		List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "0", "99", false);
-		System.out.println(GkaUtils.toNodesString(shortestPath));
-
-		// String filename = "BFStest.gka";
-		// GkaGraph myGraph = GkaUtils.read(filename);
-		// // myGraph.display();
-		// // myGraph.beautify();
-		// List<Node> nodes = AlgoBFS.traverse(myGraph, "s", false);
-		// System.out.println(GkaUtils.toNodesString(nodes));
-		//
-		// List<Node> path = AlgoBFS.shortestPath(myGraph, "s", "t", true);
-		// System.out.println(GkaUtils.toNodesString(path));
 	}
 
 	/**
@@ -178,7 +164,7 @@ public class GkaUtils {
 	}
 
 	/**
-	 * Generate a random graph.
+	 * Generate a random graph with edge weight and without seed. 
 	 * 
 	 * @param nodeNum
 	 *            Number of nodes.
@@ -196,7 +182,7 @@ public class GkaUtils {
 	}
 
 	/**
-	 * Generate a random graph.
+	 * Generate a random graph without edge weights and seed. 
 	 * 
 	 * @param nodeNum
 	 *            Number of nodes.
@@ -209,7 +195,7 @@ public class GkaUtils {
 	 * @return A GkaGraph object.
 	 */
 	public static GkaGraph generateRandom(int nodeNum, int edgeNum, boolean isDirected, boolean hasEdgeName) {
-		return generateRandom(nodeNum, edgeNum, isDirected, hasEdgeName, 2, 1, 0);
+		return generateRandom(nodeNum, edgeNum, isDirected, hasEdgeName, 2, 1, null);
 	}
 
 	/**
