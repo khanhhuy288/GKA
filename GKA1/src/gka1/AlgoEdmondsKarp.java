@@ -1,6 +1,7 @@
 package gka1;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.graphstream.graph.Edge;
@@ -9,133 +10,146 @@ import org.graphstream.graph.implementations.AbstractEdge;
 import org.graphstream.graph.implementations.AbstractNode;
 
 public class AlgoEdmondsKarp {
-	private static class Edge extends AbstractEdge {
-		public String id;
-		public AbstractNode source;
-		public AbstractNode target;
-		public boolean directed;
-		private Edge residual;
-		private long flow;
-		private final long capacity;
-		
-	    protected Edge(String id, AbstractNode source, AbstractNode target, boolean directed) {
-			super(id, source, target, directed);
-			this.capacity= Long.valueOf(getAttribute("weight"));
+	/**
+	 * Find an shortest augmenting path from source 's' to sink 't' in the residual graph using
+	 * breath-first-search.
+	 *
+	 * @param graphMatrix
+	 *            adjacency matrix of the residual graph
+	 * @param sourceIndex
+	 *            index of start node in the graph
+	 * @param sinkIndex
+	 *            index of end node in the graph
+	 * @param prev
+	 *            array to store previous node of each node on the path
+	 * @return true if an augmenting path is available.
+	 */
+	public static boolean augmentPath(int[][] graphMatrix, int sourceIndex, int sinkIndex, int prev[]) {
+		int nodeNr = graphMatrix.length;
+
+		// an array to track whether a node is visited
+		boolean visited[] = new boolean[nodeNr];
+		for (int i = 0; i < nodeNr; i++) {
+			visited[i] = false;
 		}
 
-	    
+		// create a list for BFS for an augmenting path
+		LinkedList<Integer> queue = new LinkedList<Integer>();
+		queue.add(sourceIndex);
+		visited[sourceIndex] = true;
+		prev[sourceIndex] = -1;
 
-	    public boolean isResidual() {
-	      return capacity == 0;
-	    }
+		while (!queue.isEmpty()) {
+			int u = queue.poll();
 
-	    public long remainingCapacity() {
-	      return capacity - flow;
-	    }
+			for (int v = 0; v < nodeNr; v++) {
+				// if v isn't visited yet and the remaining capacity of edge u-v > 0
+				if (!visited[v] && graphMatrix[u][v] > 0) {
+					queue.add(v);
+					prev[v] = u;
+					visited[v] = true;
+				}
+			}
+		}
 
-	    public void augment(long bottleNeck) {
-	      flow += bottleNeck;
-	      residual.flow -= bottleNeck;
-	    }
+		// return true if the sink could be reached from the source, else false
+		return visited[sinkIndex];
+	}
 
-	    
-	  }
-	
-	private static abstract class NetworkFlowSolverBase {
+	/**
+	 * Returns the maximum flow from source to sink in the given graph
+	 * 
+	 * @param graph
+	 *            The graph to work with
+	 * @param sourceName
+	 *            Name of source
+	 * @param sinkName
+	 *            Name of sink
+	 * @return maximum flow through the graph
+	 */
+	public static int solve(GkaGraph graph, String sourceName, String sinkName) {
+		// get index of start and end nodes
+		int sourceIndex = graph.getNode(graph.createNode(sourceName)).getIndex();
+		int sinkIndex = graph.getNode(graph.createNode(sinkName)).getIndex();
 
-	    // To avoid overflow, set infinity to a value less than Long.MAX_VALUE;
-	    static final long INF = Long.MAX_VALUE / 2;
+		// adjacency matrix and number of nodes of the graph
+		int[][] graphMatrix = graphMatrix(graph);
+		int nodeNr = graph.getNodeCount();
 
-	    // Inputs: n = number of nodes, s = source, t = sink
-	    final int n, s, t;
+		int maxFlow = 0;
 
-	    // 'visited' and 'visitedToken' are variables used in graph sub-routines to 
-	    // track whether a node has been visited or not. In particular, node 'i' was 
-	    // recently visited if visited[i] == visitedToken is true. This is handy 
-	    // because to mark all nodes as unvisited simply increment the visitedToken.
-	    private int visitedToken = 1;
-	    private int[] visited;
+		/*
+		 * Adjacency matrix of the residual graph. Its value at position (i,j) indicates
+		 * the remaining capacity of the edge from i to j. Initial values are edge
+		 * capacities.
+		 */
+		int rGraph[][] = new int[nodeNr][nodeNr];
 
-	    // Indicates whether the network flow algorithm has ran. The solver only 
-	    // needs to run once because it always yields the same result.
-	    protected boolean solved;
+		for (int u = 0; u < nodeNr; u++) {
+			for (int v = 0; v < nodeNr; v++) {
+				rGraph[u][v] = graphMatrix[u][v];
+			}
 
-	    /**
-	     *  The maximum flow. Calculated by calling the {@link #solve} method.
-	     */
-	    protected long maxFlow;
+		}
+		// This array will be filled when augmenting path to store path
+		int parent[] = new int[nodeNr];
 
-	    // The adjacency list representing the flow graph.
-	    protected List<Edge>[] graph;
+		// Augment the flow while there is path from source to sink
+		while (augmentPath(rGraph, sourceIndex, sinkIndex, parent)) {
 
-	    /**
-	     * Creates an instance of a flow network solver. Use the {@link #addEdge}
-	     * method to add edges to the graph.
-	     *
-	     * @param n - The number of nodes in the graph including s and t.
-	     * @param s - The index of the source node, 0 <= s < n
-	     * @param t - The index of the sink node, 0 <= t < n and t != s
-	     */
-	    public NetworkFlowSolverBase(GkaGraph graph, int s, int t) {
+			// minimum residual capacity of the edges along the path filled by BFS.
+			int bottleneck = Integer.MAX_VALUE;
+			for (int v = sinkIndex; v != sourceIndex; v = parent[v]) {
+				int u = parent[v];
+				bottleneck = Math.min(bottleneck, rGraph[u][v]);
+			}
 
-	      this.s = s; 
-	      this.t = t; 
-	      
-	      visited = new int[n];
-	    }
+			// update residual capacities of the forward and backward edges along the path
+			for (int v = sinkIndex; v != sourceIndex; v = parent[v]) {
+				int u = parent[v];
+				
+				// forward edge, remaining capacity = capacity - flow, 
+				// flow increases => r.cap. decreases
+				rGraph[u][v] -= bottleneck;
+				
+				// backward edge, remaining capacity = flow, 
+				// flow increases => r.cap. increases
+				rGraph[v][u] += bottleneck;
+			}
 
-	    
+			// Add path flow to overall flow
+			maxFlow += bottleneck;
+		}
 
-	    /**
-	     * Adds a directed edge (and its residual edge) to the flow graph.
-	     *
-	     * @param from     - The index of the node the directed edge starts at.
-	     * @param to       - The index of the node the directed edge ends at.
-	     * @param capacity - The capacity of the edge
-	     */
-	    public void addEdge(int from, int to, long capacity) {
-	      if (capacity <= 0) 
-	        throw new IllegalArgumentException("Forward edge capacity <= 0");
-	      Edge e1 = new Edge(from, to, capacity);
-	      Edge e2 = new Edge(to, from, 0);
-	      e1.residual = e2;
-	      e2.residual = e1;
-	      graph[from].add(e1);
-	      graph[to].add(e2);
-	    }
+		// Return the overall flow
+		return maxFlow;
+	}
 
+	/**
+	 * Give the adjacency matrix of a given graph
+	 * 
+	 * @param graph
+	 *            The graph to work with
+	 * @return adjacency matrix
+	 */
+	public static int[][] graphMatrix(GkaGraph graph) {
+		int nodeNr = graph.getNodeCount();
+		int graphMatrix[][] = new int[nodeNr][nodeNr];
 
-	    // Returns the maximum flow from the source to the sink.
-	    public long getMaxFlow() {
-	      execute();
-	      return maxFlow;
-	    }
+		for (int i = 0; i < nodeNr; i++) {
+			for (int j = 0; j < nodeNr; j++) {
+				Node iNode = graph.getNode(i);
+				Node jNode = graph.getNode(j);
+				if (iNode.hasEdgeToward(jNode)) {
+					graphMatrix[i][j] = iNode.getEdgeToward(jNode).getAttribute("weight");
 
-	    // Marks node 'i' as visited.
-	    public void visit(int i) {
-	      visited[i] = visitedToken;
-	    }
+				} else {
+					graphMatrix[i][j] = 0;
+				}
+			}
+		}
 
-	    // Returns true/false depending on whether node 'i' has been visited or not.
-	    public boolean visited(int i) {
-	      return visited[i] == visitedToken;
-	    }
-
-	    // Resets all nodes as unvisited. This is especially useful to do
-	    // between iterations finding augmenting paths, O(1)
-	    public void markAllNodesAsUnvisited() {
-	      visitedToken++;
-	    }
-
-	    // Wrapper method that ensures we only call solve() once
-	    private void execute() {
-	      if (solved) return; 
-	      solved = true;
-	      solve();
-	    }
-
-	    // Method to implement which solves the network flow problem.
-	    public abstract void solve();
-	  }
+		return graphMatrix;
+	}
 
 }

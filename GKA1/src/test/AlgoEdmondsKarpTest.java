@@ -6,14 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import org.graphstream.graph.Node;
 import org.junit.Test;
 
-import gka1.AlgoFordFulkerson;
+import gka1.AlgoEdmondsKarp;
 import gka1.GkaGraph;
 import gka1.GkaUtils;
 
-public class AlgoFordFulkersonTest {
+public class AlgoEdmondsKarpTest {
 
 	@Test
     public void graph03Test() throws UnsupportedEncodingException, FileNotFoundException, IOException {
@@ -21,7 +20,7 @@ public class AlgoFordFulkersonTest {
         GkaGraph graph = GkaUtils.read("graph03.gka");
 
         
-        int maxflow = AlgoFordFulkerson.solve(graph, "Hamburg", "Kiel");
+        int maxflow = AlgoEdmondsKarp.solve(graph, "Hamburg", "Kiel");
 
         int maxFlow = 276;
 
@@ -35,7 +34,7 @@ public class AlgoFordFulkersonTest {
 
         GkaGraph graph = GkaUtils.read("graph04.gka");
 
-        int maxflow = AlgoFordFulkerson.solve(graph, "v1", "v8");
+        int maxflow = AlgoEdmondsKarp.solve(graph, "v1", "v8");
 
         int maxFlow = 20;
 
@@ -48,11 +47,12 @@ public class AlgoFordFulkersonTest {
 
         GkaGraph graph = GkaUtils.read("graph04.gka");
         
-        int maxflow = AlgoFordFulkerson.solve(graph, "v1", "s");
+        int maxflow = AlgoEdmondsKarp.solve(graph, "v1", "s");
 
         int maxFlow = 23;
 
         assertEquals(maxFlow, maxflow);
 
     }
+
 }

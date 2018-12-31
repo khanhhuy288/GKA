@@ -1,16 +1,24 @@
 package gka1;
 
+import static java.lang.Math.min;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
 public class AlgoFordFulkerson {
+
 	/**
-	 * Returns true if there is an augmenting path from source 's' to sink 't' in
-	 * residual graph. Also fills prev[] to store the path
+	 * Find an augmenting path from source 's' to sink 't' in the residual graph using
+	 * depth-first-search.
 	 *
 	 * @param graphMatrix
 	 *            adjacency matrix of the residual graph
@@ -20,9 +28,9 @@ public class AlgoFordFulkerson {
 	 *            index of end node in the graph
 	 * @param prev
 	 *            array to store previous node of each node on the path
-	 * @return
+	 * @return true if there is an augmenting path from source to sink.
 	 */
-	public static boolean augmentPath(int[][] graphMatrix, int sourceIndex, int sinkIndex, int prev[]) {
+	public static boolean augmentPath(int[][] graphMatrix, int sourceIndex, int sinkIndex, int[] prev) {
 		int nodeNr = graphMatrix.length;
 
 		// an array to track whether a node is visited
@@ -31,22 +39,56 @@ public class AlgoFordFulkerson {
 			visited[i] = false;
 		}
 
-		// create a list for BFS for an augmenting path
-		LinkedList<Integer> queue = new LinkedList<Integer>();
-		queue.add(sourceIndex);
-		visited[sourceIndex] = true;
-		prev[sourceIndex] = -1;
+		// Create a stack for DFS, the path from source to sink will be store in the
+		// stack in reversed order (sink on top, source at the bottom)
+		Stack<Integer> stack = new Stack<>();
 
-		while (!queue.isEmpty()) {
-			int u = queue.poll();
+		stack.push(sourceIndex);
+		int stackLength = 1;
 
+		// loop through the stack to find and rebuild the path from source to sink. If
+		// we reach a dead end, pop that node to backtrack and then continue
+		while (!stack.empty()) {
+			// check if a new node is pushed into the stack
+			boolean stackIncreased = false;
+
+			int curr = stack.peek();
+
+			if (!visited[curr]) {
+				visited[curr] = true;
+			}
+
+			// if sink is reached, fill prev[] and then end the loop
+			if (curr == sinkIndex) {
+				// pop the top node. The new node at the top
+				// is the previous node of the popped node
+				while (!stack.empty()) {
+					int i = stack.pop();
+					if (!stack.empty()) {
+						prev[i] = stack.peek();
+					} else {
+						// source is reached, prev[source] = -1
+						prev[i] = -1;
+					}
+				}
+				break;
+			}
+
+			// find an unvisited neighbor of curr
 			for (int v = 0; v < nodeNr; v++) {
 				// if v isn't visited yet and the remaining capacity of edge u-v > 0
-				if (visited[v] == false && graphMatrix[u][v] > 0) {
-					queue.add(v);
-					prev[v] = u;
-					visited[v] = true;
+				if (!visited[v] && graphMatrix[curr][v] > 0) {
+					stack.push(v);
+					stackLength++;
+					stackIncreased = true;
+					break;
 				}
+			}
+
+			// backtrack if curr doesn't have unvisited neighbor
+			if (stackIncreased == false) {
+				stack.pop();
+				stackLength--;
 			}
 		}
 
@@ -55,7 +97,7 @@ public class AlgoFordFulkerson {
 	}
 
 	/**
-	 * Returns the maximum flow from source to sink in the given graph
+	 * Calculate the maximum flow from source to sink in the given graph
 	 * 
 	 * @param graph
 	 *            The graph to work with
@@ -65,7 +107,7 @@ public class AlgoFordFulkerson {
 	 *            Name of sink
 	 * @return maximum flow through the graph
 	 */
-	public static int fordFulkerson(GkaGraph graph, String sourceName, String sinkName) {
+	public static int solve(GkaGraph graph, String sourceName, String sinkName) {
 		// get index of start and end nodes
 		int sourceIndex = graph.getNode(graph.createNode(sourceName)).getIndex();
 		int sinkIndex = graph.getNode(graph.createNode(sinkName)).getIndex();
@@ -97,7 +139,6 @@ public class AlgoFordFulkerson {
 
 			// minimum residual capacity of the edges along the path filled by BFS.
 			int bottleneck = Integer.MAX_VALUE;
-
 			for (int v = sinkIndex; v != sourceIndex; v = parent[v]) {
 				int u = parent[v];
 				bottleneck = Math.min(bottleneck, rGraph[u][v]);
@@ -106,12 +147,12 @@ public class AlgoFordFulkerson {
 			// update residual capacities of the forward and backward edges along the path
 			for (int v = sinkIndex; v != sourceIndex; v = parent[v]) {
 				int u = parent[v];
-				
-				// forward edge, remaining capacity = capacity - flow, 
+
+				// forward edge, remaining capacity = capacity - flow,
 				// flow increases => r.cap. decreases
 				rGraph[u][v] -= bottleneck;
-				
-				// backward edge, remaining capacity = flow, 
+
+				// backward edge, 'remaining capacity' = flow,
 				// flow increases => r.cap. increases
 				rGraph[v][u] += bottleneck;
 			}
@@ -149,5 +190,11 @@ public class AlgoFordFulkerson {
 		}
 
 		return graphMatrix;
+	}
+
+	public static void main(String[] args) throws UnsupportedEncodingException, FileNotFoundException, IOException {
+		GkaGraph graph = GkaUtils.read("BFSsave.gka");
+		int maxflow = AlgoFordFulkerson.solve(graph, "s", "t");
+		System.out.println("maxflow = " + maxflow);
 	}
 }
