@@ -242,7 +242,10 @@ public class GkaUtils {
 		int edgeWeight;
 		for (int i = 0; i < edgeNum; i++) {
 			nodeName1 = nodesNameList.get(rand.nextInt(nodesNameList.size()));
-			nodeName2 = nodesNameList.get(rand.nextInt(nodesNameList.size()));
+//			nodeName2 = nodesNameList.get(rand.nextInt(nodesNameList.size()));
+			do {
+				nodeName2 = nodesNameList.get(rand.nextInt(nodesNameList.size()));
+			} while (nodeName2 == nodeName1);
 
 			if (hasEdgeWeight) {
 				edgeWeight = rand.nextInt(edgeWeightMax - edgeWeightMin + 1) + edgeWeightMin;

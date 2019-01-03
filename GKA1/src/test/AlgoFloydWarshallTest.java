@@ -2,6 +2,7 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -54,51 +55,26 @@ public class AlgoFloydWarshallTest {
 	private double shortestDistanceResultBig;
 	private APSP apspBig;
 	private APSPInfo infoBig;
-	
-	private GkaGraph[] bigGraphs;
-	private double[] shortestDistanceTestBigs;
-	private double[] shortestDistanceResultBigs;
-	private APSP[] apspBigs;
-	private APSPInfo[] infoBigs;
 
-	@Before
-	public void init() throws UnsupportedEncodingException, IOException {
+	/**
+	 * Test shortest path between 2 valid nodes in the graph read from VLtest.gka.
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 * @throws UnsupportedEncodingException 
+	 */
+	@Test
+	public void testShortestPath() throws UnsupportedEncodingException, FileNotFoundException, IOException {
 		filename = "VLtest.gka";
 		graph = GkaUtils.read(filename);
 		startNodeName = "1";
 		endNodeName = "6";
 
-		graph03File = "graph03.gka";
-		graph03 = GkaUtils.read(graph03File);
-		startNodeName03_1 = "Hamburg";
-		endNodeName03_1 = "Lübeck";
-		startNodeName03_2 = "Kiel";
-		endNodeName03_2 = "Husum";
-		startNodeName03_3 = "Lübeck";
-		endNodeName03_3 = "Husum";
-		apsp03 = new APSP(graph03, "weight", false);
-
-		big = GkaUtils.generateRandom(100, 3500, true, false, 1, 10);
-		startNodeNameBig = "0";
-		endNodeNameBig = "99";
-		apspBig = new APSP(big, "weight", true);
-
-//		for (int i = 0; i < 100; i++) {
-//			bigGraphs[i] = GkaUtils.generateRandom(100, 3500, true, false, 1, 10);
-//			apspBigs[i] = new APSP(bigGraphs[i], "weight", true);
-//		}
-	}
-
-	/**
-	 * Test shortest path between 2 valid nodes in the graph read from VLtest.gka.
-	 */
-	@Test
-	public void testShortestPath() {
+		
 		shortestPathTest = GkaUtils
 				.toNodesString(AlgoFloydWarshall.shortestPath(graph, startNodeName, endNodeName, false));
 		shortestDistanceTest = AlgoFloydWarshall.distance(graph, startNodeName, endNodeName);
 
-		assertEquals(7.0, shortestDistanceTest, 1);
+		assertEquals(7.0, shortestDistanceTest, 0.00001);
 
 		// print to console
 		System.out.println(String.format("Shortest path on %s from %s to %s:", filename, startNodeName, endNodeName));
@@ -108,9 +84,22 @@ public class AlgoFloydWarshallTest {
 
 	/**
 	 * Test shortest path between 2 valid nodes in the graph read from graph03.gka.
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 * @throws UnsupportedEncodingException 
 	 */
 	@Test
-	public void testShortestPath03() {
+	public void testShortestPath03() throws UnsupportedEncodingException, FileNotFoundException, IOException {
+		graph03File = "graph03.gka";
+		graph03 = GkaUtils.read(graph03File);
+		startNodeName03_1 = "Hamburg";
+		endNodeName03_1 = "Lübeck";
+		startNodeName03_2 = "Kiel";
+		endNodeName03_2 = "Husum";
+		startNodeName03_3 = "Lübeck";
+		endNodeName03_3 = "Husum";
+		apsp03 = new APSP(graph03, "weight", false);
+		
 		// Hamburg -> Lübeck
 		shortestPathTest03_1 = AlgoFloydWarshall.shortestPath(graph03, startNodeName03_1, endNodeName03_1, false);
 		shortestDistanceTest03_1 = AlgoFloydWarshall.distance(graph03, startNodeName03_1, endNodeName03_1);
@@ -118,7 +107,7 @@ public class AlgoFloydWarshallTest {
 		apsp03.compute();
 		info03 = graph03.getNode(graph03.createNode(startNodeName03_1)).getAttribute(APSPInfo.ATTRIBUTE_NAME);
 		shortestDistanceResult03_1 = info03.getLengthTo(graph03.createNode(endNodeName03_1));
-		assertEquals(shortestDistanceResult03_1, shortestDistanceTest03_1, 1);
+		assertEquals(shortestDistanceResult03_1, shortestDistanceTest03_1, 0.00001);
 
 		System.out.println(
 				String.format("Shortest path on %s from %s to %s:", graph03File, startNodeName03_1, endNodeName03_1));
@@ -132,7 +121,7 @@ public class AlgoFloydWarshallTest {
 		apsp03.compute();
 		info03 = graph03.getNode(graph03.createNode(startNodeName03_2)).getAttribute(APSPInfo.ATTRIBUTE_NAME);
 		shortestDistanceResult03_2 = info03.getLengthTo(graph03.createNode(endNodeName03_2));
-		assertEquals(shortestDistanceResult03_2, shortestDistanceTest03_2, 1);
+		assertEquals(shortestDistanceResult03_2, shortestDistanceTest03_2, 0.00001);
 
 		System.out.println(
 				String.format("Shortest path on %s from %s to %s:", graph03File, startNodeName03_2, endNodeName03_2));
@@ -146,7 +135,7 @@ public class AlgoFloydWarshallTest {
 		apsp03.compute();
 		info03 = graph03.getNode(graph03.createNode(startNodeName03_3)).getAttribute(APSPInfo.ATTRIBUTE_NAME);
 		shortestDistanceResult03_3 = info03.getLengthTo(graph03.createNode(endNodeName03_3));
-		assertEquals(shortestDistanceResult03_3, shortestDistanceTest03_3, 1);
+		assertEquals(shortestDistanceResult03_3, shortestDistanceTest03_3, 0.00001);
 
 		System.out.println(
 				String.format("Shortest path on %s from %s to %s:", graph03File, startNodeName03_3, endNodeName03_3));
@@ -159,6 +148,11 @@ public class AlgoFloydWarshallTest {
 	 */
 	@Test
 	public void testShortestPathBig() {
+		big = GkaUtils.generateRandom(100, 3500, true, false, 1, 10);
+		startNodeNameBig = "0";
+		endNodeNameBig = "99";
+		apspBig = new APSP(big, "weight", true);
+		
 		shortestPathTestBig = AlgoFloydWarshall.shortestPath(big, startNodeNameBig, endNodeNameBig, false);
 		shortestDistanceTestBig = AlgoFloydWarshall.distance(big, startNodeNameBig, endNodeNameBig);
 
@@ -176,18 +170,25 @@ public class AlgoFloydWarshallTest {
 		assertEquals(shortestDistanceResultBig, shortestDistanceTestBig, 0.000000001);
 	}
 	
-//	/**
-//	 * Test shortest path between 2 valid nodes in 100 big graphs with 100 nodes.
-//	 */
-//	@Test
-//	public void testShortestPathBig100() {
-//		for (int i = 0; i < 99; i++) {
-//			shortestDistanceTestBigs[i] = AlgoFloydWarshall.distance(bigGraphs[i], startNodeNameBig, endNodeNameBig);
-//
-//			apspBigs[i].compute();
-//			infoBigs[i] = big.getNode(big.createNode(startNodeNameBig)).getAttribute(APSPInfo.ATTRIBUTE_NAME);
-//			shortestDistanceResultBigs[i] = infoBigs[i].getLengthTo(big.createNode(endNodeNameBig));
-//			assertEquals(shortestDistanceResultBigs[i], shortestDistanceTestBigs[i], 0.000000001);
-//		}
-//	}
+	/**
+	 * Test shortest path between 2 valid nodes in 100 big graphs with 100 nodes.
+	 */
+	@Test
+	public void testShortestPathBig100() {
+		for (int i = 0; i < 100; i++) {			
+			big = GkaUtils.generateRandom(100, 3500, true, false, 1, 10);
+			startNodeNameBig = "0";
+			endNodeNameBig = "99";
+			apspBig = new APSP(big, "weight", true);
+			
+			shortestPathTestBig = AlgoFloydWarshall.shortestPath(big, startNodeNameBig, endNodeNameBig, false);
+			shortestDistanceTestBig = AlgoFloydWarshall.distance(big, startNodeNameBig, endNodeNameBig);
+
+			apspBig.compute();
+			infoBig = big.getNode(big.createNode(startNodeNameBig)).getAttribute(APSPInfo.ATTRIBUTE_NAME);
+			shortestDistanceResultBig = infoBig.getLengthTo(big.createNode(endNodeNameBig));
+			
+			assertEquals(shortestDistanceResultBig, shortestDistanceTestBig, 0.000001);
+		}
+	}
 }
