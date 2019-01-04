@@ -164,7 +164,7 @@ public class GkaUtils {
 	}
 
 	/**
-	 * Generate a random graph with edge weight and without seed. 
+	 * Generate a random graph with edge weight and without seed.
 	 * 
 	 * @param nodeNum
 	 *            Number of nodes.
@@ -182,7 +182,7 @@ public class GkaUtils {
 	}
 
 	/**
-	 * Generate a random graph without edge weights and seed. 
+	 * Generate a random graph without edge weights and seed.
 	 * 
 	 * @param nodeNum
 	 *            Number of nodes.
@@ -199,7 +199,7 @@ public class GkaUtils {
 	}
 
 	/**
-	 * Generate a random graph with a fixed number of nodes and edges. Edge names
+	 * Generate a random simple graph with a fixed number of nodes and edges. Edge names
 	 * are optional. Edge weight is also optional and can be set within a range.
 	 * 
 	 * @param nodeNum
@@ -241,24 +241,29 @@ public class GkaUtils {
 		Boolean hasEdgeWeight = edgeWeightMin <= edgeWeightMax;
 		int edgeWeight;
 		for (int i = 0; i < edgeNum; i++) {
+			// create 2 different random nodes
 			nodeName1 = nodesNameList.get(rand.nextInt(nodesNameList.size()));
-//			nodeName2 = nodesNameList.get(rand.nextInt(nodesNameList.size()));
 			do {
 				nodeName2 = nodesNameList.get(rand.nextInt(nodesNameList.size()));
 			} while (nodeName2 == nodeName1);
-
-			if (hasEdgeWeight) {
-				edgeWeight = rand.nextInt(edgeWeightMax - edgeWeightMin + 1) + edgeWeightMin;
-				if (hasEdgeName) {
-					graph.createEdge(nodeName1, nodeName2, isDirectedStr, "e" + i, String.valueOf(edgeWeight));
+			Node node1 = graph.getNode(graph.createNode(nodeName1));
+			Node node2 = graph.getNode(graph.createNode(nodeName2));
+			
+			// create an edge between the 2 nodes if they aren't yet connected
+			if (!node1.hasEdgeToward(node2)) {
+				if (hasEdgeWeight) {
+					edgeWeight = rand.nextInt(edgeWeightMax - edgeWeightMin + 1) + edgeWeightMin;
+					if (hasEdgeName) {
+						graph.createEdge(nodeName1, nodeName2, isDirectedStr, "e" + i, String.valueOf(edgeWeight));
+					} else {
+						graph.createEdge(nodeName1, nodeName2, isDirectedStr, null, String.valueOf(edgeWeight));
+					}
 				} else {
-					graph.createEdge(nodeName1, nodeName2, isDirectedStr, null, String.valueOf(edgeWeight));
-				}
-			} else {
-				if (hasEdgeName) {
-					graph.createEdge(nodeName1, nodeName2, isDirectedStr, "e" + i, null);
-				} else {
-					graph.createEdge(nodeName1, nodeName2, isDirectedStr, null, null);
+					if (hasEdgeName) {
+						graph.createEdge(nodeName1, nodeName2, isDirectedStr, "e" + i, null);
+					} else {
+						graph.createEdge(nodeName1, nodeName2, isDirectedStr, null, null);
+					}
 				}
 			}
 		}

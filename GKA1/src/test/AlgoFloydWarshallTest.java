@@ -74,7 +74,7 @@ public class AlgoFloydWarshallTest {
 				.toNodesString(AlgoFloydWarshall.shortestPath(graph, startNodeName, endNodeName, false));
 		shortestDistanceTest = AlgoFloydWarshall.distance(graph, startNodeName, endNodeName);
 
-		assertEquals(7.0, shortestDistanceTest, 0.00001);
+		assertEquals(7.0, shortestDistanceTest, 0.00000001);
 
 		// print to console
 		System.out.println(String.format("Shortest path on %s from %s to %s:", filename, startNodeName, endNodeName));
@@ -107,7 +107,7 @@ public class AlgoFloydWarshallTest {
 		apsp03.compute();
 		info03 = graph03.getNode(graph03.createNode(startNodeName03_1)).getAttribute(APSPInfo.ATTRIBUTE_NAME);
 		shortestDistanceResult03_1 = info03.getLengthTo(graph03.createNode(endNodeName03_1));
-		assertEquals(shortestDistanceResult03_1, shortestDistanceTest03_1, 0.00001);
+		assertEquals(shortestDistanceResult03_1, shortestDistanceTest03_1, 0.0000001);
 
 		System.out.println(
 				String.format("Shortest path on %s from %s to %s:", graph03File, startNodeName03_1, endNodeName03_1));
@@ -121,7 +121,7 @@ public class AlgoFloydWarshallTest {
 		apsp03.compute();
 		info03 = graph03.getNode(graph03.createNode(startNodeName03_2)).getAttribute(APSPInfo.ATTRIBUTE_NAME);
 		shortestDistanceResult03_2 = info03.getLengthTo(graph03.createNode(endNodeName03_2));
-		assertEquals(shortestDistanceResult03_2, shortestDistanceTest03_2, 0.00001);
+		assertEquals(shortestDistanceResult03_2, shortestDistanceTest03_2, 0.0000001);
 
 		System.out.println(
 				String.format("Shortest path on %s from %s to %s:", graph03File, startNodeName03_2, endNodeName03_2));
@@ -135,7 +135,7 @@ public class AlgoFloydWarshallTest {
 		apsp03.compute();
 		info03 = graph03.getNode(graph03.createNode(startNodeName03_3)).getAttribute(APSPInfo.ATTRIBUTE_NAME);
 		shortestDistanceResult03_3 = info03.getLengthTo(graph03.createNode(endNodeName03_3));
-		assertEquals(shortestDistanceResult03_3, shortestDistanceTest03_3, 0.00001);
+		assertEquals(shortestDistanceResult03_3, shortestDistanceTest03_3, 0.0000001);
 
 		System.out.println(
 				String.format("Shortest path on %s from %s to %s:", graph03File, startNodeName03_3, endNodeName03_3));
@@ -148,7 +148,7 @@ public class AlgoFloydWarshallTest {
 	 */
 	@Test
 	public void testShortestPathBig() {
-		big = GkaUtils.generateRandom(100, 3500, true, false, 1, 10);
+		big = GkaUtils.generateRandom(100, 3500, true, false, 1, 100);
 		startNodeNameBig = "0";
 		endNodeNameBig = "99";
 		apspBig = new APSP(big, "weight", true);
@@ -176,7 +176,7 @@ public class AlgoFloydWarshallTest {
 	@Test
 	public void testShortestPathBig100() {
 		for (int i = 0; i < 100; i++) {			
-			big = GkaUtils.generateRandom(100, 3500, true, false, 1, 10);
+			big = GkaUtils.generateRandom(100, 3500, true, false, 99, 1000);
 			startNodeNameBig = "0";
 			endNodeNameBig = "99";
 			apspBig = new APSP(big, "weight", true);
@@ -188,7 +188,7 @@ public class AlgoFloydWarshallTest {
 			infoBig = big.getNode(big.createNode(startNodeNameBig)).getAttribute(APSPInfo.ATTRIBUTE_NAME);
 			shortestDistanceResultBig = infoBig.getLengthTo(big.createNode(endNodeNameBig));
 			
-			assertEquals(shortestDistanceResultBig, shortestDistanceTestBig, 0.000001);
+			assertEquals(shortestDistanceResultBig, shortestDistanceTestBig, 0.0000000001);
 		}
 	}
 }
