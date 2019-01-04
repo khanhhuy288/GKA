@@ -29,8 +29,8 @@ public class AlgoDijkstra {
 //		System.out.println(GkaUtils.toNodesString(shortestPath));
 		
 		GkaGraph graph = GkaUtils.generateRandom(100, 3500, true, false, 1, 10);
-		List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "0", "99", true);
-		System.out.println(GkaUtils.toNodesString(shortestPath));
+		double shortestPath = AlgoDijkstra.shortestPath(graph, "0", "99", true);
+		System.out.println(shortestPath);
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class AlgoDijkstra {
 	 * @return Sequence of nodes on the shortest path between start and end
 	 *         nodes.
 	 */
-	public static List<Node> shortestPath(GkaGraph graph, String startNodeName, String endNodeName,
+	public static double shortestPath(GkaGraph graph, String startNodeName, String endNodeName,
 			boolean isVisualized) {
 		// check if nodes exist
 		if (!graph.getNodeNames().contains(startNodeName) || !graph.getNodeNames().contains(endNodeName)) {
@@ -129,27 +129,9 @@ public class AlgoDijkstra {
 			}
 		}
 
-		// print totalCosts und prevNodes in console
-		// for (Map.Entry<Node, Double> entry : totalCosts.entrySet()) {
-		// Node key = entry.getKey();
-		// double value = entry.getValue();
-		// System.out.println("Key: " + key.getAttribute("name") + "; " +
-		// "Value: " + value);
-		// }
-		//
-		// System.out.println();
-		// for (Map.Entry<Node, Node> entry : prevNodes.entrySet()) {
-		// Node key = entry.getKey();
-		// Node value = entry.getValue();
-		// if (value != null) {
-		// System.out.println("Key: " + key.getAttribute("name") + "; " +
-		// "Value: " + value.getAttribute("name"));
-		// }
-		// }
-
 		// return null if end is not found
 		if (prevNodes.get(end) == null) {
-			return null;
+			return -1.0;
 		}
 
 		// trace back the path with HashMap
@@ -175,7 +157,7 @@ public class AlgoDijkstra {
 			out.get(out.size() - 1).addAttribute("ui.class", "special");
 		}
 
-		return out;
+		return totalCosts.get(end);
 	}
 
 	/**
