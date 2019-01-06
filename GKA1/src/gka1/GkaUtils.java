@@ -342,10 +342,10 @@ public class GkaUtils {
 			throw new IllegalArgumentException("At least two nodes are needed to creat a network.");
 		}
 
-//		// maximum number of edges for a graph to be simple
-//		if (edgeNum > nodeNum * (nodeNum - 3) + 3) {
-//			throw new IllegalArgumentException("Too many edges. No multi-edge is allowed in a network.");
-//		}
+		// maximum number of edges for a graph to be simple
+		if (edgeNum > nodeNum * (nodeNum - 1) / 2) {
+			throw new IllegalArgumentException("Too many edges. No multi-edge is allowed in a network.");
+		}
 
 		if (edgeWeightMin >= edgeWeightMax) {
 			throw new IllegalArgumentException("Minimum edge weight must be smaller than maximum edge weight.");

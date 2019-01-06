@@ -60,7 +60,7 @@ public class CompareFordFulkersonEdmondsKarpTest {
 		GkaGraph bigNet = GkaUtils.generateNetwork(50, 800, 1, 100);
 
 		long start = System.nanoTime();
-		int maxFlowFF = AlgoFordFulkerson.solve(bigNet, "0", "49");
+		int maxFlowFF = AlgoFordFulkerson.maxFlow(bigNet, "0", "49");
 		long end = System.nanoTime();
 		System.out.printf("Runtime bigNetTest (FF) = %d ns%n", end - start);
 
@@ -80,15 +80,19 @@ public class CompareFordFulkersonEdmondsKarpTest {
 			Random rand = new Random();
 			
 			// 2 <= nodeNum <= 100
-			int nodeNum = 10 + rand.nextInt(50 - 10 + 1);
+			int minNodeNum = 2;
+			int maxNodeNum = 100;
+			int nodeNum = minNodeNum + rand.nextInt(maxNodeNum - minNodeNum + 1);
 			
-			// n-1 <= edgeNum <= n(n-3)+3, n is nodeNum
-//			int edgeNum = nodeNum - 1 + rand.nextInt(nodeNum * (nodeNum - 4) + 5);
-			int edgeNum = 4 * nodeNum;
+			// n-1 <= edgeNum <= n(n-1)/2, n is nodeNum
+			int minEdgeNum = nodeNum - 1;
+			int maxEdgeNum = nodeNum * (nodeNum - 1) / 2;
+			int edgeNum = minEdgeNum + rand.nextInt(maxEdgeNum - minEdgeNum + 1);
+			
 			GkaGraph bigNet = GkaUtils.generateNetwork(nodeNum, edgeNum, 1, 100);
 
 			long start = System.nanoTime();
-			int maxFlowFF = AlgoFordFulkerson.solve(bigNet, "0", String.valueOf(nodeNum - 1));
+			int maxFlowFF = AlgoFordFulkerson.maxFlow(bigNet, "0", String.valueOf(nodeNum - 1));
 			long end = System.nanoTime();
 			long runTimeFF = end - start;
 
