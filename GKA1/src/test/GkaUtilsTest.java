@@ -116,46 +116,63 @@ public class GkaUtilsTest {
 		System.out.println();
 	}
 
+//	/**
+//	 * Test GkaUtils.generateRandom().
+//	 */
+//	@Test()
+//	public void generateRandomtest() {
+//		int edgeWeight;
+//
+//		// test first random graph
+//		randomGraph = GkaUtils.generateRandom(1, 100, true, true);
+//		assertEquals(1, randomGraph.getNodeCount());
+//		assertEquals(100, randomGraph.getEdgeCount());
+//
+//		for (Edge edge : randomGraph.getEachEdge()) {
+//			assertTrue(edge.isDirected());
+//			assertTrue(edge.hasAttribute("name"));
+//		}
+//
+//		// test second random graph
+//		randomGraph = GkaUtils.generateRandom(10, 200, false, true, -4, 1000);
+//		assertEquals(10, randomGraph.getNodeCount());
+//		assertEquals(200, randomGraph.getEdgeCount());
+//
+//		for (Edge edge : randomGraph.getEachEdge()) {
+//			assertFalse(edge.isDirected());
+//			assertTrue(edge.hasAttribute("name"));
+//			edgeWeight = Integer.valueOf(edge.getAttribute("weight").toString());
+//			assertTrue(edgeWeight >= -4 && edgeWeight <= 1000);
+//		}
+//
+//		// test third random graph
+//		randomGraph = GkaUtils.generateRandom(100, 2000, true, false, 0, 100);
+//		assertEquals(100, randomGraph.getNodeCount());
+//		assertEquals(2000, randomGraph.getEdgeCount());
+//
+//		for (Edge edge : randomGraph.getEachEdge()) {
+//			assertTrue(edge.isDirected());
+//			assertFalse(edge.hasAttribute("name"));
+//			edgeWeight = Integer.valueOf(edge.getAttribute("weight").toString());
+//			assertTrue(edgeWeight >= 0 && edgeWeight <= 100);
+//		}
+//	}
+
 	/**
-	 * Test GkaUtils.generateRandom().
+	 * Test GkaUtils.generateNetwork().
 	 */
 	@Test()
-	public void generateRandomtest() {
+	public void generateNetworktest() {
 		int edgeWeight;
-
-		// test first random graph
-		randomGraph = GkaUtils.generateRandom(1, 100, true, true);
-		assertEquals(1, randomGraph.getNodeCount());
-		assertEquals(100, randomGraph.getEdgeCount());
-
-		for (Edge edge : randomGraph.getEachEdge()) {
-			assertTrue(edge.isDirected());
-			assertTrue(edge.hasAttribute("name"));
+		
+		for (int i = 0; i < 5; i++) {
+			int nodeNum = 10;
+			int edgeNum = 50;
+			GkaGraph bigNet = GkaUtils.generateNetwork(nodeNum, edgeNum, 1, 50);
+			assertEquals(nodeNum, bigNet.getNodeCount());
+			assertEquals(edgeNum, bigNet.getEdgeCount());
 		}
 
-		// test second random graph
-		randomGraph = GkaUtils.generateRandom(10, 200, false, true, -4, 1000);
-		assertEquals(10, randomGraph.getNodeCount());
-		assertEquals(200, randomGraph.getEdgeCount());
-
-		for (Edge edge : randomGraph.getEachEdge()) {
-			assertFalse(edge.isDirected());
-			assertTrue(edge.hasAttribute("name"));
-			edgeWeight = Integer.valueOf(edge.getAttribute("weight").toString());
-			assertTrue(edgeWeight >= -4 && edgeWeight <= 1000);
-		}
-
-		// test third random graph
-		randomGraph = GkaUtils.generateRandom(100, 2000, true, false, 0, 100);
-		assertEquals(100, randomGraph.getNodeCount());
-		assertEquals(2000, randomGraph.getEdgeCount());
-
-		for (Edge edge : randomGraph.getEachEdge()) {
-			assertTrue(edge.isDirected());
-			assertFalse(edge.hasAttribute("name"));
-			edgeWeight = Integer.valueOf(edge.getAttribute("weight").toString());
-			assertTrue(edgeWeight >= 0 && edgeWeight <= 100);
-		}
 	}
 
 }
