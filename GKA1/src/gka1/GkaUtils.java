@@ -54,23 +54,16 @@ public class GkaUtils {
 		// myGraph.beautify();
 		// }
 
-		// for (int i = 0; i < 5; i++) {
-		// GkaGraph bigNet = GkaUtils.generateNetwork(6, 10, 1, 10);
-		// bigNet.display();
-		// bigNet.beautify();
-		// }
-
-		for (int i = 0; i < 5; i++) {
-			Random rand = new Random();
-			// 2 <= nodeNum <= 10
-			int nodeNum = 2 + rand.nextInt(10 - 2 + 1);
-			// n-1 <= edgeNum <= n(n-3)+3, n is nodeNum
-			int edgeNum = nodeNum - 1 + rand.nextInt(nodeNum * (nodeNum - 4) + 5);
-			GkaGraph bigNet = GkaUtils.generateNetwork(nodeNum, edgeNum, 1, 100);
-			System.out.println();
+//		for (int i = 0; i < 5; i++) {
+//			Random rand = new Random();
+//			// 2 <= nodeNum <= 10
+//			int nodeNum = 2 + rand.nextInt(10 - 2 + 1);
+//			// n-1 <= edgeNum <= n(n-3)+3, n is nodeNum
+//			int edgeNum = nodeNum - 1 + rand.nextInt(nodeNum * (nodeNum - 3) / 2 + 2);
+//			GkaGraph bigNet = GkaUtils.generateNetwork(nodeNum, edgeNum, 1, 100);
 //			bigNet.display();
 //			bigNet.beautify();
-		}
+//		}
 	}
 
 	/**
@@ -251,7 +244,7 @@ public class GkaUtils {
 	 * @param edgeWeightMin
 	 *            The minimum weight of an edge.
 	 * @param edgeWeightMax
-	 *            The maximum wieght of an edge.
+	 *            The maximum weight of an edge.
 	 * @param seed
 	 *            Seed for random generator.
 	 * @return A GkaGraph object.
@@ -318,15 +311,19 @@ public class GkaUtils {
 	 * with index 0 and (nodeNum - 1) respectively.
 	 * 
 	 * @param nodeNum
+	 *            Number of nodes.
 	 * @param edgeNum
+	 *            Number of edges.
 	 * @param edgeWeightMin
+	 *            The minimum weight of an edge.
 	 * @param edgeWeightMax
+	 *            The maximum weight of an edge.
 	 * @param seed
-	 * @return
+	 *            Seed for random generator.
+	 * @return A GkaGraph object.
 	 */
 	public static GkaGraph generateNetwork(int nodeNum, int edgeNum, int edgeWeightMin, int edgeWeightMax,
 			Integer seed) {
-		// negative number of nodes and edges
 		if (nodeNum < 0 || edgeNum < 0) {
 			throw new IllegalArgumentException("Number of nodes and edges must be positive.");
 		}
@@ -368,6 +365,7 @@ public class GkaUtils {
 
 		// create (nodeNum - 1) edges to connect the nodes, ensure the graph will be
 		// connected
+		int createdEdgeNum = 0;
 		for (int i = 1; i < nodeNum; i++) {
 			String iNodeName = String.valueOf(i);
 
@@ -378,16 +376,17 @@ public class GkaUtils {
 
 			Node node1 = graph.getNode(graph.createNode(nodeName1));
 			Node iNode = graph.getNode(graph.createNode(iNodeName));
+
 			// create an edge of random weight from the random node to the current node
 			if (!node1.hasEdgeBetween(iNode)) {
 				int edgeWeight = rand.nextInt(edgeWeightMax - edgeWeightMin + 1) + edgeWeightMin;
 				graph.createEdge(nodeName1, iNodeName, "->", null, String.valueOf(edgeWeight));
+				createdEdgeNum++;
 			}
 		}
 
 		// connect random nodes until the we have edgeNum edges. Edges aren't allowed to
 		// go from sink or go to source
-		int createdEdgeNum = nodeNum - 1;
 		while (createdEdgeNum < edgeNum) {
 			// node1 != sink
 			nodeName1 = nodesNameList.get(rand.nextInt(nodeNum - 1));
@@ -408,6 +407,7 @@ public class GkaUtils {
 			}
 		}
 
+		// mark source and sink in the visualized graph
 		Node source = graph.getNode(graph.createNode("0"));
 		Node sink = graph.getNode(graph.createNode(String.valueOf(nodeNum - 1)));
 		source.addAttribute("ui.class", "special");

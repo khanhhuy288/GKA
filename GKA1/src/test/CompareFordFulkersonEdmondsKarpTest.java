@@ -70,7 +70,27 @@ public class CompareFordFulkersonEdmondsKarpTest {
 		System.out.printf("Runtime bigNetTest (EK) = %d ns%n%n", end - start);
 
 		assertEquals(maxFlowFF, maxFlowEK);
+	}
+	
+	@Test
+	public void biggestNetTest() throws UnsupportedEncodingException, FileNotFoundException, IOException {
+		int nodeNum = 2500;
+		int edgeNum = 1000000;
+		
+		GkaGraph bigNet = GkaUtils.generateNetwork(nodeNum, edgeNum, 1, 100);
 
+		long start = System.nanoTime();
+		int maxFlowFF = AlgoFordFulkerson.maxFlow(bigNet, "0", String.valueOf(nodeNum - 1));
+		long end = System.nanoTime();
+		long ns = 1000000000;
+		System.out.printf("Runtime biggestNetTest (FF) = %d s%n", (end - start) / ns);  // 57s
+
+		start = System.nanoTime();
+		int maxFlowEK = AlgoEdmondsKarp.maxFlow(bigNet, "0", String.valueOf(nodeNum - 1));
+		end = System.nanoTime();
+		System.out.printf("Runtime biggestNetTest (EK) = %d s%n%n", (end - start) / ns);  // 3s
+
+		assertEquals(maxFlowFF, maxFlowEK);
 	}
 
 	@Test
@@ -90,6 +110,9 @@ public class CompareFordFulkersonEdmondsKarpTest {
 			int edgeNum = minEdgeNum + rand.nextInt(maxEdgeNum - minEdgeNum + 1);
 			
 			GkaGraph bigNet = GkaUtils.generateNetwork(nodeNum, edgeNum, 1, 100);
+			
+			assertEquals(nodeNum, bigNet.getNodeCount());
+			assertEquals(edgeNum, bigNet.getEdgeCount());
 
 			long start = System.nanoTime();
 			int maxFlowFF = AlgoFordFulkerson.maxFlow(bigNet, "0", String.valueOf(nodeNum - 1));

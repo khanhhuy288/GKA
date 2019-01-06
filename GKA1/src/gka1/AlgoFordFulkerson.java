@@ -18,7 +18,8 @@ public class AlgoFordFulkerson {
 	 * Create the adjacency matrix of a given graph. Cell equals the capacity
 	 * between 2 nodes if there's an edge from 1 node to the other, 0 otherwise.
 	 * 
-	 * @param graph The graph to work with.
+	 * @param graph
+	 *            The graph to work with.
 	 * @return Adjacency matrix.
 	 */
 	public static int[][] graphMatrix(GkaGraph graph) {
@@ -44,10 +45,14 @@ public class AlgoFordFulkerson {
 	 * Find an augmenting path from source 's' to sink 't' in the residual graph
 	 * using depth-first-search.
 	 *
-	 * @param graphMatrix Adjacency matrix of the residual graph.
-	 * @param sourceIndex Index of the source node in the network.
-	 * @param sinkIndex   Index of the sink node in the network.
-	 * @param parent        Array to store previous node of each node on the path.
+	 * @param graphMatrix
+	 *            Adjacency matrix of the residual graph.
+	 * @param sourceIndex
+	 *            Index of the source node in the network.
+	 * @param sinkIndex
+	 *            Index of the sink node in the network.
+	 * @param parent
+	 *            Array to store previous node of each node on the path.
 	 * @return true if there is an augmenting path from source to sink, otherwise
 	 *         false.
 	 */
@@ -80,7 +85,7 @@ public class AlgoFordFulkerson {
 				visited[curr] = true;
 			}
 
-			// traceback the path with parent[] and end the loop if sink is reached
+			// trace back the path with parent[] and end the loop if sink is reached
 			if (curr == sinkIndex) {
 				while (!stack.empty()) {
 					int i = stack.pop();
@@ -117,9 +122,12 @@ public class AlgoFordFulkerson {
 	/**
 	 * Calculate the maximum flow from source to sink of a flow network.
 	 * 
-	 * @param graph      The graph to work with.
-	 * @param sourceName Name of the source node.
-	 * @param sinkName   Name of the sink node.
+	 * @param graph
+	 *            The graph to work with.
+	 * @param sourceName
+	 *            Name of the source node.
+	 * @param sinkName
+	 *            Name of the sink node.
 	 * @return Maximum flow of the network.
 	 */
 	public static int maxFlow(GkaGraph graph, String sourceName, String sinkName) {
@@ -181,11 +189,5 @@ public class AlgoFordFulkerson {
 
 		// return the overall flow
 		return maxFlow;
-	}
-
-	public static void main(String[] args) throws UnsupportedEncodingException, FileNotFoundException, IOException {
-		GkaGraph graph = GkaUtils.read("BFSsave.gka");
-		int maxflow = AlgoFordFulkerson.maxFlow(graph, "s", "t");
-		System.out.println("maxflow = " + maxflow);
 	}
 }

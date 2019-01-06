@@ -9,10 +9,45 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.AbstractEdge;
 import org.graphstream.graph.implementations.AbstractNode;
 
+/**
+ * Contain methods to find the maximum flow of a flow network using
+ * breath-first-search (BFS).
+ * 
+ * @author Tri Pham
+ *
+ */
 public class AlgoEdmondsKarp {
 	/**
-	 * Find an shortest augmenting path from source 's' to sink 't' in the residual graph using
-	 * breath-first-search.
+	 * Create the adjacency matrix of a given graph. Cell equals the capacity
+	 * between 2 nodes if there's an edge from 1 node to the other, 0 otherwise.
+	 * 
+	 * @param graph
+	 *            The graph to work with
+	 * @return adjacency matrix
+	 */
+	public static int[][] graphMatrix(GkaGraph graph) {
+		int nodeNr = graph.getNodeCount();
+		int graphMatrix[][] = new int[nodeNr][nodeNr];
+
+		for (int i = 0; i < nodeNr; i++) {
+			for (int j = 0; j < nodeNr; j++) {
+				Node iNode = graph.getNode(i);
+				Node jNode = graph.getNode(j);
+				if (iNode.hasEdgeToward(jNode)) {
+					graphMatrix[i][j] = iNode.getEdgeToward(jNode).getAttribute("weight");
+
+				} else {
+					graphMatrix[i][j] = 0;
+				}
+			}
+		}
+
+		return graphMatrix;
+	}
+
+	/**
+	 * Find an shortest augmenting path from source 's' to sink 't' in the residual
+	 * graph using breath-first-search.
 	 *
 	 * @param graphMatrix
 	 *            adjacency matrix of the residual graph
@@ -24,7 +59,7 @@ public class AlgoEdmondsKarp {
 	 *            array to store previous node of each node on the path
 	 * @return true if an augmenting path is available.
 	 */
-	public static boolean augmentPath(int[][] graphMatrix, int sourceIndex, int sinkIndex, int prev[]) {
+	public static boolean getAugmentingPath(int[][] graphMatrix, int sourceIndex, int sinkIndex, int prev[]) {
 		int nodeNr = graphMatrix.length;
 
 		// an array to track whether a node is visited
@@ -95,9 +130,8 @@ public class AlgoEdmondsKarp {
 		int parent[] = new int[nodeNr];
 
 		// Augment the flow while there is path from source to sink
-		while (augmentPath(rGraph, sourceIndex, sinkIndex, parent)) {
-
-			// minimum residual capacity of the edges along the path filled by BFS.
+		while (getAugmentingPath(rGraph, sourceIndex, sinkIndex, parent)) {
+			// find minimum residual capacity (bottleneck) of the edges along the path
 			int bottleneck = Integer.MAX_VALUE;
 			for (int v = sinkIndex; v != sourceIndex; v = parent[v]) {
 				int u = parent[v];
@@ -107,12 +141,12 @@ public class AlgoEdmondsKarp {
 			// update residual capacities of the forward and backward edges along the path
 			for (int v = sinkIndex; v != sourceIndex; v = parent[v]) {
 				int u = parent[v];
-				
-				// forward edge, remaining capacity = capacity - flow, 
+
+				// forward edge, remaining capacity = capacity - flow,
 				// flow increases => r.cap. decreases
 				rGraph[u][v] -= bottleneck;
-				
-				// backward edge, remaining capacity = flow, 
+
+				// backward edge, remaining capacity = flow,
 				// flow increases => r.cap. increases
 				rGraph[v][u] += bottleneck;
 			}
@@ -123,33 +157,6 @@ public class AlgoEdmondsKarp {
 
 		// Return the overall flow
 		return maxFlow;
-	}
-
-	/**
-	 * Give the adjacency matrix of a given graph
-	 * 
-	 * @param graph
-	 *            The graph to work with
-	 * @return adjacency matrix
-	 */
-	public static int[][] graphMatrix(GkaGraph graph) {
-		int nodeNr = graph.getNodeCount();
-		int graphMatrix[][] = new int[nodeNr][nodeNr];
-
-		for (int i = 0; i < nodeNr; i++) {
-			for (int j = 0; j < nodeNr; j++) {
-				Node iNode = graph.getNode(i);
-				Node jNode = graph.getNode(j);
-				if (iNode.hasEdgeToward(jNode)) {
-					graphMatrix[i][j] = iNode.getEdgeToward(jNode).getAttribute("weight");
-
-				} else {
-					graphMatrix[i][j] = 0;
-				}
-			}
-		}
-
-		return graphMatrix;
 	}
 
 }
