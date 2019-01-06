@@ -21,7 +21,7 @@ public class CompareFordFulkersonEdmondsKarpTest {
 		GkaGraph graph = GkaUtils.read("graph04.gka");
 
 		long start = System.nanoTime();
-		int maxFlowFF = AlgoFordFulkerson.solve(graph, "v1", "v8");
+		int maxFlowFF = AlgoFordFulkerson.maxFlow(graph, "v1", "v8");
 		long end = System.nanoTime();
 
 		System.out.printf("Runtime (FF) = %d ns%n", end - start);
@@ -40,7 +40,7 @@ public class CompareFordFulkersonEdmondsKarpTest {
 		GkaGraph graph = GkaUtils.read("graph04.gka");
 
 		long start = System.nanoTime();
-		int maxFlowFF = AlgoFordFulkerson.solve(graph, "v1", "s");
+		int maxFlowFF = AlgoFordFulkerson.maxFlow(graph, "v1", "s");
 		long end = System.nanoTime();
 
 		System.out.printf("Runtime (FF) = %d ns%n", end - start);
