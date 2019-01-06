@@ -67,7 +67,7 @@ public class AlgoEdmondsKarp {
 	 *            Name of sink
 	 * @return maximum flow through the graph
 	 */
-	public static int solve(GkaGraph graph, String sourceName, String sinkName) {
+	public static int maxFlow(GkaGraph graph, String sourceName, String sinkName) {
 		// get index of start and end nodes
 		int sourceIndex = graph.getNode(graph.createNode(sourceName)).getIndex();
 		int sinkIndex = graph.getNode(graph.createNode(sinkName)).getIndex();
