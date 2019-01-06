@@ -23,16 +23,6 @@ import org.graphstream.graph.Node;
  *
  */
 public class AlgoDijkstra {
-	public static void main(String[] args) throws UnsupportedEncodingException, FileNotFoundException, IOException {
-//		GkaGraph graph = GkaUtils.read("graph03.gka");
-//		List<Node> shortestPath = AlgoDijkstra.shortestPath(graph, "Lübeck", "Husum", true);
-//		System.out.println(GkaUtils.toNodesString(shortestPath));
-		
-		GkaGraph graph = GkaUtils.generateRandom(100, 3500, true, false, 1, 10);
-		double shortestPath = AlgoDijkstra.shortestPath(graph, "0", "99", true);
-		System.out.println(shortestPath);
-	}
-
 	/**
 	 * Find the shortest path between 2 nodes using Dijkstra.
 	 * 

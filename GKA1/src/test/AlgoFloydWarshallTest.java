@@ -176,7 +176,7 @@ public class AlgoFloydWarshallTest {
 	@Test
 	public void testShortestPathBig100() {
 		for (int i = 0; i < 100; i++) {			
-			big = GkaUtils.generateRandom(100, 3500, true, false, 99, 1000);
+			big = GkaUtils.generateRandom(100, 3500, true, false, 1, 100);
 			startNodeNameBig = "0";
 			endNodeNameBig = "99";
 			apspBig = new APSP(big, "weight", true);

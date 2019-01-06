@@ -11,11 +11,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
 /**
@@ -51,6 +53,10 @@ public class GkaUtils {
 		// myGraph.display();
 		// myGraph.beautify();
 		// }
+
+		GkaGraph bigNet = GkaUtils.generateNetwork(6, 10, true, 1, 10, 0);
+		bigNet.display();
+		bigNet.beautify();
 	}
 
 	/**
@@ -181,6 +187,11 @@ public class GkaUtils {
 		return generateRandom(nodeNum, edgeNum, isDirected, hasEdgeName, edgeWeightMin, edgeWeightMax, null);
 	}
 
+	public static GkaGraph generateNetwork(int nodeNum, int edgeNum, boolean hasEdgeName, int edgeWeightMin,
+			int edgeWeightMax) {
+		return generateNetwork(nodeNum, edgeNum, hasEdgeName, edgeWeightMin, edgeWeightMax, null);
+	}
+
 	/**
 	 * Generate a random graph without edge weights and seed.
 	 * 
@@ -199,8 +210,9 @@ public class GkaUtils {
 	}
 
 	/**
-	 * Generate a random simple graph with a fixed number of nodes and edges. Edge names
-	 * are optional. Edge weight is also optional and can be set within a range.
+	 * Generate a random simple graph with a fixed number of nodes and edges. Edge
+	 * names are optional. Edge weight is also optional and can be set within a
+	 * range.
 	 * 
 	 * @param nodeNum
 	 *            Number of nodes.
@@ -248,7 +260,7 @@ public class GkaUtils {
 			} while (nodeName2 == nodeName1);
 			Node node1 = graph.getNode(graph.createNode(nodeName1));
 			Node node2 = graph.getNode(graph.createNode(nodeName2));
-			
+
 			// create an edge between the 2 nodes if they aren't yet connected
 			if (!node1.hasEdgeToward(node2)) {
 				if (hasEdgeWeight) {
@@ -264,6 +276,101 @@ public class GkaUtils {
 					} else {
 						graph.createEdge(nodeName1, nodeName2, isDirectedStr, null, null);
 					}
+				}
+			}
+		}
+
+		// set viewer
+		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+
+		return graph;
+	}
+
+	public static GkaGraph generateNetwork(int nodeNum, int edgeNum, boolean hasEdgeName, int edgeWeightMin,
+			int edgeWeightMax, Integer seed) {
+		// negative Anzahl Knoten
+		if (nodeNum < 0 || edgeNum < 0) {
+			throw new IllegalArgumentException("Number of nodes and edges should be positive.");
+		}
+		// Kantenanzahl nicht größer als Knotenanzahl
+		if (edgeNum < nodeNum - 1) {
+			throw new IllegalArgumentException("Cannot create Network, because the created graph is not connected.");
+		}
+		// Nicht mindestens 2 Knoten für Quelle und Senke
+		if (nodeNum < 2) {
+			throw new IllegalArgumentException("Muss mindestens 2 Knoten besitzen für ein Netzwerk (Quelle und Senke)");
+		}
+
+		if (edgeNum > nodeNum * (nodeNum - 1) / 2) {
+			throw new IllegalArgumentException("No multi-edges");
+		}
+
+		// create empty graph
+		GkaGraph graph = new GkaGraph(GkaGraph.createStringId());
+
+		// add nodes
+		for (int i = 0; i < nodeNum; i++) {
+			graph.createNode(String.valueOf(i));
+		}
+
+		// get list of node names
+		ArrayList<String> nodesNameList = new ArrayList<>(graph.getNodeNames());
+
+		// add edges with random nodes, names or weight
+		Random rand = seed != null ? new Random(seed) : new Random();
+		String nodeName1;
+		String nodeName2;
+		Boolean hasEdgeWeight = edgeWeightMin <= edgeWeightMax;
+		int edgeWeight;
+
+		for (int i = 0; i < edgeNum; i++) {
+			// create 2 different random nodes, node1 can't be "n-1", node2 can't be "0"
+			nodeName1 = nodesNameList.get(rand.nextInt(nodeNum - 1));
+			do {
+				nodeName2 = nodesNameList.get(rand.nextInt(nodeNum));
+			} while (nodeName2 == nodeName1 || nodeName2 == "0");
+			Node node1 = graph.getNode(graph.createNode(nodeName1));
+			Node node2 = graph.getNode(graph.createNode(nodeName2));
+
+			// create an edge between the 2 nodes if they aren't yet connected
+			if (!node1.hasEdgeBetween(node2)) {
+				if (hasEdgeWeight) {
+					edgeWeight = rand.nextInt(edgeWeightMax - edgeWeightMin + 1) + edgeWeightMin;
+					graph.createEdge(nodeName1, nodeName2, "->", null, String.valueOf(edgeWeight));
+				} else {
+					graph.createEdge(nodeName1, nodeName2, "->", null, null);
+				}
+			}
+		}
+
+		for (int i = 0; i < nodeNum; i++) {
+			Node node = graph.getNode(graph.createNode(String.valueOf(i)));
+			Iterator<Edge> enteringEdge = node.getEnteringEdgeIterator();
+			if (i > 0 && !enteringEdge.hasNext()) {
+				String startName;
+				do {
+					startName = nodesNameList.get(rand.nextInt(nodeNum - 1));
+				} while (String.valueOf(i).equals(startName));
+				if (hasEdgeWeight) {
+					edgeWeight = rand.nextInt(edgeWeightMax - edgeWeightMin + 1) + edgeWeightMin;
+					graph.createEdge(startName, String.valueOf(i), "->", null, String.valueOf(edgeWeight));
+				} else {
+					graph.createEdge(startName, String.valueOf(i), "->", null, null);
+				}
+			}
+
+			Iterator<Edge> leavingEdge = node.getLeavingEdgeIterator();
+			if (i < nodeNum - 1 && !leavingEdge.hasNext()) {
+				String endName;
+				do {
+					endName = nodesNameList.get(1 + rand.nextInt(nodeNum - 1));
+					System.out.println(endName + "(" + Integer.valueOf(endName).toString() + ")");
+				} while (String.valueOf(i).equals(endName) || String.valueOf(0).equals(endName));
+				if (hasEdgeWeight) {
+					edgeWeight = rand.nextInt(edgeWeightMax - edgeWeightMin + 1) + edgeWeightMin;
+					graph.createEdge(String.valueOf(i), endName, "->", null, String.valueOf(edgeWeight));
+				} else {
+					graph.createEdge(String.valueOf(i), endName, "->", null, null);
 				}
 			}
 		}

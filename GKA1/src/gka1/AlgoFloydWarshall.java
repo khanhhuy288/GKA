@@ -21,54 +21,21 @@ import org.graphstream.graph.Node;
  */
 public class AlgoFloydWarshall {
 	private static class Result {
-		// private int nodeNr;
-		public double[][] distance;
-		public int[][] transit;
+		private double[][] distance;
+		private int[][] transit;
 
 		public Result(int nodeNr) {
-			// this.nodeNr = nodeNr;
 			this.distance = new double[nodeNr][nodeNr];
 			this.transit = new int[nodeNr][nodeNr];
 		}
-	}
 
-	public static void main(String[] args) throws UnsupportedEncodingException, FileNotFoundException, IOException {
-		// GkaGraph graph = GkaUtils.read("VLtest.gka");
-		// List<Node> shortestPath = AlgoFloydWarshall.shortestPath(graph, "1", "6",
-		// true);
-		// System.out.println(GkaUtils.toNodesString(shortestPath));
-		// System.out.println(AlgoFloydWarshall.distance(graph, "1", "6"));
-		//
-		// APSP apsp = new APSP(graph, "weight", true);
-		// apsp.compute();
-		// APSPInfo info =
-		// graph.getNode(graph.createNode("1")).getAttribute(APSPInfo.ATTRIBUTE_NAME);
-		// System.out.println(info.getLengthTo(graph.createNode("6")));
+		public double[][] getDistance() {
+			return this.distance;
+		}
 
-		// GkaGraph graph = GkaUtils.read("graph03.gka");
-		// List<Node> shortestPath = AlgoFloydWarshall.shortestPath(graph, "Hamburg",
-		// "Norderstedt", true);
-		// System.out.println(GkaUtils.toNodesString(shortestPath));
-		// System.out.println(AlgoFloydWarshall.distance(graph, "Hamburg",
-		// "Norderstedt"));
-		//
-		// APSP apsp = new APSP(graph, "weight", false);
-		// apsp.compute();
-		// APSPInfo info =
-		// graph.getNode(graph.createNode("Hamburg")).getAttribute(APSPInfo.ATTRIBUTE_NAME);
-		// System.out.println(info.getLengthTo(graph.createNode("Norderstedt")));
-
-		GkaGraph graph = GkaUtils.generateRandom(100, 3500, true, false, 1, 100);
-		List<Node> shortestPath = AlgoFloydWarshall.shortestPath(graph, "0", "99", false);
-		System.out.println(GkaUtils.toNodesString(shortestPath));
-		double distance = AlgoFloydWarshall.distance(graph, "0", "99");
-		System.out.println("Shortest distance calculated = " + distance);
-
-		APSP apsp = new APSP(graph, "weight", true);
-		apsp.compute();
-		APSPInfo info = graph.getNode(graph.createNode("0")).getAttribute(APSPInfo.ATTRIBUTE_NAME);
-		System.out.println("Shortest distance GraphStream = " + info.getLengthTo(graph.createNode("99")));
-
+		public int[][] getTransit() {
+			return this.transit;
+		}
 	}
 
 	/**
@@ -79,7 +46,7 @@ public class AlgoFloydWarshall {
 	 * @return a table that contains the shortest distance between two nodes.
 	 */
 	public static double[][] distanceMatrix(GkaGraph graph) {
-		return algorithm(graph).distance;
+		return algorithm(graph).getDistance();
 	}
 
 	/**
@@ -91,7 +58,7 @@ public class AlgoFloydWarshall {
 	 *         the highest index on the shortest path from s to t.
 	 */
 	public static int[][] transitMatrix(GkaGraph graph) {
-		return algorithm(graph).transit;
+		return algorithm(graph).getTransit();
 	}
 
 	/**
@@ -131,48 +98,12 @@ public class AlgoFloydWarshall {
 			throw new IllegalArgumentException("Node not found in graph.");
 		}
 
-		 List<Node> out = new LinkedList<>();
-		 for (Node node : extractPath(graph, startNodeName, endNodeName)) {
-		 out.add(node);
-		 }
-		 Node end = graph.getNode(graph.createNode(endNodeName));
-		 out.add(end);
-
-//		// get start and end nodes
-//		Node start = graph.getNode(graph.createNode(startNodeName));
-//		Node end = graph.getNode(graph.createNode(endNodeName));
-//
-//		// get index of start node in the graph
-//		int startIndex = start.getIndex();
-//		int endIndex = end.getIndex();
-//
-//		// create a HashMap between each node and its previous node on the shortest
-//		Map<Node, Node> prevNodes = new HashMap<>();
-//
-//		Node curr = end;
-//		while (transitMatrix(graph)[startIndex][curr.getIndex()] > 0) {
-//			// the node with the highest index on the shortest path from start node to
-//			// current node (isn't necessarily adjacent to current node)
-//			int trIndex = transitMatrix(graph)[startIndex][curr.getIndex()];
-//
-//			// in case the nearest node isn't adjacent to current node
-//			while (!graph.getNode(trIndex).hasEdgeToward(curr.getIndex())) {
-//				// continue to check through the transit nodes between the current transit
-//				// and current end node until the adjacent node is found
-//				trIndex = transitMatrix(graph)[trIndex][curr.getIndex()];
-//			}
-//			prevNodes.put(curr, graph.getNode(trIndex));
-//			curr = prevNodes.get(curr);
-//		}
-//		prevNodes.put(curr, start);
-//
-//		// trace back the path with HashMap
-//		List<Node> out = new LinkedList<>();
-//		curr = end;
-//		while (curr != null) {
-//			out.add(0, curr);
-//			curr = prevNodes.get(curr);
-//		}
+		List<Node> out = new LinkedList<>();
+		for (Node node : extractPath(graph, startNodeName, endNodeName)) {
+			out.add(node);
+		}
+		Node end = graph.getNode(graph.createNode(endNodeName));
+		out.add(end);
 
 		// visualize the result
 		if (isVisualized) {
@@ -192,6 +123,18 @@ public class AlgoFloydWarshall {
 		return out;
 	}
 
+	/**
+	 * Extract the shortest path (from start to the node before end) from transit
+	 * matrix using recursion
+	 * 
+	 * @param graph
+	 *            The graph to work with
+	 * @param startNodeName
+	 *            Name of start node
+	 * @param endNodeName
+	 *            Name of end node
+	 * @return the path as a list of node.
+	 */
 	public static List<Node> extractPath(GkaGraph graph, String startNodeName, String endNodeName) {
 		// get start and end nodes
 		Node start = graph.getNode(graph.createNode(startNodeName));
@@ -206,7 +149,6 @@ public class AlgoFloydWarshall {
 		if (transitMatrix(graph)[startIndex][endIndex] == -1) {
 			if (start.hasEdgeToward(end)) {
 				path.add(start);
-
 			} else {
 				// no path found
 				return new LinkedList<Node>();
@@ -216,7 +158,6 @@ public class AlgoFloydWarshall {
 
 			path.addAll(extractPath(graph, startNodeName, transitName));
 			path.addAll(extractPath(graph, transitName, endNodeName));
-
 		}
 
 		return path;
@@ -234,13 +175,10 @@ public class AlgoFloydWarshall {
 	 */
 	public static Result algorithm(GkaGraph graph) {
 		int nodeNr = graph.getNodeCount();
-		// double[][][] result = new double[2][nodeNr][nodeNr];
-		// double[][] distance = result[0];
-		// double[][] transit = result[1];
 
 		Result result = new Result(nodeNr);
-		double[][] distance = result.distance;
-		int[][] transit = result.transit;
+		double[][] distance = result.getDistance();
+		int[][] transit = result.getTransit();
 
 		// initiate distance and transit
 		for (int i = 0; i < nodeNr; i++) {
