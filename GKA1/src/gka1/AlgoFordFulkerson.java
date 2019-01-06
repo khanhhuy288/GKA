@@ -16,8 +16,7 @@ import org.graphstream.graph.Node;
 public class AlgoFordFulkerson {
 	/**
 	 * Create the adjacency matrix of a given graph. Cell equals the capacity
-	 * between 2 nodes if there's an edge from 1 node to the other. Cell equals 0
-	 * otherwise.
+	 * between 2 nodes if there's an edge from 1 node to the other, 0 otherwise.
 	 * 
 	 * @param graph The graph to work with.
 	 * @return Adjacency matrix.
@@ -48,11 +47,11 @@ public class AlgoFordFulkerson {
 	 * @param graphMatrix Adjacency matrix of the residual graph.
 	 * @param sourceIndex Index of the source node in the network.
 	 * @param sinkIndex   Index of the sink node in the network.
-	 * @param prev        Array to store previous node of each node on the path.
+	 * @param parent        Array to store previous node of each node on the path.
 	 * @return true if there is an augmenting path from source to sink, otherwise
 	 *         false.
 	 */
-	public static boolean getAugmentingPath(int[][] graphMatrix, int sourceIndex, int sinkIndex, int[] prev) {
+	public static boolean getAugmentingPath(int[][] graphMatrix, int sourceIndex, int sinkIndex, int[] parent) {
 		// get number of nodes
 		int nodeNr = graphMatrix.length;
 
@@ -66,7 +65,6 @@ public class AlgoFordFulkerson {
 		// stack in reverse order (source at the bottom, sink at the top)
 		Stack<Integer> stack = new Stack<>();
 		stack.push(sourceIndex);
-		int stackSize = 1;
 
 		// loop through the stack to find the path from source to sink
 		// pop that node to backtrack and then continue when reaching dead end
@@ -82,14 +80,14 @@ public class AlgoFordFulkerson {
 				visited[curr] = true;
 			}
 
-			// traceback the path with prev[] and end the loop if sink is reached
+			// traceback the path with parent[] and end the loop if sink is reached
 			if (curr == sinkIndex) {
 				while (!stack.empty()) {
 					int i = stack.pop();
 					if (!stack.empty()) {
-						prev[i] = stack.peek();
+						parent[i] = stack.peek();
 					} else {
-						prev[i] = -1;
+						parent[i] = -1;
 					}
 				}
 				break;
@@ -101,7 +99,6 @@ public class AlgoFordFulkerson {
 				// > 0
 				if (!visited[v] && graphMatrix[curr][v] > 0) {
 					stack.push(v);
-					stackSize++;
 					stackIncreased = true;
 					break;
 				}
@@ -110,7 +107,6 @@ public class AlgoFordFulkerson {
 			// remove current node if it doesn't have an unvisited neighbor
 			if (stackIncreased == false) {
 				stack.pop();
-				stackSize--;
 			}
 		}
 
@@ -147,19 +143,19 @@ public class AlgoFordFulkerson {
 		 * values are edge capacities.
 		 */
 		int rGraph[][] = new int[nodeNr][nodeNr];
-		
+
 		for (int u = 0; u < nodeNr; u++) {
 			for (int v = 0; v < nodeNr; v++) {
 				rGraph[u][v] = graphMatrix[u][v];
 			}
 		}
-		
+
 		// create an array for storing path
 		int parent[] = new int[nodeNr];
 
-		// augment the flow while there is path from source to sink
+		// augment the flow while there is path from source to sink with DFS
 		while (getAugmentingPath(rGraph, sourceIndex, sinkIndex, parent)) {
-			// find minimum residual capacity (bottleneck) of the edges along the path using BFS.
+			// find minimum residual capacity (bottleneck) of the edges along the path
 			int bottleneck = Integer.MAX_VALUE;
 			for (int v = sinkIndex; v != sourceIndex; v = parent[v]) {
 				int u = parent[v];
@@ -175,7 +171,7 @@ public class AlgoFordFulkerson {
 				rGraph[u][v] -= bottleneck;
 
 				// backward edge, remaining capacity = flow,
-				// flow decreases => r.cap. increases
+				// flow increases => r.cap. increases
 				rGraph[v][u] += bottleneck;
 			}
 

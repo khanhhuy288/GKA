@@ -29,7 +29,7 @@ public class CompareFordFulkersonEdmondsKarpTest {
 		assertEquals(20, maxFlowFF);
 
 		start = System.nanoTime();
-		int maxFlowEK = AlgoEdmondsKarp.solve(graph, "v1", "v8");
+		int maxFlowEK = AlgoEdmondsKarp.maxFlow(graph, "v1", "v8");
 		end = System.nanoTime();
 
 		assertEquals(20, maxFlowEK);
@@ -48,7 +48,7 @@ public class CompareFordFulkersonEdmondsKarpTest {
 		assertEquals(23, maxFlowFF);
 
 		start = System.nanoTime();
-		int maxFlowEK = AlgoEdmondsKarp.solve(graph, "v1", "s");
+		int maxFlowEK = AlgoEdmondsKarp.maxFlow(graph, "v1", "s");
 		end = System.nanoTime();
 
 		assertEquals(23, maxFlowEK);
@@ -60,12 +60,12 @@ public class CompareFordFulkersonEdmondsKarpTest {
 		GkaGraph bigNet = GkaUtils.generateNetwork(50, 800, 1, 100);
 
 		long start = System.nanoTime();
-		int maxFlowFF = AlgoFordFulkerson.solve(bigNet, "0", "49");
+		int maxFlowFF = AlgoFordFulkerson.maxFlow(bigNet, "0", "49");
 		long end = System.nanoTime();
 		System.out.printf("Runtime bigNetTest (FF) = %d ns%n", end - start);
 
 		start = System.nanoTime();
-		int maxFlowEK = AlgoEdmondsKarp.solve(bigNet, "0", "49");
+		int maxFlowEK = AlgoEdmondsKarp.maxFlow(bigNet, "0", "49");
 		end = System.nanoTime();
 		System.out.printf("Runtime bigNetTest (EK) = %d ns%n%n", end - start);
 
@@ -88,12 +88,12 @@ public class CompareFordFulkersonEdmondsKarpTest {
 			GkaGraph bigNet = GkaUtils.generateNetwork(nodeNum, edgeNum, 1, 100);
 
 			long start = System.nanoTime();
-			int maxFlowFF = AlgoFordFulkerson.solve(bigNet, "0", String.valueOf(nodeNum - 1));
+			int maxFlowFF = AlgoFordFulkerson.maxFlow(bigNet, "0", String.valueOf(nodeNum - 1));
 			long end = System.nanoTime();
 			long runTimeFF = end - start;
 
 			start = System.nanoTime();
-			int maxFlowEK = AlgoEdmondsKarp.solve(bigNet, "0", String.valueOf(nodeNum - 1));
+			int maxFlowEK = AlgoEdmondsKarp.maxFlow(bigNet, "0", String.valueOf(nodeNum - 1));
 			end = System.nanoTime();
 			long runTimeEK = end - start;
 			
