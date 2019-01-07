@@ -167,7 +167,7 @@ public class GkaUtilsTest {
 		
 		for (int i = 0; i < 5; i++) {
 			int nodeNum = 10;
-			int edgeNum = 50;
+			int edgeNum = 45;
 			GkaGraph bigNet = GkaUtils.generateNetwork(nodeNum, edgeNum, 1, 50);
 			assertEquals(nodeNum, bigNet.getNodeCount());
 			assertEquals(edgeNum, bigNet.getEdgeCount());
