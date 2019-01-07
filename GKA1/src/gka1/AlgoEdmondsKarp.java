@@ -3,6 +3,7 @@ package gka1;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
@@ -68,8 +69,8 @@ public class AlgoEdmondsKarp {
 			visited[i] = false;
 		}
 
-		// create a list for BFS for an augmenting path
-		LinkedList<Integer> queue = new LinkedList<Integer>();
+		// create a queue for BFS for an augmenting path
+		Queue<Integer> queue = new LinkedList<Integer>();
 		queue.add(sourceIndex);
 		visited[sourceIndex] = true;
 		prev[sourceIndex] = -1;

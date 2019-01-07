@@ -34,36 +34,16 @@ import org.graphstream.graph.Node;
  */
 public class GkaUtils {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		// String filename = "graphTest1.gka";
-		// GkaGraph graph = GkaUtils.read(filename);
-		// GkaUtils.save(graph, "savedGraphTest1.gka");
-		// GkaGraph savedGraph = GkaUtils.read("savedGraphTest1.gka");
-		// savedGraph.display();
-		// savedGraph.beautify();
-
-		// String[] filenames = {"graph01.gka", "graph02.gka", "graph03.gka",
-		// "graph04.gka", "graph05.gka",
-		// "graph06.gka", "graph07.gka", "graph08.gka", "graph09.gka",
-		// "graph10.gka", "graph10.gka"};
-		//
-		// GkaGraph myGraph;
-		//
-		// for (String filename : filenames) {
-		// myGraph = GkaUtils.read(filename);
-		// myGraph.display();
-		// myGraph.beautify();
-		// }
-
-//		for (int i = 0; i < 5; i++) {
-//			Random rand = new Random();
-//			// 2 <= nodeNum <= 10
-//			int nodeNum = 2 + rand.nextInt(10 - 2 + 1);
-//			// n-1 <= edgeNum <= n(n-3)+3, n is nodeNum
-//			int edgeNum = nodeNum - 1 + rand.nextInt(nodeNum * (nodeNum - 3) / 2 + 2);
-//			GkaGraph bigNet = GkaUtils.generateNetwork(nodeNum, edgeNum, 1, 100);
-//			bigNet.display();
-//			bigNet.beautify();
-//		}
+		for (int i = 0; i < 5; i++) {
+			Random rand = new Random();
+			// 2 <= nodeNum <= 10
+			int nodeNum = 2 + rand.nextInt(10 - 2 + 1);
+			// n-1 <= edgeNum <= n(n-3)+3, n is nodeNum
+			int edgeNum = nodeNum - 1 + rand.nextInt(nodeNum * (nodeNum - 3) / 2 + 2);
+			GkaGraph bigNet = GkaUtils.generateNetwork(nodeNum, edgeNum, 1, 100);
+			bigNet.display();
+			bigNet.beautify();
+		}
 	}
 
 	/**
@@ -195,23 +175,6 @@ public class GkaUtils {
 	}
 
 	/**
-	 * Generate a random flow network and without seed.
-	 * 
-	 * @param nodeNum
-	 *            Number of nodes.
-	 * @param edgeNum
-	 *            Number of edges.
-	 * @param isDirected
-	 *            Whether graph is directed.
-	 * @param hasEdgeName
-	 *            Whether name edges should be added.
-	 * @return A GkaGraph object.
-	 */
-	public static GkaGraph generateNetwork(int nodeNum, int edgeNum, int edgeWeightMin, int edgeWeightMax) {
-		return generateNetwork(nodeNum, edgeNum, edgeWeightMin, edgeWeightMax, null);
-	}
-
-	/**
 	 * Generate a random graph without edge weights and seed.
 	 * 
 	 * @param nodeNum
@@ -226,6 +189,23 @@ public class GkaUtils {
 	 */
 	public static GkaGraph generateRandom(int nodeNum, int edgeNum, boolean isDirected, boolean hasEdgeName) {
 		return generateRandom(nodeNum, edgeNum, isDirected, hasEdgeName, 2, 1, null);
+	}
+	
+	/**
+	 * Generate a random flow network without seed.
+	 * 
+	 * @param nodeNum
+	 *            Number of nodes.
+	 * @param edgeNum
+	 *            Number of edges.
+	 * @param isDirected
+	 *            Whether graph is directed.
+	 * @param hasEdgeName
+	 *            Whether name edges should be added.
+	 * @return A GkaGraph object that model a flow network.
+	 */
+	public static GkaGraph generateNetwork(int nodeNum, int edgeNum, int edgeWeightMin, int edgeWeightMax) {
+		return generateNetwork(nodeNum, edgeNum, edgeWeightMin, edgeWeightMax, null);
 	}
 
 	/**
@@ -320,7 +300,7 @@ public class GkaUtils {
 	 *            The maximum weight of an edge.
 	 * @param seed
 	 *            Seed for random generator.
-	 * @return A GkaGraph object.
+	 * @return A GkaGraph object that model a flow network.
 	 */
 	public static GkaGraph generateNetwork(int nodeNum, int edgeNum, int edgeWeightMin, int edgeWeightMax,
 			Integer seed) {
@@ -344,8 +324,8 @@ public class GkaUtils {
 			throw new IllegalArgumentException("Too many edges. No multi-edge is allowed in a network.");
 		}
 
-		if (edgeWeightMin >= edgeWeightMax) {
-			throw new IllegalArgumentException("Minimum edge weight must be smaller than maximum edge weight.");
+		if (edgeWeightMin > edgeWeightMax) {
+			throw new IllegalArgumentException("Minimum edge weight must be less than or equal maximum edge weight.");
 		}
 
 		// create empty graph

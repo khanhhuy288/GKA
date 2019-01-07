@@ -72,30 +72,30 @@ public class CompareFordFulkersonEdmondsKarpTest {
 		assertEquals(maxFlowFF, maxFlowEK);
 	}
 	
-	@Test
-	public void biggestNetTest() throws UnsupportedEncodingException, FileNotFoundException, IOException {
-		int nodeNum = 2500;
-		int edgeNum = 1000000;
-		
-		GkaGraph bigNet = GkaUtils.generateNetwork(nodeNum, edgeNum, 1, 100);
-
-		long start = System.nanoTime();
-		int maxFlowFF = AlgoFordFulkerson.maxFlow(bigNet, "0", String.valueOf(nodeNum - 1));
-		long end = System.nanoTime();
-		long ns = 1000000000;
-		System.out.printf("Runtime biggestNetTest (FF) = %d s%n", (end - start) / ns);  // 57s
-
-		start = System.nanoTime();
-		int maxFlowEK = AlgoEdmondsKarp.maxFlow(bigNet, "0", String.valueOf(nodeNum - 1));
-		end = System.nanoTime();
-		System.out.printf("Runtime biggestNetTest (EK) = %d s%n%n", (end - start) / ns);  // 3s
-
-		assertEquals(maxFlowFF, maxFlowEK);
-	}
+//	@Test
+//	public void biggestNetTest() throws UnsupportedEncodingException, FileNotFoundException, IOException {
+//		int nodeNum = 2500;
+//		int edgeNum = 1000000;
+//		
+//		GkaGraph bigNet = GkaUtils.generateNetwork(nodeNum, edgeNum, 1, 100);
+//
+//		long start = System.nanoTime();
+//		int maxFlowFF = AlgoFordFulkerson.maxFlow(bigNet, "0", String.valueOf(nodeNum - 1));
+//		long end = System.nanoTime();
+//		long ns = 1000000000;
+//		System.out.printf("Runtime biggestNetTest (FF) = %d s%n", (end - start) / ns);  // 57s
+//
+//		start = System.nanoTime();
+//		int maxFlowEK = AlgoEdmondsKarp.maxFlow(bigNet, "0", String.valueOf(nodeNum - 1));
+//		end = System.nanoTime();
+//		System.out.printf("Runtime biggestNetTest (EK) = %d s%n%n", (end - start) / ns);  // 3s
+//
+//		assertEquals(maxFlowFF, maxFlowEK);
+//	}
 
 	@Test
 	public void bigNetTest100() throws UnsupportedEncodingException, FileNotFoundException, IOException {
-		double meanRelDiff = 0.0;
+		double sumRelDiff = 0.0;
 		for (int i = 0; i < 99; i++) {
 			Random rand = new Random();
 			
@@ -125,12 +125,12 @@ public class CompareFordFulkersonEdmondsKarpTest {
 			long runTimeEK = end - start;
 			
 			double relativeDifference = (double)(runTimeFF - runTimeEK) / runTimeEK * 100;
-			meanRelDiff += relativeDifference;
+			sumRelDiff += relativeDifference;
 
 			assertEquals(maxFlowFF, maxFlowEK);
 		}
 		
-		System.out.printf("Edmonds-Karp runs faster than Ford-Fulkerson by average %.2f%% %n%n", (meanRelDiff / 100));
+		System.out.printf("Edmonds-Karp runs faster than Ford-Fulkerson by average %.2f%% %n%n", (sumRelDiff / 100));
 
 	}
 }
